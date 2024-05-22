@@ -2,10 +2,8 @@ package org.example;
 
 
 import emulation.Emulator;
-import emulation.EmulatorState;
-import emulation.component.MemoryModule;
-import rendering.CpuLayer;
-import rendering.MemoryLayer;
+import emulation.constant.EmulatorState;
+import rendering.UILayer;
 import rendering.Timer;
 import rendering.Window;
 
@@ -14,13 +12,11 @@ import java.awt.event.KeyEvent;
 public class Main {
 
     private static final int FPS = 60;
-    private static final int CLOCK_FREQUENCY = 5;
+    private static final int CLOCK_FREQUENCY = 10;
     private final Window window;
     private final Timer timer;
     private final Emulator emulator;
-
-    private final MemoryLayer memoryLayer;
-    private final CpuLayer cpuLayer;
+    private final UILayer uiLayer;
 
 
     public static void main(String[] args) {
@@ -31,8 +27,7 @@ public class Main {
         window = new Window("Example", 480, 360);
         timer = new Timer();
         emulator = new Emulator();
-        memoryLayer = new MemoryLayer(emulator.getModule("RAM", MemoryModule.class));
-        cpuLayer = new CpuLayer(emulator);
+        uiLayer = new UILayer(emulator);
         init();
         loop();
         window.cleanUp();
@@ -54,7 +49,7 @@ public class Main {
 
             emulator.update();
 
-            // Update as many times as needed to respect the number of updates per second
+            // Clock as many times as needed to respect the number of updates per second
             if (emulator.getState() == EmulatorState.RUN) {
                 accumulator += timer.getElapsedTime();
                 while (accumulator >= interval) {
@@ -73,8 +68,7 @@ public class Main {
             }
 
             // Render the frame
-            memoryLayer.render();
-            cpuLayer.render();
+            uiLayer.render();
 
             // Draw the frame
             window.endFrame();
@@ -86,7 +80,7 @@ public class Main {
     private void clock() {
         emulator.clock();
         if (emulator.hasMemoryChanged()) {
-            cpuLayer.decompile();
+            uiLayer.decompile();
         }
     }
 

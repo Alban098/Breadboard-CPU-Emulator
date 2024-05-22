@@ -1,14 +1,16 @@
 package emulation.component;
 
-public class InstructionRegisterModule extends RegisterModule {
+import emulation.constant.Signal;
 
-    public InstructionRegisterModule(Bus bus, ControlUnitModule controlUnit, String name) {
+public final class InstructionRegister extends AbstractRegister {
+
+    public InstructionRegister(Bus bus, ControlUnitModule controlUnit, String name) {
         super(bus, controlUnit, name);
     }
 
     @Override
     public boolean clock() {
-        if (controlUnit.hasControlSignal(ControlUnitModule.Signals.IR_IN)) {
+        if (controlUnit.hasControlSignal(Signal.IR_IN)) {
             value = readBus();
         }
         return false;

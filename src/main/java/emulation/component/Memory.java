@@ -1,10 +1,12 @@
 package emulation.component;
 
-public class MemoryModule extends BusConnectedModule {
-    private final MemoryAddressRegisterModule memoryAddressRegister;
+import emulation.constant.Signal;
+
+public final class Memory extends BusConnectedModule {
+    private final MemoryAddressRegister memoryAddressRegister;
 
     private final int[] memory = new int[] {
-            0x01, 0x01, 0x01, 0xFF, 0x01, 0x45, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+            0x01, 0x25, 0x02, 0x01, 0x03, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -22,15 +24,14 @@ public class MemoryModule extends BusConnectedModule {
             0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
     };
 
-
-    public MemoryModule(Bus bus, ControlUnitModule controlUnit, MemoryAddressRegisterModule memoryAddressRegister) {
+    public Memory(Bus bus, ControlUnitModule controlUnit, MemoryAddressRegister memoryAddressRegister) {
         super(bus, controlUnit);
         this.memoryAddressRegister = memoryAddressRegister;
     }
 
     @Override
     public boolean clock() {
-        if (controlUnit.hasControlSignal(ControlUnitModule.Signals.RAM_IN)) {
+        if (controlUnit.hasControlSignal(Signal.RAM_IN)) {
             memory[memoryAddressRegister.getValue()] = readBus();
             return true;
         }
@@ -39,7 +40,7 @@ public class MemoryModule extends BusConnectedModule {
 
     @Override
     public void update() {
-        if (controlUnit.hasControlSignal(ControlUnitModule.Signals.RAM_OUT)) {
+        if (controlUnit.hasControlSignal(Signal.RAM_OUT)) {
             writeBus(memory[memoryAddressRegister.getValue()]);
         }
     }
@@ -50,10 +51,11 @@ public class MemoryModule extends BusConnectedModule {
     }
 
     public int readMemory(int addr) {
-        if (addr >= 0 && addr <= 0xFF) {
-            return memory[addr];
-        }
-        return 0;
+        return memory[addr & 0xFF];
+    }
+
+    public void writeMemory(int addr, int value) {
+        memory[addr & 0xFF] = value & 0xFF;
     }
 
     @Override

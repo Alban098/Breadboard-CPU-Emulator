@@ -1,11 +1,11 @@
 package emulation.component;
 
-public abstract class RegisterModule extends BusConnectedModule {
+public abstract class AbstractRegister extends BusConnectedModule {
 
     protected final String name;
     protected int value;
 
-    public RegisterModule(Bus bus, ControlUnitModule controlUnit, String name) {
+    public AbstractRegister(Bus bus, ControlUnitModule controlUnit, String name) {
         super(bus, controlUnit);
         this.name = name;
     }

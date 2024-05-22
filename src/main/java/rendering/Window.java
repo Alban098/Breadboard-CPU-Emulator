@@ -29,8 +29,6 @@ public final class Window {
     private final ImGuiImplGlfw imguiGlfw = new ImGuiImplGlfw();
     /** The OpenGL 3+ implementation used by ImGui */
     private final ImGuiImplGl3 imguiGl3 = new ImGuiImplGl3();
-    /** The context of ImPlot used to by ImGui */
-    private ImPlotContext plotCtx;
     /** The main ImGui context */
     private ImGuiContext imGuiCtx;
     /** The current width of the screen in pixels */
@@ -51,7 +49,6 @@ public final class Window {
      * @param title the Window title
      * @param width the Window width in pixels
      * @param height the Window height in pixels
-     * @param imGuiCapability enable ImGui or not
      */
     public Window(String title, int width, int height) {
         this.title = title;
@@ -121,7 +118,6 @@ public final class Window {
 
         // Set the clear color
         imGuiCtx = ImGui.createContext();
-        plotCtx = ImPlot.createContext();
         ImGuiIO io = ImGui.getIO();
         io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
         imguiGlfw.init(windowPtr, true);

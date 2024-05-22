@@ -1,14 +1,16 @@
 package emulation.component;
 
-public class MemoryAddressRegisterModule extends RegisterModule {
+import emulation.constant.Signal;
 
-    public MemoryAddressRegisterModule(Bus bus, ControlUnitModule controlUnit) {
+public final class MemoryAddressRegister extends AbstractRegister {
+
+    public MemoryAddressRegister(Bus bus, ControlUnitModule controlUnit) {
         super(bus, controlUnit, "Memory Address");
     }
 
     @Override
     public boolean clock() {
-        if (controlUnit.hasControlSignal(ControlUnitModule.Signals.MAR_IN)) {
+        if (controlUnit.hasControlSignal(Signal.MAR_IN)) {
             value = readBus();
         }
         return false;

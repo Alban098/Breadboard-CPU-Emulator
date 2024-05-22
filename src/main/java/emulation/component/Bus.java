@@ -1,6 +1,6 @@
 package emulation.component;
 
-public class Bus implements Formattable {
+public final class Bus implements Formattable {
 
     private int state = 0;
 

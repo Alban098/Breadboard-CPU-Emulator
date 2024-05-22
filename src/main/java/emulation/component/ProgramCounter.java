@@ -1,24 +1,29 @@
 package emulation.component;
 
-public class ProgramCounterModule extends BusConnectedModule {
+import emulation.constant.Signal;
+
+public final class ProgramCounter extends BusConnectedModule {
 
     private int value;
 
-    public ProgramCounterModule(Bus bus, ControlUnitModule controlUnit) {
+    public ProgramCounter(Bus bus, ControlUnitModule controlUnit) {
         super(bus, controlUnit);
     }
 
     @Override
     public boolean clock() {
-        if (controlUnit.hasControlSignal(ControlUnitModule.Signals.C_E)) {
+        if (controlUnit.hasControlSignal(Signal.C_E)) {
             value = (value + 1) & 0xFF;
+        }
+        if (controlUnit.hasControlSignal(Signal.C_IN)) {
+            value = readBus();
         }
         return false;
     }
 
     @Override
     public void update() {
-        if (controlUnit.hasControlSignal(ControlUnitModule.Signals.C_OUT)) {
+        if (controlUnit.hasControlSignal(Signal.C_OUT)) {
             writeBus(value);
         }
     }

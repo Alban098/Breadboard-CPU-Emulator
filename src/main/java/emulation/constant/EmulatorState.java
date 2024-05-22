@@ -1,4 +1,4 @@
-package emulation;
+package emulation.constant;
 
 public enum EmulatorState {
     DEBUG,
