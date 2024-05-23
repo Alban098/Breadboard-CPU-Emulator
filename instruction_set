@@ -1,0 +1,66 @@
+Binary |  Hex | Length |  Clk | Assembly
+-------|------|--------|------|---------
+NOP
+LDA *FD
+LDA $FD
+LDB *FD
+LDB $FD
+LDS *FD
+LDS $FD
+OUT *FD
+OUT $FD
+OUT
+STA *FD
+STA $FD
+STB *FD
+STB $FD
+STS *FD
+STS $FD
+CLS
+ADD *FD
+ADD $FD
+SUB *FD
+SUB $FD
+XOR *FD
+XOR $FD
+AND *FD
+AND $FD
+ORA *FD
+ORA $FD
+CMP *FD
+CMP $FD
+CMP
+JMP *FD
+JMP $FD
+JMA
+BCS *FD
+BCS $FD
+BCC *FD
+BCC $FD
+BEQ *FD
+BEQ $FD
+BNE *FD
+BNE $FD
+BMI *FD
+BMI $FD
+BPL *FD
+BPL $FD
+BOS *FD
+BOS $FD
+BOC *FD
+BOC $FD
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+NOP
+HLT
