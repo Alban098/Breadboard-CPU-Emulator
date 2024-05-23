@@ -1,10 +1,9 @@
 package assembler.tokenizing.tokens;
 
-public class Variable {
+public class Variable extends Token {
 
     private final String alias;
     private final int value;
-    private int address;
 
     public Variable(String alias, String value) {
         this.alias = alias;
@@ -19,11 +18,8 @@ public class Variable {
         return value;
     }
 
-    public int getAddress() {
-        return address;
-    }
-
-    public void setAddress(int address) {
-        this.address = address;
+    @Override
+    public String toString() {
+        return "Var " + alias + "=" + String.format("%02X", value);
     }
 }

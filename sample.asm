@@ -2,6 +2,7 @@
 
 .block $(F0)
     10 11 12 32 87 E4 FF DE
+.endblock
 .var X 1A
 :START
     LDA 25
@@ -11,6 +12,6 @@
 :LOOP
     LDA 0
     ADD 10
-    BCC @LOOP #loop until overflow over 0xFF
+    BCC @LOOP //loop until overflow over 0xFF
     HLT
 

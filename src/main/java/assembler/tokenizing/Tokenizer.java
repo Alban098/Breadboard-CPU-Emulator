@@ -1,5 +1,7 @@
 package assembler.tokenizing;
 
+import assembler.tokenizing.exception.MalformedAddressException;
+import assembler.tokenizing.exception.TokenizingException;
 import assembler.tokenizing.tokens.*;
 import simulation.emulation.execution.Instruction;
 
@@ -65,98 +67,117 @@ public class Tokenizer {
         instructionMap.put("HLT", Instruction.HLT);
     }
 
+    private final TokenizationResult result = new TokenizationResult();
     private Mode currentMode = Mode.CODE;
     private MemoryBlock currentMemoryBlock;
-    private int currentAddress = 0;
-    private int lineIndex = 0;
-
-    private final Map<String, Label> labels = new HashMap<>();
-    private final Map<String, Variable> vars = new HashMap<>();
-    private final Map<String, MemoryBlock> memoryBlocks = new HashMap<>();
-    private final List<InstructionToken> instructions = new ArrayList<>();
+    private Label labelToReference;
+    private int lineIndex = 1; //Initialize at 1 because of mandatory header
 
     public void tokenize(String line) throws TokenizingException {
         lineIndex++;
-        handleLine(line, lineIndex);
+        tokenizeLine(line, lineIndex);
     }
 
-    private void handleLine(String line, int index) throws TokenizingException {
+    private void tokenizeLine(String line, int index) throws TokenizingException {
         String[] tokens = line.split(" ");
+        tokens = sanitizeTokens(tokens);
+
+        //skip blank lines
+        if (tokens.length == 0) {
+            return;
+        }
         switch (currentMode) {
             case MEMORY_BLOCK -> fillMemoryBlock(index, tokens);
             case CODE -> {
                 if (tokens[0].startsWith(".block")) {
-                    handleMemoryBlock(index, tokens);
+                    tokenizeMemoryBlock(index, tokens);
                 } else if (tokens[0].startsWith(".var")) {
-                    handleVariable(index, tokens);
+                    tokenizeVariable(index, tokens);
                 } else if (tokens[0].startsWith(":")) {
-                    handleLabel(index, tokens);
-                } else {
-                    handleInstruction(index, tokens);
+                    tokenizeLabel(index, tokens);
+                } else if (!tokens[0].isBlank()){
+                    tokenizeInstruction(index, tokens);
                 }
             }
         }
     }
 
-    private void handleInstruction(int index, String[] tokens) throws TokenizingException {
+    private String[] sanitizeTokens(String[] tokens) {
+        List<String> sanitized = new ArrayList<>(tokens.length);
+        for (String token : tokens) {
+            if (token.startsWith("//")) {
+                break;
+            } if (!token.isBlank()) {
+                sanitized.add(token);
+            }
+        }
+        return sanitized.toArray(new String[0]);
+    }
+
+    private void tokenizeInstruction(int index, String[] tokens) throws TokenizingException {
         String operand = tokens[0];
         String arg = null;
         if (tokens.length == 2) {
-            arg = tokens[2];
-            if (tokens[1].startsWith("$(") || tokens[1].startsWith("@")) {
+            arg = tokens[1];
+            if (arg.startsWith("$(") || arg.startsWith("@")) {
                 operand += " $(X)";
             } else {
-                operand += "X";
+                operand += " X";
             }
         }
         Instruction decoded = instructionMap.get(operand);
         if (decoded == null) {
             throw new TokenizingException("ERROR:" + index + " - " + tokens[0] + " is not recognized as an instruction, or isn't compatible with the passed argument");
         }
-        InstructionToken token = new InstructionToken(currentAddress, decoded, arg);
-        instructions.add(token);
-        currentAddress += decoded.getSize();
+        Operator token = new Operator(decoded, arg);
+        if (labelToReference != null) {
+            labelToReference.setReferenceOperator(token);
+            labelToReference = null;
+        }
+        result.add(token);
     }
 
     private void fillMemoryBlock(int index, String[] tokens) throws TokenizingException {
         for (String token : tokens) {
+            if (token.equals(".endblock")) {
+                currentMode = Mode.CODE;
+                currentMemoryBlock = null;
+                return;
+            }
             try {
                 int value = Integer.parseInt(token, 16);
                 currentMemoryBlock.addData(value);
             } catch (NumberFormatException e) {
-                throw new TokenizingException("ERROR:" + index + " - " + token + " is not an hexadecimal value");
+                throw new TokenizingException("ERROR:" + index + " - " + token + " is not an hexadecimal value (have you missed a '.endblock' tag ?)");
             }
         }
     }
 
-    private void handleMemoryBlock(int index, String[] tokens) throws TokenizingException {
+    private void tokenizeMemoryBlock(int index, String[] tokens) throws TokenizingException {
         if (tokens.length != 2) {
             throw new TokenizingException("ERROR:" + index + " - .block must be followed by its memory address");
         }
         currentMode = Mode.MEMORY_BLOCK;
         try {
-            currentMemoryBlock = new MemoryBlock(tokens[0], tokens[1]);
-        } catch (MalformedAddress e) {
+            currentMemoryBlock = new MemoryBlock(tokens[1]);
+        } catch (MalformedAddressException e) {
             throw new TokenizingException("ERROR:" + index + " - addresses must be formatted like '$FF'");
         }
-        memoryBlocks.put(tokens[0], currentMemoryBlock);
+        result.add(currentMemoryBlock);
     }
 
-    private void handleLabel(int index, String[] tokens) throws TokenizingException {
-        if (tokens.length != 2) {
+    private void tokenizeLabel(int index, String[] tokens) throws TokenizingException {
+        if (tokens.length != 1) {
             throw new TokenizingException("ERROR:" + index + " - Labels must not contains blank space");
         }
-        try {
-            labels.put(tokens[1], new Label(tokens[1], Integer.toHexString(currentAddress)));
-        } catch (MalformedAddress e) {
-            throw new TokenizingException("ERROR:" + index + " - addresses must be formatted like '$FF'");
-        }
+        labelToReference = new Label(tokens[0].replace(":", ""));
+        result.add(labelToReference);
     }
 
-    private void handleVariable(int index, String[] tokens) throws TokenizingException {
+    private void tokenizeVariable(int index, String[] tokens) throws TokenizingException {
         if (tokens.length != 2 && tokens.length != 3) {
             throw new TokenizingException("ERROR:" + index + " - .var must be followed by its alias and an optional value");
         }
-        vars.put(tokens[1], new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null));
+        result.add(new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null));
     }
 }
