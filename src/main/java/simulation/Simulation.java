@@ -14,7 +14,7 @@ import java.io.IOException;
 public class Simulation {
 
     private static final int CLOCK_FREQUENCY = 100;
-    private static final String PROGRAM_FILE = "prg.rom";
+    private static final String PROGRAM_FILE = "sample.rom";
     private final Window window;
     private final Timer timer;
     private final Emulator emulator;
@@ -40,7 +40,8 @@ public class Simulation {
 
     private void init() throws IOException {
         try (FileInputStream programFis = new FileInputStream(PROGRAM_FILE)) {
-            if (programFis.available() > 0xFF) {
+            int a = programFis.available();
+            if (programFis.available() > 0x100) {
                 throw new IOException("Program can not be more than 256 bytes");
             }
             emulator.writeMemory(programFis.readAllBytes());

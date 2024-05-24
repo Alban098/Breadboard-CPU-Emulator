@@ -1,9 +1,10 @@
 package assembler.tokenizing;
 
+import assembler.Instruction;
 import assembler.tokenizing.exception.MalformedAddressException;
+import assembler.tokenizing.exception.MalformedValueException;
 import assembler.tokenizing.exception.TokenizingException;
-import assembler.tokenizing.tokens.*;
-import simulation.emulation.execution.Instruction;
+import assembler.tokenizing.token.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,6 +79,10 @@ public class Tokenizer {
         tokenizeLine(line, lineIndex);
     }
 
+    public TokenizationResult getTokenizationResult() {
+        return result;
+    }
+
     private void tokenizeLine(String line, int index) throws TokenizingException {
         String[] tokens = line.split(" ");
         tokens = sanitizeTokens(tokens);
@@ -93,6 +98,8 @@ public class Tokenizer {
                     tokenizeMemoryBlock(index, tokens);
                 } else if (tokens[0].startsWith(".var")) {
                     tokenizeVariable(index, tokens);
+                } else if (tokens[0].startsWith(".const")) {
+                    tokenizeConstant(index, tokens);
                 } else if (tokens[0].startsWith(":")) {
                     tokenizeLabel(index, tokens);
                 } else if (!tokens[0].isBlank()){
@@ -117,24 +124,50 @@ public class Tokenizer {
     private void tokenizeInstruction(int index, String[] tokens) throws TokenizingException {
         String operand = tokens[0];
         String arg = null;
+        Instruction decoded;
         if (tokens.length == 2) {
             arg = tokens[1];
-            if (arg.startsWith("$(") || arg.startsWith("@")) {
+            try {
+                checkArg(arg);
+            } catch (MalformedValueException e) {
+                throw new TokenizingException("ERROR:" + index + " - " + arg + " is not a valid arguments");
+            }
+            // '$' means we need to dereference the address
+            // - for variables this will replace '$var' by '$(addr)'
+            // - for constants this will replace '$_const' by '$(val)'
+            if (arg.startsWith("$")) {
                 operand += " $(X)";
             } else {
                 operand += " X";
             }
         }
-        Instruction decoded = instructionMap.get(operand);
+        decoded = instructionMap.get(operand);
         if (decoded == null) {
             throw new TokenizingException("ERROR:" + index + " - " + tokens[0] + " is not recognized as an instruction, or isn't compatible with the passed argument");
         }
-        Operator token = new Operator(decoded, arg);
+        Operation token = new Operation(decoded, arg);
         if (labelToReference != null) {
-            labelToReference.setReferenceOperator(token);
+            labelToReference.setReferenceOperation(token);
             labelToReference = null;
         }
         result.add(token);
+    }
+
+    private boolean checkArg(String arg) throws MalformedValueException {
+        if (arg.startsWith("$(") && arg.matches("\\$\\([0-9A-Fa-f]{1,2}\\)")) {
+            return true;
+        } else if (arg.startsWith("@") && arg.matches("@[a-zA-Z]+[a-zA-Z0-9_-]*")) {
+            return true;
+        } else if (arg.startsWith("*") && arg.matches("\\*[a-zA-Z]+[a-zA-Z0-9_-]*")) {
+            return true;
+        } else if (arg.startsWith("$") && arg.matches("\\$_?[a-zA-Z]+[a-zA-Z0-9_-]*")) {
+            return true;
+        } else if (arg.startsWith("_") && arg.matches("_[a-zA-Z]+[a-zA-Z0-9_-]*")) {
+            return true;
+        } else if (arg.matches("[0-9A-Fa-f]{1,2}")) {
+            return true;
+        }
+        throw new MalformedValueException();
     }
 
     private void fillMemoryBlock(int index, String[] tokens) throws TokenizingException {
@@ -159,9 +192,13 @@ public class Tokenizer {
         }
         currentMode = Mode.MEMORY_BLOCK;
         try {
-            currentMemoryBlock = new MemoryBlock(tokens[1]);
+            if (tokens[1].startsWith("$(") && tokens[1].matches("\\$\\([0-9A-Fa-f]{1,2}\\)")) {
+                currentMemoryBlock = new MemoryBlock(tokens[1]);
+            } else {
+                throw new TokenizingException("ERROR:" + index + " - addresses must be formatted like '$(FF)'");
+            }
         } catch (MalformedAddressException e) {
-            throw new TokenizingException("ERROR:" + index + " - addresses must be formatted like '$FF'");
+            throw new TokenizingException("ERROR:" + index + " - addresses must be formatted like '$(FF)'");
         }
         result.add(currentMemoryBlock);
     }
@@ -178,6 +215,21 @@ public class Tokenizer {
         if (tokens.length != 2 && tokens.length != 3) {
             throw new TokenizingException("ERROR:" + index + " - .var must be followed by its alias and an optional value");
         }
-        result.add(new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null));
+        try {
+            result.add(new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null));
+        } catch (NumberFormatException e) {
+            throw new TokenizingException("ERROR:" + index + " - " + tokens[2] + " is not a valid hexadecimal value");
+        }
+    }
+
+    private void tokenizeConstant(int index, String[] tokens) throws TokenizingException {
+        if (tokens.length != 3) {
+            throw new TokenizingException("ERROR:" + index + " - .const must be followed by its alias and a value");
+        }
+        try {
+            result.add(new Constant(tokens[1], tokens[2]));
+        } catch (NumberFormatException e) {
+            throw new TokenizingException("ERROR:" + index + " - " + tokens[2] + " is not a valid hexadecimal value");
+        }
     }
 }

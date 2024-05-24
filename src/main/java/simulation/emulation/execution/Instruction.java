@@ -10,7 +10,7 @@ public enum Instruction {
                     }
             }
     ),
-    LDA_IMM(0x01, "LDA %02X", "LOAD A immediate, loads the next byte into the A register", 2, new Signal[][][]{
+    LDA_IMM(0x01, "LDA $%02X", "LOAD A immediate, loads the next byte into the A register", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -29,7 +29,7 @@ public enum Instruction {
                     }
             }
     ),
-    LDB_IMM(0x03, "LDB %02X", "LOAD B immediate, loads the next byte into the B register", 2, new Signal[][][]{
+    LDB_IMM(0x03, "LDB $%02X", "LOAD B immediate, loads the next byte into the B register", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -48,7 +48,7 @@ public enum Instruction {
                     }
             }
     ),
-    LDS_IMM(0x05, "LDS %02X", "", 2, new Signal[][][]{
+    LDS_IMM(0x05, "LDS $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -67,7 +67,7 @@ public enum Instruction {
                     }
             }
     ),
-    OUT_IMM(0x07, "OUT %02X", "", 2, new Signal[][][]{
+    OUT_IMM(0x07, "OUT $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -93,7 +93,7 @@ public enum Instruction {
                     }
             }
     ),
-    STA_IMM(0x0A, "STA %02X", "", 2, new Signal[][][]{
+    STA_IMM(0x0A, "STA $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -114,7 +114,7 @@ public enum Instruction {
                     }
             }
     ),
-    STB_IMM(0x0C, "STB %02X", "", 2, new Signal[][][]{
+    STB_IMM(0x0C, "STB $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -135,7 +135,7 @@ public enum Instruction {
                     }
             }
     ),
-    STS_IMM(0x0E, "STS %02X", "", 2, new Signal[][][]{
+    STS_IMM(0x0E, "STS $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -163,7 +163,7 @@ public enum Instruction {
                     }
             }
     ),
-    ADD_IMM(0x11, "ADD %02X", "ADD immediate, Add the next byte to the A register", 2, new Signal[][][]{
+    ADD_IMM(0x11, "ADD $%02X", "ADD immediate, Add the next byte to the A register", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -184,7 +184,7 @@ public enum Instruction {
                     }
             }
     ),
-    SUB_IMM(0x13, "SUB %02X", "", 2, new Signal[][][]{
+    SUB_IMM(0x13, "SUB $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -205,7 +205,7 @@ public enum Instruction {
                     }
             }
     ),
-    XOR_IMM(0x15, "XOR %02X", "", 2, new Signal[][][]{
+    XOR_IMM(0x15, "XOR $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -226,7 +226,7 @@ public enum Instruction {
                     }
             }
     ),
-    AND_IMM(0x17, "AND %02X", "", 2, new Signal[][][]{
+    AND_IMM(0x17, "AND $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -247,7 +247,7 @@ public enum Instruction {
                     }
             }
     ),
-    ORA_IMM(0x19, "ORA %02X", "", 2, new Signal[][][]{
+    ORA_IMM(0x19, "ORA $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -268,7 +268,7 @@ public enum Instruction {
                     }
             }
     ),
-    CMP_IMM(0x1B, "CMP %02X", "", 2, new Signal[][][]{
+    CMP_IMM(0x1B, "CMP $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -296,7 +296,7 @@ public enum Instruction {
                     }
             }
     ),
-    JMP_IMM(0x1E, "JMP %02X", "JMP immediate, jump to the address in the next byte", 2, new Signal[][][]{
+    JMP_IMM(0x1E, "JMP $%02X", "JMP immediate, jump to the address in the next byte", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -322,7 +322,7 @@ public enum Instruction {
                     }
             }
     ),
-    BCS_IMM(0x21, "BCS %02X", "", 2, new Signal[][][]{
+    BCS_IMM(0x21, "BCS $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_E, Signal.CU_RST}
@@ -496,7 +496,7 @@ public enum Instruction {
                     }
             }
     ),
-    BCC_IMM(0x23, "BCC %02X", "", 2, new Signal[][][]{
+    BCC_IMM(0x23, "BCC $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -670,7 +670,7 @@ public enum Instruction {
                     }
             }
     ),
-    BEQ_IMM(0x25, "BEQ %02X", "", 2, new Signal[][][]{
+    BEQ_IMM(0x25, "BEQ $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_E, Signal.CU_RST}
@@ -844,7 +844,7 @@ public enum Instruction {
                     }
             }
     ),
-    BNE_IMM(0x27, "BNE %02X", "", 2, new Signal[][][]{
+    BNE_IMM(0x27, "BNE $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -1018,7 +1018,7 @@ public enum Instruction {
                     }
             }
     ),
-    BMI_IMM(0x29, "BMI %02X", "", 2, new Signal[][][]{
+    BMI_IMM(0x29, "BMI $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_E, Signal.CU_RST}
@@ -1192,7 +1192,7 @@ public enum Instruction {
                     }
             }
     ),
-    BPL_IMM(0x2B, "BPL %02X", "", 2, new Signal[][][]{
+    BPL_IMM(0x2B, "BPL $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},
@@ -1366,7 +1366,7 @@ public enum Instruction {
                     }
             }
     ),
-    BOS_IMM(0x2D, "BOS %02X", "", 2, new Signal[][][]{
+    BOS_IMM(0x2D, "BOS $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_E, Signal.CU_RST}
@@ -1540,7 +1540,7 @@ public enum Instruction {
                     }
             }
     ),
-    BOC_IMM(0x2F, "BOC %02X", "", 2, new Signal[][][]{
+    BOC_IMM(0x2F, "BOC $%02X", "", 2, new Signal[][][]{
                     new Signal[][]{
                             new Signal[]{Signal.C_E},
                             new Signal[]{Signal.C_OUT, Signal.MAR_IN},

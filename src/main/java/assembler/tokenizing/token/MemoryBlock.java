@@ -1,9 +1,10 @@
-package assembler.tokenizing.tokens;
+package assembler.tokenizing.token;
 
 import assembler.tokenizing.exception.MalformedAddressException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MemoryBlock extends Token {
 
@@ -14,7 +15,7 @@ public class MemoryBlock extends Token {
         if (!address.startsWith("$")) {
             throw new MalformedAddressException();
         }
-        this.address = Integer.parseInt(address.replaceAll("[$()]", ""), 16);
+        this.address = Integer.parseInt(address.replaceAll("[$()]", ""), 16) & 0xFF;
     }
 
     public int getAddress() {
@@ -26,7 +27,7 @@ public class MemoryBlock extends Token {
     }
 
     public void addData(int value) {
-        data.add(value);
+        data.add(value & 0xFF);
     }
 
     @Override
@@ -40,5 +41,18 @@ public class MemoryBlock extends Token {
         data.forEach(data -> builder.append(String.format("%02X ", data)));
         builder.append("}");
         return builder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MemoryBlock that = (MemoryBlock) o;
+        return address == that.address && Objects.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(address, data);
     }
 }

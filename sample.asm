@@ -4,14 +4,15 @@
     10 11 12 32 87 E4 FF DE
 .endblock
 .var X 1A
+.const B F0
+
 :START
-    LDA 25
-    ADD 12
+    LDA $X //load the value at the location of X
+    ADD $_B
     ADD $(F1)
-    STA E0
-:LOOP
+    STA *X
     LDA 0
+:LOOP
     ADD 10
     BCC @LOOP //loop until overflow over 0xFF
     HLT
-
