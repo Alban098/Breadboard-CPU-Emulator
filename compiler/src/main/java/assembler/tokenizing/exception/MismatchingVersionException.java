@@ -5,8 +5,8 @@
 */
 package assembler.tokenizing.exception;
 
-public class TokenizingException extends Exception {
-  public TokenizingException(String s) {
+public class MismatchingVersionException extends Exception {
+  public MismatchingVersionException(String s) {
     super(s);
   }
 }

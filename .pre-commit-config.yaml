@@ -14,7 +14,4 @@ repos:
     hooks:
       - id: prettier
         name: prettier
-        exclude: |
-          (?x)(
-              ^\.github/
-          )
+        files: '.*\.(java)'

@@ -6,7 +6,6 @@
 package assembler;
 
 import assembler.linking.Linker;
-import assembler.linking.exception.LinkingException;
 import assembler.linking.token.LinkedMemoryBlock;
 import assembler.linking.token.LinkedOperation;
 import assembler.linking.token.LinkedToken;
@@ -14,34 +13,57 @@ import assembler.linking.token.LinkedVariable;
 import assembler.mapping.Mapper;
 import assembler.mapping.exception.MappingException;
 import assembler.tokenizing.Tokenizer;
-import assembler.tokenizing.exception.TokenizingException;
+import assembler.tokenizing.exception.MismatchingVersionException;
 import java.io.*;
 import java.util.List;
+import org.apache.log4j.PropertyConfigurator;
 
 public class Assembler {
 
-  private static final String ASM_FILE = "sample.asm";
-  private static final String ROM_FILE = "sample.rom";
   private static final String ASM_VERSION_HEADER = "#BB8BC_ASM_v1";
   private static Tokenizer tokenizer;
   private static Mapper mapper;
   private static Linker linker;
 
   public static void main(String[] args)
-      throws IOException, TokenizingException, MismatchingVersionException, MappingException,
-          LinkingException {
+      throws IOException, MismatchingVersionException, MappingException {
+    PropertyConfigurator.configure("./log4j.properties");
+
+    boolean foundFile = false;
+    boolean foundBinary = false;
+    String file = null;
+    String binary = null;
+    for (String arg : args) {
+      if (foundFile) {
+        file = arg;
+      }
+      if (foundBinary) {
+        binary = arg;
+      }
+      foundFile = "-f".equals(arg);
+      foundBinary = "-o".equals(arg);
+    }
+
     tokenizer = new Tokenizer();
     mapper = new Mapper();
     linker = new Linker();
-    createTokens();
-    mapTokens();
-    linkTokens();
-    writeBinary();
+    if (file == null || createTokens(file)) {
+      return;
+    }
+    if (mapTokens()) {
+      return;
+    }
+    if (linkTokens()) {
+      return;
+    }
+    if (binary == null) {
+      binary = file.split("\\.")[0] + ".rom";
+    }
+    writeBinary(binary);
   }
 
-  private static void createTokens()
-      throws IOException, TokenizingException, MismatchingVersionException {
-    try (BufferedReader reader = new BufferedReader(new FileReader(ASM_FILE))) {
+  private static boolean createTokens(String file) throws IOException, MismatchingVersionException {
+    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
       String header = reader.readLine();
       if (!ASM_VERSION_HEADER.equals(header)) {
         throw new MismatchingVersionException("Wrong ASM Header !");
@@ -54,17 +76,20 @@ public class Assembler {
         tokenizer.tokenize(line);
       } while (true);
     }
+    return tokenizer.hasErrors();
   }
 
-  private static void mapTokens() throws MappingException {
+  private static boolean mapTokens() throws MappingException {
     mapper.mapTokens(tokenizer.getTokenizationResult());
+    return mapper.hasErrors();
   }
 
-  private static void linkTokens() throws LinkingException {
+  private static boolean linkTokens() {
     linker.linkTokens(mapper.getMappingResult());
+    return linker.hasErrors();
   }
 
-  private static void writeBinary() {
+  private static void writeBinary(String file) {
     byte[] binary = new byte[0x100];
     List<LinkedToken> tokens = linker.getLinkingResult();
     for (LinkedToken token : tokens) {
@@ -83,7 +108,7 @@ public class Assembler {
       }
     }
 
-    try (FileOutputStream fos = new FileOutputStream(ROM_FILE)) {
+    try (FileOutputStream fos = new FileOutputStream(file)) {
       fos.write(binary);
     } catch (IOException e) {
       throw new RuntimeException(e);

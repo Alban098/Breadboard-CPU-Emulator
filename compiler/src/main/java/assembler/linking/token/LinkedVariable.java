@@ -8,7 +8,7 @@ package assembler.linking.token;
 /**
  * Represents a Variable
  *
- * <p>.var $(addr) ?value that as been tokenized, mapped and linked, at this point it is valid
+ * <p>.var alias ?value that as been tokenized, mapped and linked, at this point it is valid
  */
 public class LinkedVariable extends LinkedToken {
 

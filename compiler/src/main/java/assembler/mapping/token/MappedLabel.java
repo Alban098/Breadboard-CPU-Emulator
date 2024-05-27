@@ -7,28 +7,38 @@ package assembler.mapping.token;
 
 import assembler.tokenizing.token.Label;
 
+/**
+ * Represents a Constant
+ *
+ * <p>:ALIAS that as been tokenized and mapped
+ */
 public class MappedLabel extends MappedToken {
 
+  /** The token that is mapped by this object */
   private final Label token;
-  private final MappedOperation referenceOperation;
 
+  /**
+   * Creates a new Mapped Label
+   *
+   * @param token the label to map
+   * @param referenceOperation the operation to attach this label to
+   */
   public MappedLabel(Label token, MappedOperation referenceOperation) {
-    super(referenceOperation.getAddress());
+    super(referenceOperation.getAddress(), token.getSourceFileLine());
     this.token = token;
-    this.referenceOperation = referenceOperation;
   }
 
+  /**
+   * Returns the reference token
+   *
+   * @return the reference token
+   */
   public Label getToken() {
     return token;
   }
 
-  public MappedOperation getReferenceOperation() {
-    return referenceOperation;
-  }
-
   @Override
   public String toString() {
-    return String.format(
-        "[$%02X] %s | ref. {%s}", getAddress(), token.getAlias(), referenceOperation);
+    return String.format("[$%02X] %s", getAddress(), token.getAlias());
   }
 }

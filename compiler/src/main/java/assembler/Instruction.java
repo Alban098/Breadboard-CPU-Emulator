@@ -89,4 +89,8 @@ public enum Instruction {
   public String getFormat() {
     return format;
   }
+
+  public String getName() {
+    return this.format.split(" ")[0];
+  }
 }

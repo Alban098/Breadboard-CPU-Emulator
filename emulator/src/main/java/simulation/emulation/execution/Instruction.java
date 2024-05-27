@@ -9,16 +9,10 @@ import simulation.emulation.constant.Flag;
 import simulation.emulation.constant.Signal;
 
 public enum Instruction {
-  NOP(
-      0x00,
-      "NOP",
-      "No operation",
-      1,
-      new Signal[][][] {new Signal[][] {new Signal[] {Signal.C_E, Signal.CU_RST}}}),
+  NOP(0x00, "NOP", 1, new Signal[][][] {new Signal[][] {new Signal[] {Signal.C_E, Signal.CU_RST}}}),
   LDA_IMM(
       0x01,
-      "LDA $%02X",
-      "LOAD A immediate, loads the next byte into the A register",
+      "LDA %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -31,7 +25,6 @@ public enum Instruction {
   LDA_ABS(
       0x02,
       "LDA $(%02X)",
-      "LOAD A absolute, loads the value at the address of the next byte in the A register",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -44,8 +37,7 @@ public enum Instruction {
       }),
   LDB_IMM(
       0x03,
-      "LDB $%02X",
-      "LOAD B immediate, loads the next byte into the B register",
+      "LDB %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -58,7 +50,6 @@ public enum Instruction {
   LDB_ABS(
       0x04,
       "LDB $(%02X)",
-      "LOAD B absolute, loads the value at the address of the next byte in the B register",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -71,8 +62,7 @@ public enum Instruction {
       }),
   LDS_IMM(
       0x05,
-      "LDS $%02X",
-      "",
+      "LDS %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -85,7 +75,6 @@ public enum Instruction {
   LDS_ABS(
       0x06,
       "LDS $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -98,8 +87,7 @@ public enum Instruction {
       }),
   OUT_IMM(
       0x07,
-      "OUT $%02X",
-      "",
+      "OUT %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -112,7 +100,6 @@ public enum Instruction {
   OUT_ABS(
       0x08,
       "OUT $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -126,7 +113,6 @@ public enum Instruction {
   OUT(
       0x09,
       "OUT",
-      "",
       1,
       new Signal[][][] {
         new Signal[][] {
@@ -136,8 +122,7 @@ public enum Instruction {
       }),
   STA_IMM(
       0x0A,
-      "STA $%02X",
-      "",
+      "STA %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -151,7 +136,6 @@ public enum Instruction {
   STA_ABS(
       0x0B,
       "STA $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -165,8 +149,7 @@ public enum Instruction {
       }),
   STB_IMM(
       0x0C,
-      "STB $%02X",
-      "",
+      "STB %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -180,7 +163,6 @@ public enum Instruction {
   STB_ABS(
       0x0D,
       "STB $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -194,8 +176,7 @@ public enum Instruction {
       }),
   STS_IMM(
       0x0E,
-      "STS $%02X",
-      "",
+      "STS %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -209,7 +190,6 @@ public enum Instruction {
   STS_ABS(
       0x0F,
       "STS $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -224,15 +204,13 @@ public enum Instruction {
   CLS(
       0x10,
       "CLS",
-      "",
       1,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.SR_RST}, new Signal[] {Signal.C_E, Signal.CU_RST}}
       }),
   ADD_IMM(
       0x11,
-      "ADD $%02X",
-      "ADD immediate, Add the next byte to the A register",
+      "ADD %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -246,7 +224,6 @@ public enum Instruction {
   ADD_ABS(
       0x12,
       "ADD $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -260,8 +237,7 @@ public enum Instruction {
       }),
   SUB_IMM(
       0x13,
-      "SUB $%02X",
-      "",
+      "SUB %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -275,7 +251,6 @@ public enum Instruction {
   SUB_ABS(
       0x14,
       "SUB $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -289,8 +264,7 @@ public enum Instruction {
       }),
   XOR_IMM(
       0x15,
-      "XOR $%02X",
-      "",
+      "XOR %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -304,7 +278,6 @@ public enum Instruction {
   XOR_ABS(
       0x16,
       "XOR $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -318,8 +291,7 @@ public enum Instruction {
       }),
   AND_IMM(
       0x17,
-      "AND $%02X",
-      "",
+      "AND %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -333,7 +305,6 @@ public enum Instruction {
   AND_ABS(
       0x18,
       "AND $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -347,8 +318,7 @@ public enum Instruction {
       }),
   ORA_IMM(
       0x19,
-      "ORA $%02X",
-      "",
+      "ORA %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -362,7 +332,6 @@ public enum Instruction {
   ORA_ABS(
       0x1A,
       "ORA $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -376,8 +345,7 @@ public enum Instruction {
       }),
   CMP_IMM(
       0x1B,
-      "CMP $%02X",
-      "",
+      "CMP %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -391,7 +359,6 @@ public enum Instruction {
   CMP_ABS(
       0x1C,
       "CMP $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -406,7 +373,6 @@ public enum Instruction {
   CMP(
       0x1D,
       "CMP",
-      "",
       1,
       new Signal[][][] {
         new Signal[][] {
@@ -416,8 +382,7 @@ public enum Instruction {
       }),
   JMP_IMM(
       0x1E,
-      "JMP $%02X",
-      "JMP immediate, jump to the address in the next byte",
+      "JMP %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -430,7 +395,6 @@ public enum Instruction {
   JMP_ABS(
       0x1F,
       "JMP $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -444,7 +408,6 @@ public enum Instruction {
   JMA(
       0x20,
       "JMA",
-      "",
       1,
       new Signal[][][] {
         new Signal[][] {
@@ -454,8 +417,7 @@ public enum Instruction {
       }),
   BCS_IMM(
       0x21,
-      "BCS $%02X",
-      "",
+      "BCS %02X",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -532,7 +494,6 @@ public enum Instruction {
   BCS_ABS(
       0x22,
       "BCS $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -616,8 +577,7 @@ public enum Instruction {
       }),
   BCC_IMM(
       0x23,
-      "BCC $%02X",
-      "",
+      "BCC %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -696,7 +656,6 @@ public enum Instruction {
   BCC_ABS(
       0x24,
       "BCC $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -782,8 +741,7 @@ public enum Instruction {
       }),
   BEQ_IMM(
       0x25,
-      "BEQ $%02X",
-      "",
+      "BEQ %02X",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -860,7 +818,6 @@ public enum Instruction {
   BEQ_ABS(
       0x26,
       "BEQ $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -944,8 +901,7 @@ public enum Instruction {
       }),
   BNE_IMM(
       0x27,
-      "BNE $%02X",
-      "",
+      "BNE %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -1024,7 +980,6 @@ public enum Instruction {
   BNE_ABS(
       0x28,
       "BNE $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -1110,8 +1065,7 @@ public enum Instruction {
       }),
   BMI_IMM(
       0x29,
-      "BMI $%02X",
-      "",
+      "BMI %02X",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -1188,7 +1142,6 @@ public enum Instruction {
   BMI_ABS(
       0x2A,
       "BMI $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -1272,8 +1225,7 @@ public enum Instruction {
       }),
   BPL_IMM(
       0x2B,
-      "BPL $%02X",
-      "",
+      "BPL %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -1352,7 +1304,6 @@ public enum Instruction {
   BPL_ABS(
       0x2C,
       "BPL $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -1438,8 +1389,7 @@ public enum Instruction {
       }),
   BOS_IMM(
       0x2D,
-      "BOS $%02X",
-      "",
+      "BOS %02X",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -1516,7 +1466,6 @@ public enum Instruction {
   BOS_ABS(
       0x2E,
       "BOS $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
@@ -1600,8 +1549,7 @@ public enum Instruction {
       }),
   BOC_IMM(
       0x2F,
-      "BOC $%02X",
-      "",
+      "BOC %02X",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -1680,7 +1628,6 @@ public enum Instruction {
   BOC_ABS(
       0x30,
       "BOC $(%02X)",
-      "",
       2,
       new Signal[][][] {
         new Signal[][] {
@@ -1767,7 +1714,6 @@ public enum Instruction {
   HLT(
       0x3F,
       "HLT",
-      "HALT, Hold the CPU from further execution",
       1,
       new Signal[][][] {
         new Signal[][] {new Signal[] {Signal.HLT}, new Signal[] {Signal.C_E, Signal.CU_RST}}
@@ -1775,22 +1721,19 @@ public enum Instruction {
 
   private final int opcode;
   private final String format;
-  private final String desc;
   private final int size;
   private final int[][] microcode;
 
   /**
    * @param opcode
-   * @param desc
    * @param size
    * @param microcode [x][y][z] x : status flags (not present defaults to y = 0) y : Control Unit
    *     Micro Step (starting after the first 2 mandatory fetch steps) z : signals (order is
    *     irrelevant)
    */
-  Instruction(int opcode, String format, String desc, int size, Signal[][][] microcode) {
+  Instruction(int opcode, String format, int size, Signal[][][] microcode) {
     this.opcode = opcode;
     this.format = format;
-    this.desc = desc;
     this.size = size;
     int flagStateCount = (1 << Flag.values().length);
     // microsteps are coded over 4 bits, so 16 possible values
@@ -1843,9 +1786,5 @@ public enum Instruction {
 
   public int[][] getMicrocode() {
     return microcode;
-  }
-
-  public String getDesc() {
-    return desc;
   }
 }

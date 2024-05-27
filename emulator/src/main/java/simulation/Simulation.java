@@ -18,31 +18,32 @@ import simulation.rendering.Window;
 public class Simulation {
 
   private static final int CLOCK_FREQUENCY = 100;
-  private static final String PROGRAM_FILE = "sample.rom";
   private final Window window;
   private final Timer timer;
   private final Emulator emulator;
   private final UILayer uiLayer;
 
   public static void main(String[] args) throws IOException {
-    Instructions.dumpInstructionSet("instruction_set");
-    Instructions.dumpProgramROM(false, "ROM_dump.txt");
-    Instructions.dumpProgramROM(true, "ROM_dump.bin");
-    new Simulation();
+    if (args[0] != null) {
+      Instructions.dumpInstructionSet("docs/instruction_set.txt");
+      Instructions.dumpProgramROM(false, "docs/ROM_dump.txt");
+      Instructions.dumpProgramROM(true, "docs/ROM_dump.bin");
+      new Simulation(args[0]);
+    }
   }
 
-  public Simulation() throws IOException {
+  public Simulation(String file) throws IOException {
     window = new Window("Example", 480, 360);
     timer = new Timer();
     emulator = new Emulator();
     uiLayer = new UILayer(emulator);
-    init();
+    init(file);
     loop();
     window.cleanUp();
   }
 
-  private void init() throws IOException {
-    try (FileInputStream programFis = new FileInputStream(PROGRAM_FILE)) {
+  private void init(String file) throws IOException {
+    try (FileInputStream programFis = new FileInputStream(file)) {
       int a = programFis.available();
       if (programFis.available() > 0x100) {
         throw new IOException("Program can not be more than 256 bytes");

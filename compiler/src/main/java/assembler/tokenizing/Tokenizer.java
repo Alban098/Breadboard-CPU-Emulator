@@ -8,86 +8,132 @@ package assembler.tokenizing;
 import assembler.Instruction;
 import assembler.tokenizing.exception.MalformedAddressException;
 import assembler.tokenizing.exception.MalformedValueException;
-import assembler.tokenizing.exception.TokenizingException;
 import assembler.tokenizing.token.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * This component will execute the Tokenizer stage of the compilation.
+ *
+ * <p>Rejects invalid operand
+ *
+ * <p>Rejects invalid arguments
+ */
 public class Tokenizer {
 
-  private static final Map<String, Instruction> instructionMap = new HashMap<>();
+  private static final Logger LOG = LoggerFactory.getLogger(Tokenizer.class);
 
+  /** Just a cache to convert from text to actual instructions */
+  private static final Map<String, Instruction> INSTRUCTION_MAP = new HashMap<>();
+
+  /*
+   * Initializes the instruction cache
+   */
   static {
-    instructionMap.put("NOP", Instruction.NOP);
-    instructionMap.put("LDA X", Instruction.LDA_IMM);
-    instructionMap.put("LDA $(X)", Instruction.LDA_ABS);
-    instructionMap.put("LDB X", Instruction.LDB_IMM);
-    instructionMap.put("LDB $(X)", Instruction.LDB_ABS);
-    instructionMap.put("LDS X", Instruction.LDS_IMM);
-    instructionMap.put("LDS $(X)", Instruction.LDS_ABS);
-    instructionMap.put("OUT X", Instruction.OUT_IMM);
-    instructionMap.put("OUT $(X)", Instruction.OUT_ABS);
-    instructionMap.put("OUT", Instruction.OUT);
-    instructionMap.put("STA X", Instruction.STA_IMM);
-    instructionMap.put("STA $(X)", Instruction.STA_ABS);
-    instructionMap.put("STB X", Instruction.STB_IMM);
-    instructionMap.put("STB $(X)", Instruction.STB_ABS);
-    instructionMap.put("STS X", Instruction.STS_IMM);
-    instructionMap.put("STS $(X)", Instruction.STS_ABS);
-    instructionMap.put("CLS", Instruction.CLS);
-    instructionMap.put("ADD X", Instruction.ADD_IMM);
-    instructionMap.put("ADD $(X)", Instruction.ADD_ABS);
-    instructionMap.put("SUB X", Instruction.SUB_IMM);
-    instructionMap.put("SUB $(X)", Instruction.SUB_ABS);
-    instructionMap.put("XOR X", Instruction.XOR_IMM);
-    instructionMap.put("XOR $(X)", Instruction.XOR_ABS);
-    instructionMap.put("AND X", Instruction.AND_IMM);
-    instructionMap.put("AND $(X)", Instruction.AND_ABS);
-    instructionMap.put("ORA X", Instruction.ORA_IMM);
-    instructionMap.put("ORA $(X)", Instruction.ORA_ABS);
-    instructionMap.put("CMP X", Instruction.CMP_IMM);
-    instructionMap.put("CMP $(X)", Instruction.CMP_ABS);
-    instructionMap.put("CMP", Instruction.CMP);
-    instructionMap.put("JMP X", Instruction.JMP_IMM);
-    instructionMap.put("JMP $(X)", Instruction.JMP_ABS);
-    instructionMap.put("JMA", Instruction.JMA);
-    instructionMap.put("BCS X", Instruction.BCS_IMM);
-    instructionMap.put("BCS $(X)", Instruction.BCS_ABS);
-    instructionMap.put("BCC X", Instruction.BCC_IMM);
-    instructionMap.put("BCC $(X)", Instruction.BCC_ABS);
-    instructionMap.put("BEQ X", Instruction.BEQ_IMM);
-    instructionMap.put("BEQ $(X)", Instruction.BEQ_ABS);
-    instructionMap.put("BNE X", Instruction.BNE_IMM);
-    instructionMap.put("BNE $(X)", Instruction.BNE_ABS);
-    instructionMap.put("BMI X", Instruction.BMI_IMM);
-    instructionMap.put("BMI $(X)", Instruction.BMI_ABS);
-    instructionMap.put("BPL X", Instruction.BPL_IMM);
-    instructionMap.put("BPL $(X)", Instruction.BPL_ABS);
-    instructionMap.put("BOS X", Instruction.BOS_IMM);
-    instructionMap.put("BOS $(X)", Instruction.BOS_ABS);
-    instructionMap.put("BOC X", Instruction.BOC_IMM);
-    instructionMap.put("BOC $(X)", Instruction.BOC_ABS);
-    instructionMap.put("HLT", Instruction.HLT);
+    INSTRUCTION_MAP.put("NOP", Instruction.NOP);
+    INSTRUCTION_MAP.put("LDA X", Instruction.LDA_IMM);
+    INSTRUCTION_MAP.put("LDA $(X)", Instruction.LDA_ABS);
+    INSTRUCTION_MAP.put("LDB X", Instruction.LDB_IMM);
+    INSTRUCTION_MAP.put("LDB $(X)", Instruction.LDB_ABS);
+    INSTRUCTION_MAP.put("LDS X", Instruction.LDS_IMM);
+    INSTRUCTION_MAP.put("LDS $(X)", Instruction.LDS_ABS);
+    INSTRUCTION_MAP.put("OUT X", Instruction.OUT_IMM);
+    INSTRUCTION_MAP.put("OUT $(X)", Instruction.OUT_ABS);
+    INSTRUCTION_MAP.put("OUT", Instruction.OUT);
+    INSTRUCTION_MAP.put("STA X", Instruction.STA_IMM);
+    INSTRUCTION_MAP.put("STA $(X)", Instruction.STA_ABS);
+    INSTRUCTION_MAP.put("STB X", Instruction.STB_IMM);
+    INSTRUCTION_MAP.put("STB $(X)", Instruction.STB_ABS);
+    INSTRUCTION_MAP.put("STS X", Instruction.STS_IMM);
+    INSTRUCTION_MAP.put("STS $(X)", Instruction.STS_ABS);
+    INSTRUCTION_MAP.put("CLS", Instruction.CLS);
+    INSTRUCTION_MAP.put("ADD X", Instruction.ADD_IMM);
+    INSTRUCTION_MAP.put("ADD $(X)", Instruction.ADD_ABS);
+    INSTRUCTION_MAP.put("SUB X", Instruction.SUB_IMM);
+    INSTRUCTION_MAP.put("SUB $(X)", Instruction.SUB_ABS);
+    INSTRUCTION_MAP.put("XOR X", Instruction.XOR_IMM);
+    INSTRUCTION_MAP.put("XOR $(X)", Instruction.XOR_ABS);
+    INSTRUCTION_MAP.put("AND X", Instruction.AND_IMM);
+    INSTRUCTION_MAP.put("AND $(X)", Instruction.AND_ABS);
+    INSTRUCTION_MAP.put("ORA X", Instruction.ORA_IMM);
+    INSTRUCTION_MAP.put("ORA $(X)", Instruction.ORA_ABS);
+    INSTRUCTION_MAP.put("CMP X", Instruction.CMP_IMM);
+    INSTRUCTION_MAP.put("CMP $(X)", Instruction.CMP_ABS);
+    INSTRUCTION_MAP.put("CMP", Instruction.CMP);
+    INSTRUCTION_MAP.put("JMP X", Instruction.JMP_IMM);
+    INSTRUCTION_MAP.put("JMP $(X)", Instruction.JMP_ABS);
+    INSTRUCTION_MAP.put("JMA", Instruction.JMA);
+    INSTRUCTION_MAP.put("BCS X", Instruction.BCS_IMM);
+    INSTRUCTION_MAP.put("BCS $(X)", Instruction.BCS_ABS);
+    INSTRUCTION_MAP.put("BCC X", Instruction.BCC_IMM);
+    INSTRUCTION_MAP.put("BCC $(X)", Instruction.BCC_ABS);
+    INSTRUCTION_MAP.put("BEQ X", Instruction.BEQ_IMM);
+    INSTRUCTION_MAP.put("BEQ $(X)", Instruction.BEQ_ABS);
+    INSTRUCTION_MAP.put("BNE X", Instruction.BNE_IMM);
+    INSTRUCTION_MAP.put("BNE $(X)", Instruction.BNE_ABS);
+    INSTRUCTION_MAP.put("BMI X", Instruction.BMI_IMM);
+    INSTRUCTION_MAP.put("BMI $(X)", Instruction.BMI_ABS);
+    INSTRUCTION_MAP.put("BPL X", Instruction.BPL_IMM);
+    INSTRUCTION_MAP.put("BPL $(X)", Instruction.BPL_ABS);
+    INSTRUCTION_MAP.put("BOS X", Instruction.BOS_IMM);
+    INSTRUCTION_MAP.put("BOS $(X)", Instruction.BOS_ABS);
+    INSTRUCTION_MAP.put("BOC X", Instruction.BOC_IMM);
+    INSTRUCTION_MAP.put("BOC $(X)", Instruction.BOC_ABS);
+    INSTRUCTION_MAP.put("HLT", Instruction.HLT);
   }
 
+  /** Holds all Tokens that have been decoded */
   private final TokenizationResult result = new TokenizationResult();
+  /** The current mode of the Tokenizer see {@link Mode} */
   private Mode currentMode = Mode.CODE;
+  /** The memory block to fill in case we are in {@link Mode#MEMORY_BLOCK} */
   private MemoryBlock currentMemoryBlock;
+  /** The last encountered label, waiting to be linked to an operation */
   private Label labelToReference;
+  /** The current line inside the source file */
   private int lineIndex = 1; // Initialize at 1 because of mandatory header
+  /** Has an error been encountered during this stage */
+  private boolean hasErrors = false;
 
-  public void tokenize(String line) throws TokenizingException {
+  /**
+   * Convert and extract tokens from a line of the source file
+   *
+   * @param line the line to tokenize
+   */
+  public void tokenize(String line) {
     lineIndex++;
     tokenizeLine(line, lineIndex);
   }
 
+  /**
+   * Returns the result of the tokenizing stage
+   *
+   * @return the result of the tokenizing stage
+   */
   public TokenizationResult getTokenizationResult() {
     return result;
   }
 
-  private void tokenizeLine(String line, int index) throws TokenizingException {
+  /**
+   * Returns whether errors have been encountered or not
+   *
+   * @return whether errors have been encountered or not
+   */
+  public boolean hasErrors() {
+    return hasErrors;
+  }
+
+  /**
+   * Tokenize a line,
+   *
+   * @param line the line to tokenize
+   * @param index the index of the current line in the source file
+   */
+  private void tokenizeLine(String line, int index) {
     String[] tokens = line.split(" ");
     tokens = sanitizeTokens(tokens);
 
@@ -113,12 +159,20 @@ public class Tokenizer {
     }
   }
 
+  /**
+   * Cleans up a line, by removing blank tokens, and ignoring comments
+   *
+   * @param tokens an array of token to sanitize
+   * @return an array of sanitized tokens
+   */
   private String[] sanitizeTokens(String[] tokens) {
     List<String> sanitized = new ArrayList<>(tokens.length);
     for (String token : tokens) {
+      // Ignore everything that is a comment
       if (token.startsWith("//")) {
         break;
       }
+      // Ignore blank entries, that appear with 2 consecutive spaces
       if (!token.isBlank()) {
         sanitized.add(token);
       }
@@ -126,7 +180,13 @@ public class Tokenizer {
     return sanitized.toArray(new String[0]);
   }
 
-  private void tokenizeInstruction(int index, String[] tokens) throws TokenizingException {
+  /**
+   * Tokenizes an instruction
+   *
+   * @param line the line index in the source file
+   * @param tokens tokens to tokenize
+   */
+  private void tokenizeInstruction(int line, String[] tokens) {
     String operand = tokens[0];
     String arg = null;
     Instruction decoded;
@@ -135,9 +195,11 @@ public class Tokenizer {
       try {
         checkArg(arg);
       } catch (MalformedValueException e) {
-        throw new TokenizingException("ERROR:" + index + " - " + arg + " is not a valid arguments");
+        LOG.error("-----> Line {} - Malformed argument '{}'", line, arg);
+        this.hasErrors = true;
+        return;
       }
-      // '$' means we need to dereference the address
+      // '$' means we need to dereference the address, aka indirect addressing
       // - for variables this will replace '$var' by '$(addr)'
       // - for constants this will replace '$_const' by '$(val)'
       if (arg.startsWith("$")) {
@@ -146,16 +208,16 @@ public class Tokenizer {
         operand += " X";
       }
     }
-    decoded = instructionMap.get(operand);
+    decoded = INSTRUCTION_MAP.get(operand);
     if (decoded == null) {
-      throw new TokenizingException(
-          "ERROR:"
-              + index
-              + " - "
-              + tokens[0]
-              + " is not recognized as an instruction, or isn't compatible with the passed argument");
+      LOG.error(
+          "-----> Line {} - '{}' is not recognized as an instruction, or isn't compatible with the passed argument",
+          line,
+          tokens[0]);
+      this.hasErrors = true;
+      return;
     }
-    Operation token = new Operation(decoded, arg);
+    Operation token = new Operation(decoded, arg, line);
     if (labelToReference != null) {
       labelToReference.setReferenceOperation(token);
       labelToReference = null;
@@ -163,6 +225,13 @@ public class Tokenizer {
     result.add(token);
   }
 
+  /**
+   * Return true if the argument is pseudo valid
+   *
+   * @param arg the argument to check
+   * @return true if valid
+   * @throws MalformedValueException if the argument is not valid
+   */
   private boolean checkArg(String arg) throws MalformedValueException {
     if (arg.startsWith("$(") && arg.matches("\\$\\([0-9A-Fa-f]{1,2}\\)")) {
       return true;
@@ -180,7 +249,14 @@ public class Tokenizer {
     throw new MalformedValueException();
   }
 
-  private void fillMemoryBlock(int index, String[] tokens) throws TokenizingException {
+  /**
+   * Fills a memory block, this is called when in {@link Mode#MEMORY_BLOCK}, interprets tokens as
+   * raw data to add to the current memory block
+   *
+   * @param line the line index in the source file
+   * @param tokens tokens to add to the memory block, should be 8 bits hexadecimal values
+   */
+  private void fillMemoryBlock(int line, String[] tokens) {
     for (String token : tokens) {
       if (token.equals(".endblock")) {
         currentMode = Mode.CODE;
@@ -191,67 +267,101 @@ public class Tokenizer {
         int value = Integer.parseInt(token, 16);
         currentMemoryBlock.addData(value);
       } catch (NumberFormatException e) {
-        throw new TokenizingException(
-            "ERROR:"
-                + index
-                + " - "
-                + token
-                + " is not an hexadecimal value (have you missed a '.endblock' tag ?)");
+        LOG.error("-----> Line {} - '{}' is not a valid hexadecimal value", line, tokens[0]);
+        this.hasErrors = true;
       }
     }
   }
 
-  private void tokenizeMemoryBlock(int index, String[] tokens) throws TokenizingException {
+  /**
+   * Tokenizes a memory block
+   *
+   * @param line the line index in the source file
+   * @param tokens tokens to tokenize
+   */
+  private void tokenizeMemoryBlock(int line, String[] tokens) {
     if (tokens.length != 2) {
-      throw new TokenizingException(
-          "ERROR:" + index + " - .block must be followed by its memory address");
+      LOG.error("-----> Line {} - .block must be followed by a memory address '.block $(F0)", line);
+      this.hasErrors = true;
+      return;
     }
     currentMode = Mode.MEMORY_BLOCK;
     try {
       if (tokens[1].startsWith("$(") && tokens[1].matches("\\$\\([0-9A-Fa-f]{1,2}\\)")) {
-        currentMemoryBlock = new MemoryBlock(tokens[1]);
+        currentMemoryBlock = new MemoryBlock(tokens[1], line);
       } else {
-        throw new TokenizingException(
-            "ERROR:" + index + " - addresses must be formatted like '$(FF)'");
+        LOG.error(
+            "-----> Line {} - {} is invalid, addresses must be formatted like '$(FF)'",
+            line,
+            tokens[1]);
+        this.hasErrors = true;
+        return;
       }
     } catch (MalformedAddressException e) {
-      throw new TokenizingException(
-          "ERROR:" + index + " - addresses must be formatted like '$(FF)'");
+      LOG.error(
+          "-----> Line {} - {} is invalid, addresses must be formatted like '$(FF)'",
+          line,
+          tokens[1]);
+      this.hasErrors = true;
+      return;
     }
     result.add(currentMemoryBlock);
   }
 
-  private void tokenizeLabel(int index, String[] tokens) throws TokenizingException {
+  /**
+   * Tokenizes a label
+   *
+   * @param line the line index in the source file
+   * @param tokens tokens to tokenize
+   */
+  private void tokenizeLabel(int line, String[] tokens) {
     if (tokens.length != 1) {
-      throw new TokenizingException("ERROR:" + index + " - Labels must not contains blank space");
+      LOG.error(
+          "-----> Line {} - {} is invalid, labels must not contains blank space", line, tokens[1]);
+      this.hasErrors = true;
+      return;
     }
-    labelToReference = new Label(tokens[0].replace(":", ""));
+    labelToReference = new Label(tokens[0].replace(":", ""), line);
     result.add(labelToReference);
   }
 
-  private void tokenizeVariable(int index, String[] tokens) throws TokenizingException {
+  /**
+   * Tokenizes a variable
+   *
+   * @param line the line index in the source file
+   * @param tokens tokens to tokenize
+   */
+  private void tokenizeVariable(int line, String[] tokens) {
     if (tokens.length != 2 && tokens.length != 3) {
-      throw new TokenizingException(
-          "ERROR:" + index + " - .var must be followed by its alias and an optional value");
+      LOG.error("-----> Line {} - .var must be followed by its alias and an optional value", line);
+      this.hasErrors = true;
+      return;
     }
     try {
-      result.add(new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null));
+      result.add(new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null, line));
     } catch (NumberFormatException e) {
-      throw new TokenizingException(
-          "ERROR:" + index + " - " + tokens[2] + " is not a valid hexadecimal value");
+      LOG.error("-----> Line {} - '{}' is not a valid hexadecimal value", line, tokens[2]);
+      this.hasErrors = true;
     }
   }
 
-  private void tokenizeConstant(int index, String[] tokens) throws TokenizingException {
+  /**
+   * Tokenizes a constant
+   *
+   * @param line the line index in the source file
+   * @param tokens tokens to tokenize
+   */
+  private void tokenizeConstant(int line, String[] tokens) {
     if (tokens.length != 3) {
-      throw new TokenizingException(
-          "ERROR:" + index + " - .const must be followed by its alias and a value");
+      LOG.error("-----> Line {} - .const must be followed by its alias and optional value", line);
+      this.hasErrors = true;
+      return;
     }
     try {
-      result.add(new Constant(tokens[1], tokens[2]));
+      result.add(new Constant(tokens[1], tokens[2], line));
     } catch (NumberFormatException e) {
-      throw new TokenizingException(
-          "ERROR:" + index + " - " + tokens[2] + " is not a valid hexadecimal value");
+      LOG.error("-----> Line {} - '{}' is not a valid hexadecimal value", line, tokens[2]);
+      this.hasErrors = true;
     }
   }
 }
