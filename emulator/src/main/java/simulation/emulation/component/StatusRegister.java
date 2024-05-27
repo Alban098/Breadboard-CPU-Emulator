@@ -19,12 +19,6 @@ public final class StatusRegister extends AbstractRegister {
 
   @Override
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signal.SR_IN)) {
-      value = readBus();
-    }
-    if (controlUnit.hasControlSignal(Signal.SR_RST)) {
-      value = 0;
-    }
     if (controlUnit.hasControlSignal(Signal.SR_LATCH)) {
       value =
           (alu.probeFlag(Flag.OVERFLOW) ? Flag.OVERFLOW.getMask() : 0)
@@ -37,9 +31,7 @@ public final class StatusRegister extends AbstractRegister {
 
   @Override
   public void update() {
-    if (controlUnit.hasControlSignal(Signal.SR_OUT)) {
-      writeBus(value);
-    }
+    // Nothing to do
   }
 
   public void setFlag(Flag flag, boolean value) {

@@ -75,7 +75,7 @@ public final class Instructions {
       BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
       writer.append("OpCode|OZCN|Step|          Bin          |\n");
       writer.append("------|----|----|-----------------------|\n");
-      for (int addr = 0; addr < TABLE.length * (1 << Flag.values().length) * 8; addr++) {
+      for (int addr = 0; addr < TABLE.length * (1 << Flag.values().length) * 16; addr++) {
         int opcode = (addr & 0b111111_0000_0000) >> 8;
         int flags = (addr & 0b000000_1111_0000) >> 4;
         int microstep = addr & 0b000000_0000_1111;
@@ -97,7 +97,7 @@ public final class Instructions {
                           Integer.toBinaryString(microstep))
                       .replaceAll(" ", "0"))
               .append(" ")
-              .append(String.format("%23s", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
+              .append(String.format("%16s", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
               .append(" ")
               .append(String.valueOf(formattedSignals))
               .append("\n");
@@ -107,26 +107,21 @@ public final class Instructions {
     } else {
       FileOutputStream dump_LB = new FileOutputStream(fileName + "0");
       FileOutputStream dump_MB = new FileOutputStream(fileName + "1");
-      FileOutputStream dump_HB = new FileOutputStream(fileName + "2");
       byte[] lbs = new byte[0b1000000_0000_0000];
       byte[] mbs = new byte[0b1000000_0000_0000];
-      byte[] hbs = new byte[0b1000000_0000_0000];
       for (int addr = 0; addr < TABLE.length * (1 << (Flag.values().length - 1)) * 8; addr++) {
         int opcode = (addr & 0b111111_0000_0000) >> 8;
         int flags = (addr & 0b000000_1111_0000) >> 4;
         int microstep = addr & 0b000000_0000_1111;
         Instruction instruction = TABLE[opcode];
         int signals = instruction.getMicrocode()[flags][microstep];
-        lbs[addr] = (byte) (signals & 0x0000FF);
-        mbs[addr] = (byte) ((signals & 0x00FF00) >> 8);
-        hbs[addr] = (byte) ((signals & 0xFF0000) >> 16);
+        lbs[addr] = (byte) (signals & 0x00FF);
+        mbs[addr] = (byte) ((signals & 0xFF00) >> 8);
       }
       dump_LB.write(lbs);
       dump_MB.write(mbs);
-      dump_HB.write(hbs);
       dump_LB.close();
       dump_MB.close();
-      dump_HB.close();
     }
   }
 }

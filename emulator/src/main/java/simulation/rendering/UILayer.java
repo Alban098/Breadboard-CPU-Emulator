@@ -100,7 +100,7 @@ public class UILayer {
       ImGui.sameLine();
       ImGui.text("(" + alu.hexString() + ")");
       ImGui.sameLine();
-      ImGui.textColored(255, 0, 255, 255, " O");
+      ImGui.textColored(255, 0, 255, 255, "    O");
       ImGui.sameLine();
       ImGui.text("=");
       ImGui.sameLine();
@@ -141,37 +141,16 @@ public class UILayer {
       }
 
       ImGui.sameLine();
-      if (!controlUnit.hasControlSignal(Signal.SUB)
-          && !controlUnit.hasControlSignal(Signal.AND)
-          && !controlUnit.hasControlSignal(Signal.XOR)
-          && !controlUnit.hasControlSignal(Signal.OR)) {
-        ImGui.textColored(0, 255, 0, 255, " ADD");
+      if (!controlUnit.hasControlSignal(Signal.SUB)) {
+        ImGui.textColored(0, 255, 0, 255, "    ADD");
       } else {
-        ImGui.textColored(255, 0, 0, 255, " ADD");
+        ImGui.textColored(255, 0, 0, 255, "    ADD");
       }
       ImGui.sameLine();
       if (controlUnit.hasControlSignal(Signal.SUB)) {
         ImGui.textColored(0, 255, 0, 255, "SUB");
       } else {
         ImGui.textColored(255, 0, 0, 255, "SUB");
-      }
-      ImGui.sameLine();
-      if (controlUnit.hasControlSignal(Signal.AND)) {
-        ImGui.textColored(0, 255, 0, 255, "AND");
-      } else {
-        ImGui.textColored(255, 0, 0, 255, "AND");
-      }
-      ImGui.sameLine();
-      if (controlUnit.hasControlSignal(Signal.OR)) {
-        ImGui.textColored(0, 255, 0, 255, "OR");
-      } else {
-        ImGui.textColored(255, 0, 0, 255, "OR");
-      }
-      ImGui.sameLine();
-      if (controlUnit.hasControlSignal(Signal.XOR)) {
-        ImGui.textColored(0, 255, 0, 255, "XOR");
-      } else {
-        ImGui.textColored(255, 0, 0, 255, "XOR");
       }
       ImGui.treePop();
     }
@@ -402,7 +381,7 @@ public class UILayer {
 
   private void printControlUnitStatus() {
     ImGui.setNextItemOpen(true);
-    if (ImGui.treeNode("ControlUnit")) {
+    if (ImGui.treeNode("Control Unit")) {
       ControlUnitModule controlUnit =
           emulator.getModule(ModuleId.CONTROL_UNIT, ControlUnitModule.class);
       ImGui.textColored(0, 255, 255, 255, "State");

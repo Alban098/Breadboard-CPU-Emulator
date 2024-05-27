@@ -50,12 +50,12 @@ public final class ControlUnitModule extends Module {
 
   @Override
   public String hexString() {
-    return String.format("0x%06X", state);
+    return String.format("0x%04X", state);
   }
 
   @Override
   public String binaryString() {
-    return String.format("%23s", Integer.toBinaryString(state)).replaceAll(" ", "0");
+    return String.format("%16s", Integer.toBinaryString(state)).replaceAll(" ", "0");
   }
 
   public int getMicroStep() {

@@ -23,8 +23,6 @@ public final class BRegister extends AbstractRegister {
 
   @Override
   public void update() {
-    if (controlUnit.hasControlSignal(Signal.B_OUT)) {
-      writeBus(value);
-    }
+    // Nothing to do
   }
 }

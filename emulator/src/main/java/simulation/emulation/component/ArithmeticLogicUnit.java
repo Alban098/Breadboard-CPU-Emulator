@@ -55,12 +55,6 @@ public final class ArithmeticLogicUnit extends BusConnectedModule {
     if (controlUnit.hasControlSignal(Signal.SUB)) {
       // 2's complement
       return aRegister.getValue() + (bRegister.getValue() ^ 0xFF) + 1;
-    } else if (controlUnit.hasControlSignal(Signal.OR)) {
-      return aRegister.getValue() | bRegister.getValue();
-    } else if (controlUnit.hasControlSignal(Signal.XOR)) {
-      return aRegister.getValue() ^ bRegister.getValue();
-    } else if (controlUnit.hasControlSignal(Signal.AND)) {
-      return aRegister.getValue() & bRegister.getValue();
     } else {
       return aRegister.getValue() + bRegister.getValue();
     }
