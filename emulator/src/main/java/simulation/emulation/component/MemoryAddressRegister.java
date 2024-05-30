@@ -15,7 +15,7 @@ public final class MemoryAddressRegister extends AbstractRegister {
 
   @Override
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signal.MAR_IN)) {
+    if (controlUnit.hasControlSignal(Signal.MR_IN)) {
       value = readBus();
     }
     return false;

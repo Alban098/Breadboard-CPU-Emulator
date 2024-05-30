@@ -17,7 +17,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.A_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -29,8 +29,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.A_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -42,7 +42,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -54,8 +54,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -67,7 +67,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.OUT_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -79,8 +79,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.OUT_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -102,8 +102,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.A_OUT, Signal.RAM_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -115,9 +115,9 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.A_OUT, Signal.RAM_IN},
           new Signal[] {Signal.C_E, Signal.CU_RST}
         }
@@ -129,7 +129,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN},
           new Signal[] {Signal.ALU_OUT, Signal.A_IN, Signal.SR_LATCH},
           new Signal[] {Signal.C_E, Signal.CU_RST}
@@ -142,8 +142,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN},
           new Signal[] {Signal.ALU_OUT, Signal.A_IN, Signal.SR_LATCH},
           new Signal[] {Signal.C_E, Signal.CU_RST}
@@ -156,7 +156,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN, Signal.SUB},
           new Signal[] {Signal.ALU_OUT, Signal.A_IN, Signal.SR_LATCH, Signal.SUB},
           new Signal[] {Signal.C_E, Signal.CU_RST, Signal.SUB}
@@ -169,8 +169,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN, Signal.SUB},
           new Signal[] {Signal.ALU_OUT, Signal.A_IN, Signal.SR_LATCH, Signal.SUB},
           new Signal[] {Signal.C_E, Signal.CU_RST, Signal.SUB}
@@ -183,7 +183,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN, Signal.SUB},
           new Signal[] {Signal.SR_LATCH, Signal.SUB},
           new Signal[] {Signal.C_E, Signal.CU_RST, Signal.SUB}
@@ -196,8 +196,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.B_IN, Signal.SUB},
           new Signal[] {Signal.SR_LATCH, Signal.SUB},
           new Signal[] {Signal.C_E, Signal.CU_RST, Signal.SUB}
@@ -220,7 +220,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -232,8 +232,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -259,13 +259,13 @@ public enum Instruction {
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -277,13 +277,13 @@ public enum Instruction {
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -295,13 +295,13 @@ public enum Instruction {
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -313,13 +313,13 @@ public enum Instruction {
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -335,15 +335,15 @@ public enum Instruction {
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -355,15 +355,15 @@ public enum Instruction {
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -375,15 +375,15 @@ public enum Instruction {
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -395,15 +395,15 @@ public enum Instruction {
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -415,13 +415,13 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -433,13 +433,13 @@ public enum Instruction {
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -451,13 +451,13 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -469,13 +469,13 @@ public enum Instruction {
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -493,15 +493,15 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -513,15 +513,15 @@ public enum Instruction {
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -533,15 +533,15 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -553,15 +553,15 @@ public enum Instruction {
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -589,25 +589,25 @@ public enum Instruction {
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -625,25 +625,25 @@ public enum Instruction {
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -665,29 +665,29 @@ public enum Instruction {
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -705,29 +705,29 @@ public enum Instruction {
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -739,25 +739,25 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -775,25 +775,25 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -817,29 +817,29 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -857,29 +857,29 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -904,7 +904,7 @@ public enum Instruction {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -913,7 +913,7 @@ public enum Instruction {
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -922,7 +922,7 @@ public enum Instruction {
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -931,7 +931,7 @@ public enum Instruction {
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -940,7 +940,7 @@ public enum Instruction {
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -949,7 +949,7 @@ public enum Instruction {
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -958,7 +958,7 @@ public enum Instruction {
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -967,7 +967,7 @@ public enum Instruction {
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -980,8 +980,8 @@ public enum Instruction {
         new Signal[][] {new Signal[] {Signal.C_E}, new Signal[] {Signal.C_E, Signal.CU_RST}},
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -990,8 +990,8 @@ public enum Instruction {
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1000,8 +1000,8 @@ public enum Instruction {
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1010,8 +1010,8 @@ public enum Instruction {
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1020,8 +1020,8 @@ public enum Instruction {
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1030,8 +1030,8 @@ public enum Instruction {
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1040,8 +1040,8 @@ public enum Instruction {
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1050,8 +1050,8 @@ public enum Instruction {
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -1063,7 +1063,7 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1072,7 +1072,7 @@ public enum Instruction {
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1081,7 +1081,7 @@ public enum Instruction {
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1090,7 +1090,7 @@ public enum Instruction {
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1099,7 +1099,7 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1108,7 +1108,7 @@ public enum Instruction {
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1117,7 +1117,7 @@ public enum Instruction {
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1126,7 +1126,7 @@ public enum Instruction {
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1141,8 +1141,8 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1151,8 +1151,8 @@ public enum Instruction {
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1161,8 +1161,8 @@ public enum Instruction {
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1171,8 +1171,8 @@ public enum Instruction {
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1181,8 +1181,8 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1191,8 +1191,8 @@ public enum Instruction {
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1201,8 +1201,8 @@ public enum Instruction {
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1211,8 +1211,8 @@ public enum Instruction {
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1249,49 +1249,49 @@ public enum Instruction {
         },
         new Signal[][] { // O
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1325,57 +1325,57 @@ public enum Instruction {
         },
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O  N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // O CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZ N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // OZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         }
@@ -1387,49 +1387,49 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1465,57 +1465,57 @@ public enum Instruction {
       new Signal[][][] {
         new Signal[][] {
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //   N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  C
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { //  CN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // Z N
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZC
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
         new Signal[][] { // ZCN
           new Signal[] {Signal.C_E},
-          new Signal[] {Signal.C_OUT, Signal.MAR_IN},
-          new Signal[] {Signal.RAM_OUT, Signal.MAR_IN},
+          new Signal[] {Signal.C_OUT, Signal.MR_IN},
+          new Signal[] {Signal.RAM_OUT, Signal.MR_IN},
           new Signal[] {Signal.RAM_OUT, Signal.C_IN},
           new Signal[] {Signal.CU_RST}
         },
@@ -1572,7 +1572,7 @@ public enum Instruction {
     // microsteps are coded over 4 bits, so 16 possible values
     this.microcode = new int[flagStateCount][16];
     for (int flagState = 0; flagState < flagStateCount; flagState++) {
-      this.microcode[flagState][0] = Signal.C_OUT.getMask() | Signal.MAR_IN.getMask();
+      this.microcode[flagState][0] = Signal.C_OUT.getMask() | Signal.MR_IN.getMask();
       this.microcode[flagState][1] = Signal.RAM_OUT.getMask() | Signal.IR_IN.getMask();
     }
 

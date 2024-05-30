@@ -21,6 +21,9 @@ To run a binary file, just pass its path as an argument to the emulator
 
 WARNING Not all Instruction have been tested, some of them may be bugged !
 
+## Physical Computer
+More details about the Breadboard computer in itself can be found [there](docs/modules.md), along with the full [parts list](docs/parts_list.md)
+
 ## Roadmap
 * [x] Instruction set
 * [x] Assembly compiler

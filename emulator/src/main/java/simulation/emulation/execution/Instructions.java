@@ -73,12 +73,12 @@ public final class Instructions {
   public static void dumpProgramROM(boolean raw, String fileName) throws IOException {
     if (!raw) {
       BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-      writer.append("OpCode|OZCN|Step|          Bin          |\n");
-      writer.append("------|----|----|-----------------------|\n");
+      writer.append("Step|OZCN|OpCode|          Bin          |\n");
+      writer.append("----|----|------|-----------------------|\n");
       for (int addr = 0; addr < TABLE.length * (1 << Flag.values().length) * 16; addr++) {
-        int opcode = (addr & 0b111111_0000_0000) >> 8;
-        int flags = (addr & 0b000000_1111_0000) >> 4;
-        int microstep = addr & 0b000000_0000_1111;
+        int opcode = addr & 0b0000_0000_111111;
+        int flags = (addr & 0b0000_1111_000000) >> 6;
+        int microstep = (addr & 0b1111_0000_000000) >> 10;
         Instruction instruction = TABLE[opcode];
         int signals = instruction.getMicrocode()[flags][microstep];
         StringBuilder formattedSignals = new StringBuilder();
@@ -91,10 +91,10 @@ public final class Instructions {
           writer
               .append(
                   String.format(
-                          "%6s_%4s_%4s",
-                          Integer.toBinaryString(opcode),
+                          "%4s_%4s_%6s",
+                          Integer.toBinaryString(microstep),
                           Integer.toBinaryString(flags),
-                          Integer.toBinaryString(microstep))
+                          Integer.toBinaryString(opcode))
                       .replaceAll(" ", "0"))
               .append(" ")
               .append(String.format("%16s", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
@@ -110,9 +110,9 @@ public final class Instructions {
       byte[] lbs = new byte[0b1000000_0000_0000];
       byte[] mbs = new byte[0b1000000_0000_0000];
       for (int addr = 0; addr < TABLE.length * (1 << (Flag.values().length - 1)) * 8; addr++) {
-        int opcode = (addr & 0b111111_0000_0000) >> 8;
-        int flags = (addr & 0b000000_1111_0000) >> 4;
-        int microstep = addr & 0b000000_0000_1111;
+        int opcode = addr & 0b0000_0000_111111;
+        int flags = (addr & 0b0000_1111_000000) >> 6;
+        int microstep = (addr & 0b1111_0000_000000) >> 10;
         Instruction instruction = TABLE[opcode];
         int signals = instruction.getMicrocode()[flags][microstep];
         lbs[addr] = (byte) (signals & 0x00FF);

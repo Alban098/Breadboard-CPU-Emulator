@@ -9,7 +9,7 @@ public enum Signal {
   C_E,
   C_IN,
   C_OUT,
-  MAR_IN,
+  MR_IN,
   RAM_IN,
   RAM_OUT,
   IR_IN,
