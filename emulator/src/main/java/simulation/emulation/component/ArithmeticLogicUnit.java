@@ -6,20 +6,17 @@
 package simulation.emulation.component;
 
 import simulation.emulation.constant.Flag;
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 
 public final class ArithmeticLogicUnit extends BusConnectedModule {
 
-  private final AbstractRegister aRegister;
-  private final AbstractRegister bRegister;
+  private final Register8 aRegister;
+  private final Register8 bRegister;
 
   private int state = 0;
 
   public ArithmeticLogicUnit(
-      Bus bus,
-      ControlUnitModule controlUnit,
-      AbstractRegister aRegister,
-      AbstractRegister bRegister) {
+      Bus bus, ControlUnitModule controlUnit, Register8 aRegister, Register8 bRegister) {
     super(bus, controlUnit);
     this.aRegister = aRegister;
     this.bRegister = bRegister;
@@ -34,7 +31,7 @@ public final class ArithmeticLogicUnit extends BusConnectedModule {
   @Override
   public void update() {
     state = computeState();
-    if (controlUnit.hasControlSignal(Signal.ALU_OUT)) {
+    if (controlUnit.hasControlSignal(Signals.ALU_OUT)) {
       writeBus(state & 0xFF);
     }
   }
@@ -52,7 +49,7 @@ public final class ArithmeticLogicUnit extends BusConnectedModule {
   public void reset() {}
 
   private int computeState() {
-    if (controlUnit.hasControlSignal(Signal.SUB)) {
+    if (controlUnit.hasControlSignal(Signals.SUB)) {
       // 2's complement
       return aRegister.getValue() + (bRegister.getValue() ^ 0xFF) + 1;
     } else {

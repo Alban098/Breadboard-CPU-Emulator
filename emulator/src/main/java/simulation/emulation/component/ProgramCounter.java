@@ -5,33 +5,34 @@
 */
 package simulation.emulation.component;
 
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 
 public final class ProgramCounter extends BusConnectedModule {
 
+  private final Register16 hlRegister;
   private int value;
 
-  public ProgramCounter(Bus bus, ControlUnitModule controlUnit) {
+  public ProgramCounter(Bus bus, ControlUnitModule controlUnit, Register16 hlRegister) {
     super(bus, controlUnit);
+    this.hlRegister = hlRegister;
   }
 
   @Override
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signal.C_E)) {
-      value = (value + 1) & 0xFF;
+    if (controlUnit.hasControlSignal(Signals.PC_E)) {
+      value = (value + 1) & 0x3FF;
     }
-    if (controlUnit.hasControlSignal(Signal.C_IN)) {
+    if (controlUnit.hasControlSignal(Signals.PC_IN)) {
       value = readBus();
+    }
+    if (controlUnit.hasControlSignal(Signals.PC_IN_HL)) {
+      value = hlRegister.getValue() & 0x3FF;
     }
     return false;
   }
 
   @Override
-  public void update() {
-    if (controlUnit.hasControlSignal(Signal.C_OUT)) {
-      writeBus(value);
-    }
-  }
+  public void update() {}
 
   @Override
   public void reset() {
@@ -40,15 +41,15 @@ public final class ProgramCounter extends BusConnectedModule {
 
   @Override
   public String hexString() {
-    return String.format("0x%02X", value);
+    return String.format("0x%04X", value);
   }
 
   @Override
   public String binaryString() {
-    return String.format("%8s", Integer.toBinaryString(value)).replaceAll(" ", "0");
+    return String.format("%16s", Integer.toBinaryString(value)).replaceAll(" ", "0");
   }
 
   public int getValue() {
-    return value & 0xFF;
+    return value & 0x3FF;
   }
 }

@@ -14,7 +14,7 @@ import simulation.emulation.component.*;
 import simulation.emulation.constant.EmulatorState;
 import simulation.emulation.constant.Flag;
 import simulation.emulation.constant.ModuleId;
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 import simulation.emulation.execution.Instruction;
 import simulation.emulation.execution.Instructions;
 
@@ -141,13 +141,13 @@ public class UILayer {
       }
 
       ImGui.sameLine();
-      if (!controlUnit.hasControlSignal(Signal.SUB)) {
+      if (!controlUnit.hasControlSignal(Signals.SUB)) {
         ImGui.textColored(0, 255, 0, 255, "    ADD");
       } else {
         ImGui.textColored(255, 0, 0, 255, "    ADD");
       }
       ImGui.sameLine();
-      if (controlUnit.hasControlSignal(Signal.SUB)) {
+      if (controlUnit.hasControlSignal(Signals.SUB)) {
         ImGui.textColored(0, 255, 0, 255, "SUB");
       } else {
         ImGui.textColored(255, 0, 0, 255, "SUB");
@@ -304,14 +304,13 @@ public class UILayer {
   private void printRegisters() {
     ImGui.setNextItemOpen(true);
     if (ImGui.treeNode("Registers")) {
-      AbstractRegister aRegister = emulator.getModule(ModuleId.A_REGISTER, AbstractRegister.class);
-      AbstractRegister bRegister = emulator.getModule(ModuleId.B_REGISTER, AbstractRegister.class);
-      AbstractRegister outputRegister =
-          emulator.getModule(ModuleId.OUTPUT_REGISTER, AbstractRegister.class);
+      Register8 aRegister = emulator.getModule(ModuleId.A_REGISTER, Register8.class);
+      Register8 bRegister = emulator.getModule(ModuleId.B_REGISTER, Register8.class);
+      Register8 outputRegister = emulator.getModule(ModuleId.OUTPUT_REGISTER, Register8.class);
       ProgramCounter programCounter =
           emulator.getModule(ModuleId.PROGRAM_COUNTER, ProgramCounter.class);
-      InstructionRegister instructionRegister =
-          emulator.getModule(ModuleId.INSTRUCTION_REGISTER, InstructionRegister.class);
+      Register8 instructionRegister =
+          emulator.getModule(ModuleId.INSTRUCTION_REGISTER, Register8.class);
       MemoryAddressRegister memoryAddressRegister =
           emulator.getModule(ModuleId.MEMORY_ADDRESS_REGISTER, MemoryAddressRegister.class);
       Memory ram = emulator.getModule(ModuleId.RAM, Memory.class);
@@ -395,10 +394,11 @@ public class UILayer {
       ImGui.text("= " + controlUnit.getMicroStep());
       ImGui.newLine();
       int col = 0;
-      for (Signal signal : Signal.values()) {
+      for (Map.Entry<Integer, String> signal : Signals.values().entrySet()) {
         col++;
-        boolean hasSignal = controlUnit.hasControlSignal(signal);
-        ImGui.textColored(hasSignal ? 0 : 255, hasSignal ? 255 : 0, 0, 255, signal.name() + "    ");
+        boolean hasSignal = controlUnit.hasControlSignal(signal.getKey());
+        ImGui.textColored(
+            hasSignal ? 0 : 255, hasSignal ? 255 : 0, 0, 255, signal.getValue() + "    ");
         if (col < 6) {
           ImGui.sameLine(95 * col);
         } else {

@@ -25,13 +25,12 @@ WARNING Not all Instruction have been tested, some of them may be bugged !
 More details about the Breadboard computer in itself can be found [there](docs/modules.md), along with the full [parts list](docs/parts_list.md)
 
 ## Roadmap
-* [x] Instruction set
-* [x] Assembly compiler
+* [ ] Instruction set
+* [ ] Assembly compiler
 * [x] Emulator (WIP)
   * [x] Components
   * [x] Signals
-  * [x] Instructions
-  * [ ] Complete instruction tests
+  * [ ] Instructions
 * [ ] Logic and electric diagrams
 * [ ] Electronic part ordering (See [part list](/parts_list.md))
 * [ ] Physical assembly

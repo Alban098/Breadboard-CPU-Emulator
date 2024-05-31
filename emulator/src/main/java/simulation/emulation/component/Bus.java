@@ -14,7 +14,11 @@ public final class Bus implements Formattable {
   }
 
   public void write(int value) {
-    this.state = value;
+    this.state |= value;
+  }
+
+  public void update() {
+    this.state = 0;
   }
 
   @Override

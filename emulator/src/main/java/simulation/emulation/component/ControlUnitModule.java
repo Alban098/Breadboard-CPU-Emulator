@@ -5,31 +5,31 @@
 */
 package simulation.emulation.component;
 
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 import simulation.emulation.execution.Instruction;
 import simulation.emulation.execution.Instructions;
 
 public final class ControlUnitModule extends Module {
 
-  private InstructionRegister instructionRegister;
+  private Register8 instructionRegister;
   private StatusRegister statusRegister;
   private int microStep = 0;
   private int state;
 
-  public void linkRegisters(
-      InstructionRegister instructionRegister, StatusRegister statusRegister) {
+  public void linkRegisters(Register8 instructionRegister, StatusRegister statusRegister) {
     this.instructionRegister = instructionRegister;
     this.statusRegister = statusRegister;
   }
 
-  public boolean hasControlSignal(Signal signal) {
-    return signal.isActiveInState(state);
+  public boolean hasControlSignal(int signal) {
+    return Signals.isActiveInState(signal, state);
   }
 
   @Override
   public boolean clock() {
     microStep++;
-    if (hasControlSignal(Signal.CU_RST)) {
+    microStep &= 0b11111;
+    if (hasControlSignal(Signals.CU_RST)) {
       microStep = 0;
       return true;
     }
@@ -39,7 +39,7 @@ public final class ControlUnitModule extends Module {
   @Override
   public void update() {
     Instruction instruction = Instructions.TABLE[instructionRegister.getValue() & 0b111111];
-    state = instruction.getSignals(microStep & 0b1111, statusRegister.getValue() & 0b111);
+    state = instruction.getSignals(microStep & 0b11111, statusRegister.getValue() & 0b111);
   }
 
   @Override

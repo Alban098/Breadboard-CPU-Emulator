@@ -6,12 +6,12 @@
 package simulation.emulation.component;
 
 import java.util.Arrays;
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 
 public final class Memory extends BusConnectedModule {
   private final MemoryAddressRegister memoryAddressRegister;
 
-  private final int[] memory = new int[0x100];
+  private final int[] memory = new int[0x400];
 
   public Memory(
       Bus bus, ControlUnitModule controlUnit, MemoryAddressRegister memoryAddressRegister) {
@@ -22,7 +22,7 @@ public final class Memory extends BusConnectedModule {
 
   @Override
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signal.RAM_IN)) {
+    if (controlUnit.hasControlSignal(Signals.RAM_IN)) {
       memory[memoryAddressRegister.getValue()] = readBus();
     }
     return false;
@@ -30,7 +30,7 @@ public final class Memory extends BusConnectedModule {
 
   @Override
   public void update() {
-    if (controlUnit.hasControlSignal(Signal.RAM_OUT)) {
+    if (controlUnit.hasControlSignal(Signals.RAM_OUT)) {
       writeBus(memory[memoryAddressRegister.getValue()]);
     }
   }
@@ -39,7 +39,7 @@ public final class Memory extends BusConnectedModule {
   public void reset() {}
 
   public int readMemory(int addr) {
-    return memory[addr & 0xFF];
+    return memory[addr & 0x3FF];
   }
 
   public void writeMemory(byte[] values) {

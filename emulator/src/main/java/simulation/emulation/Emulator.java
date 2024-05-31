@@ -11,40 +11,32 @@ import simulation.emulation.component.*;
 import simulation.emulation.component.Module;
 import simulation.emulation.constant.EmulatorState;
 import simulation.emulation.constant.ModuleId;
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 
 public final class Emulator {
 
   private EmulatorState state = EmulatorState.DEBUG;
   private final Bus bus;
-  private final ARegister aRegister;
-  private final BRegister bRegister;
-  private final InstructionRegister instructionRegister;
-  private final OutputRegister outputRegister;
-  private final StatusRegister statusRegister;
-  private final MemoryAddressRegister memoryAddressRegister;
-  private final Memory ram;
-  private final ArithmeticLogicUnit alu;
-  private final ProgramCounter programCounter;
-  private final ControlUnitModule controlUnit;
-
   private final Map<ModuleId, Module> modules = new HashMap<>();
-  private boolean hasMemoryChanged = false;
   private int currentInstructionAddress = 0;
 
   public Emulator() {
     this.bus = new Bus();
-    this.controlUnit = new ControlUnitModule();
-    this.aRegister = new ARegister(bus, controlUnit, "A");
-    this.bRegister = new BRegister(bus, controlUnit, "B");
-    this.instructionRegister = new InstructionRegister(bus, controlUnit, "Instruction");
-    this.outputRegister = new OutputRegister(bus, controlUnit, "Output");
-    this.memoryAddressRegister = new MemoryAddressRegister(bus, controlUnit);
-    this.ram = new Memory(bus, controlUnit, memoryAddressRegister);
-    this.alu = new ArithmeticLogicUnit(bus, controlUnit, aRegister, bRegister);
-    this.statusRegister = new StatusRegister(bus, controlUnit, alu);
-    this.programCounter = new ProgramCounter(bus, controlUnit);
-    this.controlUnit.linkRegisters(instructionRegister, statusRegister);
+    ControlUnitModule controlUnit = new ControlUnitModule();
+    Register8 aRegister = new Register8(bus, controlUnit, Signals.A_IN, Signals.A_OUT);
+    Register8 bRegister = new Register8(bus, controlUnit, Signals.B_IN, Signals.B_OUT);
+    Register8 instructionRegister = new Register8(bus, controlUnit, Signals.IR_IN, 0);
+    Register8 outputRegister = new Register8(bus, controlUnit, Signals.OUT_IN, 0);
+    StackPointer stackPointer = new StackPointer(bus, controlUnit);
+    Register16 hlRegister =
+        new Register16(bus, controlUnit, Signals.HL_IN_LOW, Signals.HL_IN_HIGH, 0, 0);
+    ArithmeticLogicUnit alu = new ArithmeticLogicUnit(bus, controlUnit, aRegister, bRegister);
+    StatusRegister statusRegister = new StatusRegister(bus, controlUnit, alu);
+    ProgramCounter programCounter = new ProgramCounter(bus, controlUnit, hlRegister);
+    MemoryAddressRegister memoryAddressRegister =
+        new MemoryAddressRegister(bus, controlUnit, hlRegister, programCounter, stackPointer);
+    Memory ram = new Memory(bus, controlUnit, memoryAddressRegister);
+    controlUnit.linkRegisters(instructionRegister, statusRegister);
 
     modules.put(ModuleId.PROGRAM_COUNTER, programCounter);
     modules.put(ModuleId.INSTRUCTION_REGISTER, instructionRegister);
@@ -52,6 +44,8 @@ public final class Emulator {
     modules.put(ModuleId.STATUS_REGISTER, statusRegister);
     modules.put(ModuleId.A_REGISTER, aRegister);
     modules.put(ModuleId.B_REGISTER, bRegister);
+    modules.put(ModuleId.HL_REGISTER, hlRegister);
+    modules.put(ModuleId.STACK_POINTER, stackPointer);
     modules.put(ModuleId.OUTPUT_REGISTER, outputRegister);
     modules.put(ModuleId.MEMORY_ADDRESS_REGISTER, memoryAddressRegister);
     modules.put(ModuleId.RAM, ram);
@@ -59,16 +53,17 @@ public final class Emulator {
   }
 
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signal.HLT)) {
+    if (getModule(ModuleId.CONTROL_UNIT, ControlUnitModule.class).hasControlSignal(Signals.HALT)) {
       return false;
     }
-    bus.write(0);
+    bus.update();
     update();
     boolean newInstruction = false;
     for (ModuleId id : ModuleId.values()) {
       newInstruction |= modules.get(id).clock();
       if (newInstruction) {
-        currentInstructionAddress = programCounter.getValue();
+        currentInstructionAddress =
+            getModule(ModuleId.PROGRAM_COUNTER, ProgramCounter.class).getValue();
       }
     }
     return newInstruction;
@@ -104,7 +99,7 @@ public final class Emulator {
   }
 
   public void writeMemory(byte[] bytes) {
-    ram.writeMemory(bytes);
+    getModule(ModuleId.RAM, Memory.class).writeMemory(bytes);
   }
 
   public int getCurrentInstructionAddress() {

@@ -10,8 +10,9 @@ import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Map;
 import simulation.emulation.constant.Flag;
-import simulation.emulation.constant.Signal;
+import simulation.emulation.constant.Signals;
 
 public final class Instructions {
 
@@ -42,7 +43,7 @@ public final class Instructions {
                 int clockCycles = 0;
                 for (int signals : flagState) {
                   clockCycles++;
-                  if ((signals & Signal.CU_RST.getMask()) == Signal.CU_RST.getMask()) {
+                  if ((signals & Signals.CU_RST.getMask()) == Signals.CU_RST.getMask()) {
                     break;
                   }
                 }
@@ -82,9 +83,10 @@ public final class Instructions {
         Instruction instruction = TABLE[opcode];
         int signals = instruction.getMicrocode()[flags][microstep];
         StringBuilder formattedSignals = new StringBuilder();
-        for (Signal signal : Signal.values()) {
-          if ((signals & signal.getMask()) == signal.getMask()) {
-            formattedSignals.append(String.format("%9s", signal.name()));
+        for (Map.Entry<Integer, String> signal : Signals.values().entrySet()) {
+          int mask = signal.getKey();
+          if ((signals & mask) == mask) {
+            formattedSignals.append(String.format("%11s", signal.getValue()));
           }
         }
         if (signals != 0) {
