@@ -15,18 +15,20 @@ public class Register8 extends BusConnectedModule {
     super(bus, controlUnit);
     this.sigIn = sigIn;
     this.sigOut = sigOut;
+    reset();
   }
 
   public Register8(Bus bus, ControlUnitModule controlUnit) {
     super(bus, controlUnit);
     this.sigIn = 0;
     this.sigOut = 0;
+    reset();
   }
 
   @Override
   public boolean clock() {
     if (sigIn > 0 && controlUnit.hasControlSignal(sigIn)) {
-      value = readBus();
+      value = readBus8();
     }
     return false;
   }
@@ -34,7 +36,7 @@ public class Register8 extends BusConnectedModule {
   @Override
   public void update() {
     if (sigOut > 0 && controlUnit.hasControlSignal(sigOut)) {
-      writeBus(value);
+      writeBus8(value);
     }
   }
 

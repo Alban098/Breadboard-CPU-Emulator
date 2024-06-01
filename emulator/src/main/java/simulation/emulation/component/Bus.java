@@ -13,8 +13,16 @@ public final class Bus implements Formattable {
     return state & 0xFF;
   }
 
+  public int read16() {
+    return state & 0xFFFF;
+  }
+
   public void write(int value) {
-    this.state |= value;
+    this.state |= value & 0xFF;
+  }
+
+  public void write16(int value) {
+    this.state |= value & 0xFFFF;
   }
 
   public void update() {
@@ -23,11 +31,11 @@ public final class Bus implements Formattable {
 
   @Override
   public String hexString() {
-    return String.format("0x%02X", state);
+    return String.format("0x%04X", state);
   }
 
   @Override
   public String binaryString() {
-    return String.format("%8s", Integer.toBinaryString(state)).replaceAll(" ", "0");
+    return String.format("%16s", Integer.toBinaryString(state)).replaceAll(" ", "0");
   }
 }

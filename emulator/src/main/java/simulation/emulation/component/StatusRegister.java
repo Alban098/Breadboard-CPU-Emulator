@@ -20,7 +20,7 @@ public final class StatusRegister extends Register8 {
   @Override
   public boolean clock() {
     super.clock();
-    if (controlUnit.hasControlSignal(Signals.SR_LATCH)) {
+    if (controlUnit.hasControlSignal(Signals.ALU_OUT)) {
       value =
           (alu.probeFlag(Flag.OVERFLOW) ? Flag.OVERFLOW.getMask() : 0)
               | (alu.probeFlag(Flag.ZERO) ? Flag.ZERO.getMask() : 0)

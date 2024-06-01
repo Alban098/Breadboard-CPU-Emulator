@@ -11,10 +11,10 @@ import java.util.Map;
 public final class Signals {
 
   public static final int PC_E = 1;
-  public static final int PC_IN_HL = 1 << 1;
-  public static final int MAR_IN_HL = 1 << 2;
-  public static final int MAR_IN_PC = 1 << 3;
-  public static final int MAR_IN_STACK = 1 << 4;
+  public static final int PC_IN_16 = 1 << 1;
+  public static final int PC_OUT_16 = 1 << 2;
+  public static final int PC_OUT_HIGH = 1 << 3;
+  public static final int MAR_IN_16 = 1 << 4;
   public static final int RAM_IN = 1 << 5;
   public static final int RAM_OUT = 1 << 6;
   public static final int STATUS_OUT = 1 << 7;
@@ -23,26 +23,26 @@ public final class Signals {
   public static final int A_IN = 1 << 10;
   public static final int A_OUT = 1 << 11;
   public static final int B_IN = 1 << 12;
-  public static final int B_OUT = 1 << 13;
-  public static final int HL_IN_LOW = 1 << 14;
-  public static final int HL_IN_HIGH = 1 << 15;
+  public static final int HL_IN_LOW = 1 << 13;
+  public static final int HL_IN_HIGH = 1 << 14;
+  public static final int HL_OUT_16 = 1 << 15;
   public static final int STACK_PUSH = 1 << 16;
   public static final int STACK_POP = 1 << 17;
-  public static final int ALU_OUT = 1 << 18;
-  public static final int SUB = 1 << 19;
-  public static final int OUT_IN = 1 << 20;
-  public static final int CU_RST = 1 << 21;
-  public static final int SR_LATCH = 1 << 22;
+  public static final int STACK_OUT_16 = 1 << 18;
+  public static final int ALU_OUT = 1 << 19;
+  public static final int SUB = 1 << 20;
+  public static final int OUT_IN = 1 << 21;
+  public static final int CU_RST = 1 << 22;
   public static final int HALT = 1 << 23;
 
   private static final Map<Integer, String> NAMES = new HashMap<>();
 
   static {
     NAMES.put(PC_E, "PC_E");
-    NAMES.put(PC_IN_HL, "C_IN_HL");
-    NAMES.put(MAR_IN_HL, "MR_IN_HL");
-    NAMES.put(MAR_IN_PC, "MR_IN_PC");
-    NAMES.put(MAR_IN_STACK, "MR_IN_STACK");
+    NAMES.put(PC_IN_16, "PC_IN_16");
+    NAMES.put(PC_OUT_16, "PC_OUT_16");
+    NAMES.put(PC_OUT_HIGH, "PC_OUT_HIGH");
+    NAMES.put(MAR_IN_16, "MAR_IN_16");
     NAMES.put(RAM_IN, "RAM_IN");
     NAMES.put(RAM_OUT, "RAM_OUT");
     NAMES.put(STATUS_OUT, "STATUS_OUT");
@@ -51,16 +51,16 @@ public final class Signals {
     NAMES.put(A_IN, "A_IN");
     NAMES.put(A_OUT, "A_OUT");
     NAMES.put(B_IN, "B_IN");
-    NAMES.put(B_OUT, "B_OUT");
     NAMES.put(HL_IN_LOW, "HL_IN_LOW");
     NAMES.put(HL_IN_HIGH, "HL_IN_HIGH");
+    NAMES.put(HL_OUT_16, "HL_OUT_16");
     NAMES.put(STACK_PUSH, "STACK_PUSH");
     NAMES.put(STACK_POP, "STACK_POP");
+    NAMES.put(STACK_OUT_16, "STACK_OUT_16");
     NAMES.put(ALU_OUT, "ALU_OUT");
     NAMES.put(SUB, "SUB");
     NAMES.put(OUT_IN, "OUT_IN");
     NAMES.put(CU_RST, "CU_RST");
-    NAMES.put(SR_LATCH, "SR_LATCH");
     NAMES.put(HALT, "HLT");
   }
 

@@ -9,12 +9,10 @@ import simulation.emulation.constant.Signals;
 
 public final class ProgramCounter extends BusConnectedModule {
 
-  private final Register16 hlRegister;
   private int value;
 
-  public ProgramCounter(Bus bus, ControlUnitModule controlUnit, Register16 hlRegister) {
+  public ProgramCounter(Bus bus, ControlUnitModule controlUnit) {
     super(bus, controlUnit);
-    this.hlRegister = hlRegister;
   }
 
   @Override
@@ -22,14 +20,21 @@ public final class ProgramCounter extends BusConnectedModule {
     if (controlUnit.hasControlSignal(Signals.PC_E)) {
       value = (value + 1) & 0xFFFF;
     }
-    if (controlUnit.hasControlSignal(Signals.PC_IN_HL)) {
-      value = hlRegister.getValue() & 0xFFFF;
+    if (controlUnit.hasControlSignal(Signals.PC_IN_16)) {
+      value = bus.read16();
     }
     return false;
   }
 
   @Override
-  public void update() {}
+  public void update() {
+    if (controlUnit.hasControlSignal(Signals.PC_OUT_16)) {
+      writeBus16(value & 0xFFFF);
+    }
+    if (controlUnit.hasControlSignal(Signals.PC_OUT_HIGH)) {
+      writeBus16((value & 0xFF00) >> 8);
+    }
+  }
 
   @Override
   public void reset() {

@@ -10,49 +10,49 @@ public class Register16 extends BusConnectedModule {
   protected int value;
   private final int sigInLow;
   private final int sigInHigh;
-  private final int sigOutLow;
-  private final int sigOutHigh;
+  private final int sigIn16;
+  private final int sigOut16;
 
   public Register16(
       Bus bus,
       ControlUnitModule controlUnit,
       int sigInLow,
       int sigInHigh,
-      int sigOutLow,
-      int sigOutHigh) {
+      int sigIn16,
+      int sigOut16) {
     super(bus, controlUnit);
     this.sigInLow = sigInLow;
     this.sigInHigh = sigInHigh;
-    this.sigOutLow = sigOutLow;
-    this.sigOutHigh = sigOutHigh;
+    this.sigIn16 = sigIn16;
+    this.sigOut16 = sigOut16;
   }
 
   public Register16(Bus bus, ControlUnitModule controlUnit) {
     super(bus, controlUnit);
     this.sigInLow = 0;
     this.sigInHigh = 0;
-    this.sigOutLow = 0;
-    this.sigOutHigh = 0;
+    this.sigIn16 = 0;
+    this.sigOut16 = 0;
   }
 
   @Override
   public boolean clock() {
     if (sigInLow > 0 && controlUnit.hasControlSignal(sigInLow)) {
-      value = value & 0xFF00 | (readBus() & 0xFF);
+      value = value & 0xFF00 | (readBus8() & 0xFF);
     }
     if (sigInHigh > 0 && controlUnit.hasControlSignal(sigInHigh)) {
-      value = value & 0x00FF | ((readBus() & 0xFF) << 8);
+      value = value & 0x00FF | ((readBus8() & 0xFF) << 8);
+    }
+    if (sigIn16 > 0 && controlUnit.hasControlSignal(sigIn16)) {
+      value = readBus16() & 0xFFFF;
     }
     return false;
   }
 
   @Override
   public void update() {
-    if (sigOutHigh > 0 && controlUnit.hasControlSignal(sigOutHigh)) {
-      writeBus((value >> 8) & 0x00FF);
-    }
-    if (sigOutLow > 0 && controlUnit.hasControlSignal(sigOutLow)) {
-      writeBus(value & 0x00FF);
+    if (sigOut16 > 0 && controlUnit.hasControlSignal(sigOut16)) {
+      writeBus16(value & 0xFFFF);
     }
   }
 

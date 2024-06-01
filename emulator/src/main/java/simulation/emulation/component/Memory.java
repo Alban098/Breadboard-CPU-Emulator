@@ -24,7 +24,7 @@ public final class Memory extends BusConnectedModule {
   @Override
   public boolean clock() {
     if (controlUnit.hasControlSignal(Signals.RAM_IN)) {
-      memory[memoryAddressRegister.getValue()] = readBus();
+      memory[memoryAddressRegister.getValue() & MAX_ADDRESS] = readBus8();
     }
     return false;
   }
@@ -32,7 +32,7 @@ public final class Memory extends BusConnectedModule {
   @Override
   public void update() {
     if (controlUnit.hasControlSignal(Signals.RAM_OUT)) {
-      writeBus(memory[memoryAddressRegister.getValue() & MAX_ADDRESS]);
+      writeBus8(memory[memoryAddressRegister.getValue() & MAX_ADDRESS]);
     }
   }
 

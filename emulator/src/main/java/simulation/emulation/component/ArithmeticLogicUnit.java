@@ -32,7 +32,7 @@ public final class ArithmeticLogicUnit extends BusConnectedModule {
   public void update() {
     state = computeState();
     if (controlUnit.hasControlSignal(Signals.ALU_OUT)) {
-      writeBus(state & 0xFF);
+      writeBus8(state & 0xFF);
     }
   }
 
@@ -60,12 +60,12 @@ public final class ArithmeticLogicUnit extends BusConnectedModule {
   @Override
   public String hexString() {
     int state = computeState();
-    return String.format("0x%02X", state);
+    return String.format("0x%02X", state & 0xFF);
   }
 
   @Override
   public String binaryString() {
     int state = computeState();
-    return String.format("%8s", Integer.toBinaryString(state)).replaceAll(" ", "0");
+    return String.format("%8s", Integer.toBinaryString(state & 0xFF)).replaceAll(" ", "0");
   }
 }

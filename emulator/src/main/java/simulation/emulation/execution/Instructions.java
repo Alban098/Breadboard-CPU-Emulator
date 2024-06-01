@@ -5,6 +5,8 @@
 */
 package simulation.emulation.execution;
 
+import static simulation.emulation.constant.Signals.*;
+
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -17,6 +19,40 @@ import simulation.emulation.constant.Signals;
 public final class Instructions {
 
   public static final Instruction[] TABLE = new Instruction[0x40];
+
+  public static final int[] JMP_ZP_MICROCODE =
+      new int[] {
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | IR_IN,
+        PC_E,
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | HL_IN_LOW,
+        HL_IN_HIGH,
+        PC_IN_16 | HL_OUT_16 | CU_RST
+      };
+
+  public static final int[] JMP_ABS_MICROCODE =
+      new int[] {
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | IR_IN,
+        PC_E,
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | HL_IN_HIGH | PC_E,
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | HL_IN_LOW,
+        PC_IN_16 | HL_OUT_16 | CU_RST
+      };
+
+  public static final int[] JMP_IDX_MICROCODE =
+      new int[] {
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | IR_IN,
+        PC_E,
+        MAR_IN_16 | PC_OUT_16,
+        RAM_OUT | HL_IN_HIGH,
+        A_OUT | HL_IN_LOW,
+        PC_IN_16 | HL_OUT_16 | CU_RST
+      };
 
   static {
     Arrays.fill(TABLE, Instruction.NOP);
@@ -32,9 +68,6 @@ public final class Instructions {
     writer.append("-------|------|--------|-----------|------|---------\n");
 
     for (int i = 0; i < TABLE.length; i++) {
-      if (i == 0x40) {
-        break;
-      }
       Instruction instruction = TABLE[i];
       int[] minMaxClockCycles = {32, 0};
       Arrays.stream(instruction.getMicrocode())

@@ -9,32 +9,14 @@ import simulation.emulation.constant.Signals;
 
 public final class MemoryAddressRegister extends Register16 {
 
-  private final Register16 hlRegister;
-  private final ProgramCounter programCounter;
-  private final StackPointer stackPointer;
-
-  public MemoryAddressRegister(
-      Bus bus,
-      ControlUnitModule controlUnit,
-      Register16 hlRegister,
-      ProgramCounter programCounter,
-      StackPointer stackPointer) {
+  public MemoryAddressRegister(Bus bus, ControlUnitModule controlUnit) {
     super(bus, controlUnit);
-    this.hlRegister = hlRegister;
-    this.programCounter = programCounter;
-    this.stackPointer = stackPointer;
   }
 
   @Override
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signals.MAR_IN_HL)) {
-      value = hlRegister.getValue();
-    }
-    if (controlUnit.hasControlSignal(Signals.MAR_IN_PC)) {
-      value = programCounter.getValue();
-    }
-    if (controlUnit.hasControlSignal(Signals.MAR_IN_STACK)) {
-      value = stackPointer.getValue();
+    if (controlUnit.hasControlSignal(Signals.MAR_IN_16)) {
+      value = bus.read16();
     }
     return false;
   }

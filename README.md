@@ -30,7 +30,7 @@ More details about the Breadboard computer in itself can be found [there](docs/m
 * [x] Emulator (WIP)
   * [x] Components
   * [x] Signals
-  * [ ] Instructions
+  * [x] Instructions
 * [ ] Logic and electric diagrams
 * [ ] Electronic part ordering (See [part list](/parts_list.md))
 * [ ] Physical assembly

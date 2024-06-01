@@ -22,33 +22,31 @@ public final class Emulator {
 
   public Emulator() {
     this.bus = new Bus();
+
     ControlUnitModule controlUnit = new ControlUnitModule();
     Register8 aRegister = new Register8(bus, controlUnit, Signals.A_IN, Signals.A_OUT);
-    Register8 bRegister = new Register8(bus, controlUnit, Signals.B_IN, Signals.B_OUT);
+    Register8 bRegister = new Register8(bus, controlUnit, Signals.B_IN, 0);
     Register8 instructionRegister = new Register8(bus, controlUnit, Signals.IR_IN, 0);
-    Register8 outputRegister = new Register8(bus, controlUnit, Signals.OUT_IN, 0);
-    StackPointer stackPointer = new StackPointer(bus, controlUnit);
-    Register16 hlRegister =
-        new Register16(bus, controlUnit, Signals.HL_IN_LOW, Signals.HL_IN_HIGH, 0, 0);
     ArithmeticLogicUnit alu = new ArithmeticLogicUnit(bus, controlUnit, aRegister, bRegister);
     StatusRegister statusRegister = new StatusRegister(bus, controlUnit, alu);
-    ProgramCounter programCounter = new ProgramCounter(bus, controlUnit, hlRegister);
-    MemoryAddressRegister memoryAddressRegister =
-        new MemoryAddressRegister(bus, controlUnit, hlRegister, programCounter, stackPointer);
-    Memory ram = new Memory(bus, controlUnit, memoryAddressRegister);
+    MemoryAddressRegister memoryAddressRegister = new MemoryAddressRegister(bus, controlUnit);
     controlUnit.linkRegisters(instructionRegister, statusRegister);
 
-    modules.put(ModuleId.PROGRAM_COUNTER, programCounter);
+    modules.put(ModuleId.PROGRAM_COUNTER, new ProgramCounter(bus, controlUnit));
+    modules.put(
+        ModuleId.HL_REGISTER,
+        new Register16(
+            bus, controlUnit, Signals.HL_IN_LOW, Signals.HL_IN_HIGH, 0, Signals.HL_OUT_16));
+    modules.put(ModuleId.STACK_POINTER, new StackPointer(bus, controlUnit));
+    modules.put(ModuleId.OUTPUT_REGISTER, new Register8(bus, controlUnit, Signals.OUT_IN, 0));
+    modules.put(ModuleId.RAM, new Memory(bus, controlUnit, memoryAddressRegister));
+
+    modules.put(ModuleId.MEMORY_ADDRESS_REGISTER, memoryAddressRegister);
     modules.put(ModuleId.INSTRUCTION_REGISTER, instructionRegister);
     modules.put(ModuleId.ALU, alu);
     modules.put(ModuleId.STATUS_REGISTER, statusRegister);
     modules.put(ModuleId.A_REGISTER, aRegister);
     modules.put(ModuleId.B_REGISTER, bRegister);
-    modules.put(ModuleId.HL_REGISTER, hlRegister);
-    modules.put(ModuleId.STACK_POINTER, stackPointer);
-    modules.put(ModuleId.OUTPUT_REGISTER, outputRegister);
-    modules.put(ModuleId.MEMORY_ADDRESS_REGISTER, memoryAddressRegister);
-    modules.put(ModuleId.RAM, ram);
     modules.put(ModuleId.CONTROL_UNIT, controlUnit);
   }
 
@@ -70,6 +68,7 @@ public final class Emulator {
   }
 
   public void update() {
+    bus.update();
     for (ModuleId id : ModuleId.values()) {
       modules.get(id).update();
     }

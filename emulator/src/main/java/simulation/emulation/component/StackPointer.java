@@ -11,6 +11,7 @@ public class StackPointer extends Register8 {
 
   public StackPointer(Bus bus, ControlUnitModule controlUnit) {
     super(bus, controlUnit);
+    reset();
   }
 
   @Override
@@ -25,17 +26,29 @@ public class StackPointer extends Register8 {
   }
 
   @Override
+  public void update() {
+    if (controlUnit.hasControlSignal(Signals.STACK_OUT_16)) {
+      writeBus16(0xFF00 | value);
+    }
+  }
+
+  @Override
   public String hexString() {
-    return String.format("0x%04X", value);
+    return String.format("0x%04X", getValue());
   }
 
   @Override
   public String binaryString() {
-    return String.format("%16s", Integer.toBinaryString(value)).replaceAll(" ", "0");
+    return String.format("%16s", Integer.toBinaryString(getValue())).replaceAll(" ", "0");
   }
 
   @Override
   public int getValue() {
     return 0xFF00 | value;
+  }
+
+  @Override
+  public void reset() {
+    value = 0xFF;
   }
 }

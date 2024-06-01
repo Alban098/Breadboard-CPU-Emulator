@@ -165,6 +165,9 @@ public class UILayer {
     ImGui.setNextItemOpen(true);
     if (ImGui.treeNode("Memory")) {
       Memory memory = emulator.getModule(ModuleId.RAM, Memory.class);
+      StackPointer stackPointer = emulator.getModule(ModuleId.STACK_POINTER, StackPointer.class);
+      ProgramCounter programCounter =
+          emulator.getModule(ModuleId.PROGRAM_COUNTER, ProgramCounter.class);
       MemoryAddressRegister memoryAddressRegister =
           emulator.getModule(ModuleId.MEMORY_ADDRESS_REGISTER, MemoryAddressRegister.class);
       ImGui.pushItemWidth(100);
@@ -213,7 +216,11 @@ public class UILayer {
               highlight = -1;
             }
           } else if (addr == (memoryAddressRegister.getValue() & Memory.MAX_ADDRESS)) {
-            ImGui.textColored(0, 192, 255, 255, String.format("%02X", read));
+            ImGui.textColored(255, 0, 255, 255, String.format("%02X", read));
+          } else if (addr == (programCounter.getValue() & Memory.MAX_ADDRESS)) {
+            ImGui.textColored(207, 125, 10, 255, String.format("%02X", read));
+          } else if (addr == (stackPointer.getValue() & Memory.MAX_ADDRESS)) {
+            ImGui.textColored(0, 255, 0, 255, String.format("%02X", read));
           } else if (!gradient.get()) {
             if (read == 0x00) {
               ImGui.textColored(128, 128, 128, 255, String.format("%02X", read));
@@ -340,13 +347,13 @@ public class UILayer {
       ImGui.sameLine();
       ImGui.text("= " + outputRegister.hexString());
       ImGui.sameLine();
-      ImGui.textColored(255, 255, 0, 255, " Prg. Cnt");
-      ImGui.sameLine();
-      ImGui.text("= " + programCounter.hexString());
-      ImGui.sameLine();
-      ImGui.textColored(0, 255, 255, 255, " Instr. Reg");
+      ImGui.textColored(0, 255, 255, 255, " Instr Reg");
       ImGui.sameLine();
       ImGui.text("= " + instructionRegister.hexString());
+      ImGui.sameLine();
+      ImGui.textColored(0, 255, 255, 255, " HL Register");
+      ImGui.sameLine();
+      ImGui.text("= " + hlRegister.hexString());
 
       ImGui.text(aRegister.binaryString());
       ImGui.sameLine();
@@ -354,41 +361,41 @@ public class UILayer {
       ImGui.sameLine();
       ImGui.text("    " + outputRegister.binaryString());
       ImGui.sameLine();
-      ImGui.text("     " + programCounter.binaryString());
+      ImGui.text("        " + instructionRegister.binaryString());
       ImGui.sameLine();
-      ImGui.text("      " + instructionRegister.binaryString());
+      ImGui.text("        " + hlRegister.binaryString());
       ImGui.newLine();
 
-      ImGui.textColored(255, 255, 0, 255, "Bus");
-      ImGui.sameLine();
-      ImGui.text("= " + emulator.getBus().hexString());
-      ImGui.sameLine();
-      ImGui.textColored(255, 0, 255, 255, " Memory Address");
+      ImGui.textColored(255, 0, 255, 255, "Memory Address");
       ImGui.sameLine();
       ImGui.text("= " + memoryAddressRegister.hexString());
       ImGui.sameLine();
-      ImGui.textColored(255, 0, 255, 255, " RAM Val");
-      ImGui.sameLine();
-      ImGui.text("= " + ram.hexString());
-      ImGui.sameLine();
-      ImGui.textColored(0, 255, 255, 255, " HL Register");
-      ImGui.sameLine();
-      ImGui.text("= " + hlRegister.hexString());
-
-      ImGui.text(" " + emulator.getBus().binaryString());
-      ImGui.sameLine();
-      ImGui.text("     " + memoryAddressRegister.binaryString());
-      ImGui.sameLine();
-      ImGui.text("        " + ram.binaryString());
-      ImGui.sameLine();
-      ImGui.text("       " + hlRegister.binaryString());
-      ImGui.newLine();
-
-      ImGui.textColored(255, 255, 0, 255, "Stack Pointer");
+      ImGui.textColored(0, 255, 0, 255, "    Stack Pointer");
       ImGui.sameLine();
       ImGui.text("= " + stackPointer.hexString());
+      ImGui.sameLine();
+      ImGui.textColored(207, 125, 10, 255, "   Prg. Cnt");
+      ImGui.sameLine();
+      ImGui.text("= " + programCounter.hexString());
 
-      ImGui.text("   " + stackPointer.binaryString());
+      ImGui.text("   " + memoryAddressRegister.binaryString());
+      ImGui.sameLine();
+      ImGui.text("           " + stackPointer.binaryString());
+      ImGui.sameLine();
+      ImGui.text("       " + programCounter.binaryString());
+      ImGui.newLine();
+
+      ImGui.textColored(255, 255, 0, 255, "                Bus");
+      ImGui.sameLine();
+      ImGui.text("= " + emulator.getBus().hexString());
+      ImGui.sameLine();
+      ImGui.textColored(255, 0, 255, 255, "        RAM Output");
+      ImGui.sameLine();
+      ImGui.text("= " + ram.hexString());
+
+      ImGui.text("              " + emulator.getBus().binaryString());
+      ImGui.sameLine();
+      ImGui.text("           " + ram.binaryString());
 
       ImGui.treePop();
     }
@@ -426,8 +433,8 @@ public class UILayer {
         boolean hasSignal = controlUnit.hasControlSignal(signal.getKey());
         ImGui.textColored(
             hasSignal ? 0 : 255, hasSignal ? 255 : 0, 0, 255, signal.getValue() + "    ");
-        if (col < 6) {
-          ImGui.sameLine(95 * col);
+        if (col < 4) {
+          ImGui.sameLine(150 * col);
         } else {
           col = 0;
         }
@@ -450,7 +457,7 @@ public class UILayer {
     }
     int index = 0;
     while (index < DECOMPILATION_STACK_SIZE - (lastInstruction != null ? 1 : 0)) {
-      DecompiledInstruction decompileLine = decompileLine(addr & 0xFF);
+      DecompiledInstruction decompileLine = decompileLine(addr & 0x3FF);
       decompiled.add(decompileLine);
       addr += decompileLine.getSize();
       index++;
@@ -486,7 +493,7 @@ public class UILayer {
     ImGui.newLine();
     ImGui.sameLine(180);
     if (!current) {
-      ImGui.textColored(0, 255, 255, 255, "  " + String.format("%02X", instruction.addr) + ":");
+      ImGui.textColored(0, 255, 255, 255, "  " + String.format("%03X", instruction.addr) + ":");
       ImGui.sameLine();
       ImGui.textColored(128, 128, 128, 255, String.format("%02X", instruction.getOpcode()));
       if (instruction.args != null) {
@@ -495,10 +502,10 @@ public class UILayer {
           ImGui.textColored(128, 128, 128, 255, String.format("%02X", value));
         }
       }
-      ImGui.sameLine(290);
+      ImGui.sameLine(295);
       ImGui.text(String.format(instruction.getFormat(), instruction.fullArg));
     } else {
-      ImGui.textColored(255, 255, 0, 255, "  " + String.format("%02X", instruction.addr) + ":");
+      ImGui.textColored(255, 255, 0, 255, "  " + String.format("%03X", instruction.addr) + ":");
       ImGui.sameLine();
       ImGui.textColored(128, 128, 0, 255, String.format("%02X", instruction.getOpcode()));
       if (instruction.args != null) {
@@ -507,7 +514,7 @@ public class UILayer {
           ImGui.textColored(128, 128, 0, 255, String.format("%02X", value));
         }
       }
-      ImGui.sameLine(290);
+      ImGui.sameLine(295);
       ImGui.textColored(
           255, 255, 0, 255, String.format(instruction.getFormat(), instruction.fullArg));
     }

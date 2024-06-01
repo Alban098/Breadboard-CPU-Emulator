@@ -11,14 +11,24 @@ import simulation.emulation.constant.AddressingMode;
 import simulation.emulation.constant.Flag;
 
 public enum Instruction {
-  NOP(0x00, "NOP", 1, new int[][] {new int[] {MAR_IN_PC, RAM_OUT | IR_IN | PC_E, CU_RST}}),
+  NOP(
+      0x00,
+      "NOP",
+      1,
+      new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, CU_RST}}),
 
   LDA_IMM(
       0x01,
       "LDA #%02X",
       2,
       new int[][] {
-        new int[] {MAR_IN_PC, RAM_OUT | IR_IN | PC_E, MAR_IN_PC, RAM_OUT | A_IN, PC_E | CU_RST}
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | A_IN | CU_RST | PC_E
+        }
       }),
   LDA_ZP(
       0x02,
@@ -26,14 +36,14 @@ public enum Instruction {
       2,
       new int[][] {
         new int[] {
-          MAR_IN_PC,
-          RAM_OUT | IR_IN | PC_E,
-          MAR_IN_PC,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
           RAM_OUT | HL_IN_LOW,
           HL_IN_HIGH,
-          MAR_IN_HL,
-          RAM_OUT | A_IN,
-          PC_E | CU_RST
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | A_IN | CU_RST | PC_E
         }
       }),
   LDA_ABS(
@@ -42,15 +52,15 @@ public enum Instruction {
       3,
       new int[][] {
         new int[] {
-          MAR_IN_PC,
-          RAM_OUT | IR_IN | PC_E,
-          MAR_IN_PC,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
           RAM_OUT | HL_IN_HIGH | PC_E,
-          MAR_IN_PC,
+          MAR_IN_16 | PC_OUT_16,
           RAM_OUT | HL_IN_LOW,
-          MAR_IN_HL,
-          RAM_OUT | A_IN,
-          PC_E | CU_RST
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | A_IN | CU_RST | PC_E
         }
       }),
 
@@ -59,7 +69,13 @@ public enum Instruction {
       "LDB #%02X",
       2,
       new int[][] {
-        new int[] {MAR_IN_PC, RAM_OUT | IR_IN | PC_E, MAR_IN_PC, RAM_OUT | B_IN, PC_E | CU_RST}
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | B_IN | CU_RST | PC_E
+        }
       }),
   LDB_ZP(
       0x05,
@@ -67,14 +83,14 @@ public enum Instruction {
       2,
       new int[][] {
         new int[] {
-          MAR_IN_PC,
-          RAM_OUT | IR_IN | PC_E,
-          MAR_IN_PC,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
           RAM_OUT | HL_IN_LOW,
           HL_IN_HIGH,
-          MAR_IN_HL,
-          RAM_OUT | B_IN,
-          PC_E | CU_RST
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN | CU_RST | PC_E
         }
       }),
   LDB_ABS(
@@ -83,403 +99,894 @@ public enum Instruction {
       3,
       new int[][] {
         new int[] {
-          MAR_IN_PC,
-          RAM_OUT | IR_IN | PC_E,
-          MAR_IN_PC,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
           RAM_OUT | HL_IN_HIGH | PC_E,
-          MAR_IN_PC,
+          MAR_IN_16 | PC_OUT_16,
           RAM_OUT | HL_IN_LOW,
-          MAR_IN_HL,
-          RAM_OUT | B_IN,
-          PC_E | CU_RST
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN | CU_RST | PC_E
         }
       }),
 
-  STA_ZP(0x07, "STA $%02X", 2, new int[][] {new int[] {}}),
-  STA_ABS(0x08, "STA $%04X", 3, new int[][] {new int[] {}}),
-
-  STB_ZP(0x09, "STB $%02X", 2, new int[][] {new int[] {}}),
-  STB_ABS(0x0A, "STB $%04X", 3, new int[][] {new int[] {}}),
-
-  ADD_IMM(0x0B, "ADD #%02X", 2, new int[][] {new int[] {}}),
-  ADD_ZP(0x0C, "ADD $%02X", 2, new int[][] {new int[] {}}),
-  ADD_ABS(0x0D, "ADD $%04X", 3, new int[][] {new int[] {}}),
-  ADD_IDX(0x0E, "ADD $%02X, A", 2, new int[][] {new int[] {}}),
-
-  SUB_IMM(0x0F, "SUB #%02X", 2, new int[][] {new int[] {}}),
-  SUB_ZP(0x10, "SUB $%02X", 2, new int[][] {new int[] {}}),
-  SUB_ABS(0x11, "SUB $%04X", 3, new int[][] {new int[] {}}),
-  SUB_IDX(0x12, "SUB $%02X, A", 2, new int[][] {new int[] {}}),
-
-  INC_ABS(0x13, "INC $%04X", 3, new int[][] {new int[] {}}),
-  DEC_ABS(0x14, "DEC $%04X", 3, new int[][] {new int[] {}}),
-
-  CLS(0x15, "CLS", 1, new int[][] {new int[] {}}),
-
-  CMP(0x16, "CMP", 1, new int[][] {new int[] {}}),
-  CMP_IMM(0x17, "CMP #%02X", 2, new int[][] {new int[] {}}),
-  CMP_ZP(0x18, "CMP $%02X", 2, new int[][] {new int[] {}}),
-  CMP_ABS(0x19, "CMP $%04X", 3, new int[][] {new int[] {}}),
-
-  PHA(0x1A, "PHA", 1, new int[][] {new int[] {}}),
-  PHB(0x1B, "PHB", 1, new int[][] {new int[] {}}),
-  PHS(0x1C, "PHS", 1, new int[][] {new int[] {}}),
-
-  PLA(0x1D, "PLA", 1, new int[][] {new int[] {}}),
-  PLB(0x1E, "PLB", 1, new int[][] {new int[] {}}),
-  PLS(0x1F, "PLS", 1, new int[][] {new int[] {}}),
-
-  JSR_ZP(0x20, "JSR $%02X", 2, new int[][] {new int[] {}}),
-  JSR_ABS(0x21, "JSR $%04X", 3, new int[][] {new int[] {}}),
-  RTS(0x22, "RTS", 1, new int[][] {new int[] {}}),
-  JMP_ZP(0x23, "JMP $%02X", 2, new int[][] {new int[] {}}),
-  JMP_ABS(0x24, "JMP $%04X", 3, new int[][] {new int[] {}}),
-  JMP_IDX(0x25, "JMP $%02X, A", 2, new int[][] {new int[] {}}),
-
-  BCC_ZP(
-      0x26,
-      "BCC $%04X",
+  STA_ZP(
+      0x07,
+      "STA $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          HL_IN_HIGH,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_IN | A_OUT | CU_RST | PC_E
+        }
       }),
-  BCC_ABS(
-      0x27,
-      "BCC $%04X",
+  STA_ABS(
+      0x08,
+      "STA $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_IN | A_OUT | CU_RST | PC_E
+        }
       }),
-  BCC_IDX(
-      0x28,
-      "BCC $%02X, A",
+
+  ADD_IMM(
+      0x0B,
+      "ADD #%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | B_IN,
+          ALU_OUT | A_IN | CU_RST | PC_E
+        }
       }),
+  ADD_ZP(
+      0x0C,
+      "ADD $%02X",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          HL_IN_HIGH,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+  ADD_ABS(
+      0x0D,
+      "ADD $%04X",
+      3,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+  ADD_IDX(
+      0x0E,
+      "ADD $%02X, A",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH,
+          A_OUT | HL_IN_LOW,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+
+  SUB_IMM(
+      0x0F,
+      "SUB #%02X",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+  SUB_ZP(
+      0x10,
+      "SUB $%02X",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          HL_IN_HIGH,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+  SUB_ABS(
+      0x11,
+      "SUB $%04X",
+      3,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+  SUB_IDX(
+      0x12,
+      "SUB $%02X, A",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH,
+          A_OUT | HL_IN_LOW,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+
+  CLS(
+      0x14,
+      "CLS",
+      1,
+      new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, STATUS_IN | CU_RST | PC_E}}),
+
+  CMP(
+      0x15,
+      "CMP",
+      1,
+      new int[][] {
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, SUB | ALU_OUT | CU_RST | PC_E}
+      }),
+  CMP_IMM(
+      0x16,
+      "CMP #%02X",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | CU_RST | PC_E
+        }
+      }),
+  CMP_ZP(
+      0x17,
+      "CMP $%02X",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          HL_IN_HIGH,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | CU_RST | PC_E
+        }
+      }),
+  CMP_ABS(
+      0x18,
+      "CMP $%04X",
+      3,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          MAR_IN_16 | HL_OUT_16,
+          RAM_OUT | B_IN,
+          SUB | ALU_OUT | CU_RST | PC_E
+        }
+      }),
+
+  PHA(
+      0x19,
+      "PHA",
+      1,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          MAR_IN_16 | STACK_OUT_16,
+          STACK_PUSH | RAM_IN | A_OUT | CU_RST | PC_E
+        }
+      }),
+  PHS(
+      0x1B,
+      "PHS",
+      1,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          MAR_IN_16 | STACK_OUT_16,
+          STACK_PUSH | RAM_IN | STATUS_OUT | CU_RST | PC_E
+        }
+      }),
+
+  PLA(
+      0x1C,
+      "PLA",
+      1,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          STACK_POP,
+          MAR_IN_16 | STACK_OUT_16,
+          RAM_OUT | A_IN | CU_RST | PC_E
+        }
+      }),
+  PLB(
+      0x1D,
+      "PLB",
+      1,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          STACK_POP,
+          MAR_IN_16 | STACK_OUT_16,
+          RAM_OUT | B_IN | CU_RST | PC_E
+        }
+      }),
+  PLS(
+      0x1E,
+      "PLS",
+      1,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          STACK_POP,
+          MAR_IN_16 | STACK_OUT_16,
+          RAM_OUT | STATUS_IN | CU_RST | PC_E
+        }
+      }),
+
+  JSR_ABS(
+      0x20,
+      "JSR $%04X",
+      3,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          MAR_IN_16 | STACK_OUT_16,
+          STACK_PUSH | RAM_IN | PC_OUT_16,
+          MAR_IN_16 | STACK_OUT_16,
+          STACK_PUSH | RAM_IN | PC_OUT_HIGH | PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          PC_IN_16 | HL_OUT_16 | CU_RST
+        }
+      }),
+  RTS(
+      0x21,
+      "RTS",
+      1,
+      new int[][] {
+        new int[] {
+          MAR_IN_16 | PC_OUT_16,
+          RAM_OUT | IR_IN,
+          STACK_POP,
+          MAR_IN_16 | STACK_OUT_16,
+          RAM_OUT | HL_IN_HIGH,
+          STACK_POP,
+          MAR_IN_16 | STACK_OUT_16,
+          RAM_OUT | HL_IN_LOW,
+          HL_OUT_16 | PC_IN_16,
+          PC_E,
+          PC_E,
+          CU_RST | PC_E
+        }
+      }),
+  JMP_ZP(0x22, "JMP $%02X", 2, new int[][] {Instructions.JMP_ZP_MICROCODE}),
+  JMP_ABS(0x23, "JMP $%04X", 3, new int[][] {Instructions.JMP_ABS_MICROCODE}),
+  JMP_IDX(0x24, "JMP $%02X, A", 2, new int[][] {Instructions.JMP_IDX_MICROCODE}),
 
   BCS_ZP(
-      0x29,
-      "BCS $%04X",
+      0x25,
+      "BCS $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE
       }),
   BCS_ABS(
-      0x2A,
+      0x26,
       "BCS $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE
       }),
   BCS_IDX(
-      0x2B,
+      0x27,
       "BCS $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE
       }),
 
-  BEQ_ZP(
-      0x2C,
-      "BEQ $%04X",
+  BCC_ZP(
+      0x28,
+      "BCC $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
-  BEQ_ABS(
-      0x2D,
-      "BEQ $%04X",
+  BCC_ABS(
+      0x29,
+      "BCC $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST}
       }),
-  BEQ_IDX(
-      0x2E,
-      "BEQ $%02X, A",
+  BCC_IDX(
+      0x2A,
+      "BCC $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
 
   BNE_ZP(
-      0x2F,
-      "BNE $%04X",
+      0x2B,
+      "BNE $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
   BNE_ABS(
-      0x30,
+      0x2C,
       "BNE $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST}
       }),
   BNE_IDX(
-      0x31,
+      0x2D,
       "BNE $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
 
-  BMI_ZP(
-      0x32,
-      "BMI $%04X",
+  BEQ_ZP(
+      0x2E,
+      "BEQ $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE
       }),
-  BMI_ABS(
-      0x33,
-      "BMI $%04X",
+  BEQ_ABS(
+      0x2F,
+      "BEQ $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE
       }),
-  BMI_IDX(
-      0x34,
-      "BMI $%02X, A",
+  BEQ_IDX(
+      0x30,
+      "BEQ $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE
       }),
 
   BPL_ZP(
-      0x35,
-      "BPL $%04X",
+      0x31,
+      "BPL $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
   BPL_ABS(
-      0x36,
+      0x32,
       "BPL $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST}
       }),
   BPL_IDX(
-      0x37,
+      0x33,
       "BPL $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
+      }),
+
+  BMI_ZP(
+      0x34,
+      "BMI $%02X",
+      2,
+      new int[][] {
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
+      }),
+  BMI_ABS(
+      0x35,
+      "BMI $%04X",
+      3,
+      new int[][] {
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST}
+      }),
+  BMI_IDX(
+      0x36,
+      "BMI $%02X, A",
+      2,
+      new int[][] {
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
 
   BOC_ZP(
-      0x38,
-      "BOC $%04X",
+      0x37,
+      "BOC $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
   BOC_ABS(
-      0x39,
+      0x38,
       "BOC $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST}
       }),
   BOC_IDX(
-      0x3A,
+      0x39,
       "BOC $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST}
       }),
 
   BOS_ZP(
-      0x3B,
-      "BOS $%04X",
+      0x3A,
+      "BOS $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE,
+        Instructions.JMP_ZP_MICROCODE
       }),
   BOS_ABS(
-      0x3C,
+      0x3B,
       "BOS $%04X",
       3,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE,
+        Instructions.JMP_ABS_MICROCODE
       }),
   BOS_IDX(
-      0x3D,
+      0x3C,
       "BOS $%02X, A",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE,
+        Instructions.JMP_IDX_MICROCODE
       }),
-  HLT(0x3F, "HLT", 1, new int[][] {new int[] {HALT, PC_E | CU_RST}});
+  HLT(
+      0x3F,
+      "HLT",
+      1,
+      new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, HALT, PC_E | CU_RST}});
 
   private final int opcode;
   private final String format;
@@ -489,9 +996,8 @@ public enum Instruction {
   /**
    * @param opcode
    * @param size
-   * @param microcode [x][y][z] x : status flags (not present defaults to y = 0) y : Control Unit
-   *     Micro Step (starting after the first 2 mandatory fetch steps) z : signals (order is
-   *     irrelevant)
+   * @param microcode [x][y] x : status flags (not present defaults to y = 0) y : Control Unit Micro
+   *     Step (starting after the first 2 mandatory fetch steps)
    */
   Instruction(int opcode, String format, int size, int[][] microcode) {
     this.opcode = opcode;
@@ -503,9 +1009,6 @@ public enum Instruction {
     if (microcode.length > 0) {
       for (int flagState = 0; flagState < flagStateCount; flagState++) {
         int[] steps = microcode[microcode.length > flagState ? flagState : 0];
-        if (steps == null) {
-          steps = microcode[0];
-        }
         if (steps.length > 0) {
           for (int step = 0; step < steps.length && step < 16; step++) {
             this.microcode[flagState][step] = steps[step];
