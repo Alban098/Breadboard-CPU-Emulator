@@ -7,68 +7,138 @@ package simulation.emulation.execution;
 
 import static simulation.emulation.constant.Signals.*;
 
+import simulation.emulation.constant.AddressingMode;
 import simulation.emulation.constant.Flag;
 
 public enum Instruction {
-  NOP(0x00, "NOP", 1, new int[][] {new int[] {PC_E | CU_RST}}),
+  NOP(0x00, "NOP", 1, new int[][] {new int[] {MAR_IN_PC, RAM_OUT | IR_IN | PC_E, CU_RST}}),
+
   LDA_IMM(
       0x01,
-      "LDA %02X",
+      "LDA #%02X",
       2,
-      new int[][] {new int[] {PC_E, MAR_IN_PC, RAM_OUT | A_IN, PC_E | CU_RST}}),
-  LDA_ABS(
+      new int[][] {
+        new int[] {MAR_IN_PC, RAM_OUT | IR_IN | PC_E, MAR_IN_PC, RAM_OUT | A_IN, PC_E | CU_RST}
+      }),
+  LDA_ZP(
       0x02,
-      "LDA $(%02X)",
-      2,
-      new int[][] {new int[] {PC_E, MAR_IN_PC, RAM_OUT | MAR_IN, RAM_OUT | A_IN, PC_E | CU_RST}}),
-  LDB_IMM(0x03, "LDB %02X", 2, new int[][] {new int[] {0}}),
-  LDB_ABS(0x04, "LDB $(%02X)", 2, new int[][] {new int[] {0}}),
-  OUT_IMM(0x05, "OUT %02X", 2, new int[][] {new int[] {0}}),
-  OUT_ABS(0x06, "OUT $(%02X)", 2, new int[][] {new int[] {0}}),
-  OUT(0x07, "OUT", 1, new int[][] {new int[] {0}}),
-  STA_IMM(0x08, "STA %02X", 2, new int[][] {new int[] {0}}),
-  STA_ABS(0x09, "STA $(%02X)", 2, new int[][] {new int[] {0}}),
-  ADD_IMM(0x0A, "ADD %02X", 2, new int[][] {new int[] {0}}),
-  ADD_ABS(0x0B, "ADD $(%02X)", 2, new int[][] {new int[] {0}}),
-  SUB_IMM(0x0C, "SUB %02X", 2, new int[][] {new int[] {0}}),
-  SUB_ABS(0x0D, "SUB $(%02X)", 2, new int[][] {new int[] {0}}),
-  CMP_IMM(0x0E, "CMP %02X", 2, new int[][] {new int[] {0}}),
-  CMP_ABS(0x0F, "CMP $(%02X)", 2, new int[][] {new int[] {0}}),
-  CMP(0x10, "CMP", 1, new int[][] {new int[] {0}}),
-  JMP_IMM(0x11, "JMP %02X", 2, new int[][] {new int[] {0}}),
-  JMP_ABS(0x12, "JMP $(%02X)", 2, new int[][] {new int[] {0}}),
-  JMA(0x13, "JMA", 1, new int[][] {new int[] {0}}),
-  BCS_IMM(
-      0x14,
-      "BCS %02X",
+      "LDA $%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {
+          MAR_IN_PC,
+          RAM_OUT | IR_IN | PC_E,
+          MAR_IN_PC,
+          RAM_OUT | HL_IN_LOW,
+          HL_IN_HIGH,
+          MAR_IN_HL,
+          RAM_OUT | A_IN,
+          PC_E | CU_RST
+        }
       }),
-  BCS_ABS(
-      0x15,
-      "BCS $(%02X)",
+  LDA_ABS(
+      0x03,
+      "LDA $%04X",
+      3,
+      new int[][] {
+        new int[] {
+          MAR_IN_PC,
+          RAM_OUT | IR_IN | PC_E,
+          MAR_IN_PC,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_PC,
+          RAM_OUT | HL_IN_LOW,
+          MAR_IN_HL,
+          RAM_OUT | A_IN,
+          PC_E | CU_RST
+        }
+      }),
+
+  LDB_IMM(
+      0x04,
+      "LDB #%02X",
       2,
       new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
+        new int[] {MAR_IN_PC, RAM_OUT | IR_IN | PC_E, MAR_IN_PC, RAM_OUT | B_IN, PC_E | CU_RST}
       }),
-  BCC_IMM(
-      0x16,
-      "BCC %02X",
+  LDB_ZP(
+      0x05,
+      "LDB $%02X",
+      2,
+      new int[][] {
+        new int[] {
+          MAR_IN_PC,
+          RAM_OUT | IR_IN | PC_E,
+          MAR_IN_PC,
+          RAM_OUT | HL_IN_LOW,
+          HL_IN_HIGH,
+          MAR_IN_HL,
+          RAM_OUT | B_IN,
+          PC_E | CU_RST
+        }
+      }),
+  LDB_ABS(
+      0x06,
+      "LDB $%04X",
+      3,
+      new int[][] {
+        new int[] {
+          MAR_IN_PC,
+          RAM_OUT | IR_IN | PC_E,
+          MAR_IN_PC,
+          RAM_OUT | HL_IN_HIGH | PC_E,
+          MAR_IN_PC,
+          RAM_OUT | HL_IN_LOW,
+          MAR_IN_HL,
+          RAM_OUT | B_IN,
+          PC_E | CU_RST
+        }
+      }),
+
+  STA_ZP(0x07, "STA $%02X", 2, new int[][] {new int[] {}}),
+  STA_ABS(0x08, "STA $%04X", 3, new int[][] {new int[] {}}),
+
+  STB_ZP(0x09, "STB $%02X", 2, new int[][] {new int[] {}}),
+  STB_ABS(0x0A, "STB $%04X", 3, new int[][] {new int[] {}}),
+
+  ADD_IMM(0x0B, "ADD #%02X", 2, new int[][] {new int[] {}}),
+  ADD_ZP(0x0C, "ADD $%02X", 2, new int[][] {new int[] {}}),
+  ADD_ABS(0x0D, "ADD $%04X", 3, new int[][] {new int[] {}}),
+  ADD_IDX(0x0E, "ADD $%02X, A", 2, new int[][] {new int[] {}}),
+
+  SUB_IMM(0x0F, "SUB #%02X", 2, new int[][] {new int[] {}}),
+  SUB_ZP(0x10, "SUB $%02X", 2, new int[][] {new int[] {}}),
+  SUB_ABS(0x11, "SUB $%04X", 3, new int[][] {new int[] {}}),
+  SUB_IDX(0x12, "SUB $%02X, A", 2, new int[][] {new int[] {}}),
+
+  INC_ABS(0x13, "INC $%04X", 3, new int[][] {new int[] {}}),
+  DEC_ABS(0x14, "DEC $%04X", 3, new int[][] {new int[] {}}),
+
+  CLS(0x15, "CLS", 1, new int[][] {new int[] {}}),
+
+  CMP(0x16, "CMP", 1, new int[][] {new int[] {}}),
+  CMP_IMM(0x17, "CMP #%02X", 2, new int[][] {new int[] {}}),
+  CMP_ZP(0x18, "CMP $%02X", 2, new int[][] {new int[] {}}),
+  CMP_ABS(0x19, "CMP $%04X", 3, new int[][] {new int[] {}}),
+
+  PHA(0x1A, "PHA", 1, new int[][] {new int[] {}}),
+  PHB(0x1B, "PHB", 1, new int[][] {new int[] {}}),
+  PHS(0x1C, "PHS", 1, new int[][] {new int[] {}}),
+
+  PLA(0x1D, "PLA", 1, new int[][] {new int[] {}}),
+  PLB(0x1E, "PLB", 1, new int[][] {new int[] {}}),
+  PLS(0x1F, "PLS", 1, new int[][] {new int[] {}}),
+
+  JSR_ZP(0x20, "JSR $%02X", 2, new int[][] {new int[] {}}),
+  JSR_ABS(0x21, "JSR $%04X", 3, new int[][] {new int[] {}}),
+  RTS(0x22, "RTS", 1, new int[][] {new int[] {}}),
+  JMP_ZP(0x23, "JMP $%02X", 2, new int[][] {new int[] {}}),
+  JMP_ABS(0x24, "JMP $%04X", 3, new int[][] {new int[] {}}),
+  JMP_IDX(0x25, "JMP $%02X, A", 2, new int[][] {new int[] {}}),
+
+  BCC_ZP(
+      0x26,
+      "BCC $%04X",
       2,
       new int[][] {
         new int[] {0},
@@ -81,8 +151,22 @@ public enum Instruction {
         new int[] {0}
       }),
   BCC_ABS(
-      0x17,
-      "BCC $(%02X)",
+      0x27,
+      "BCC $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BCC_IDX(
+      0x28,
+      "BCC $%02X, A",
       2,
       new int[][] {
         new int[] {0},
@@ -94,9 +178,53 @@ public enum Instruction {
         new int[] {0},
         new int[] {0}
       }),
-  BEQ_IMM(
-      0x18,
-      "BEQ %02X",
+
+  BCS_ZP(
+      0x29,
+      "BCS $%04X",
+      2,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BCS_ABS(
+      0x2A,
+      "BCS $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BCS_IDX(
+      0x2B,
+      "BCS $%02X, A",
+      2,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+
+  BEQ_ZP(
+      0x2C,
+      "BEQ $%04X",
       2,
       new int[][] {
         new int[] {0},
@@ -109,8 +237,22 @@ public enum Instruction {
         new int[] {0}
       }),
   BEQ_ABS(
-      0x19,
-      "BEQ $(%02X)",
+      0x2D,
+      "BEQ $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BEQ_IDX(
+      0x2E,
+      "BEQ $%02X, A",
       2,
       new int[][] {
         new int[] {0},
@@ -122,9 +264,10 @@ public enum Instruction {
         new int[] {0},
         new int[] {0}
       }),
-  BNE_IMM(
-      0x1A,
-      "BNE %02X",
+
+  BNE_ZP(
+      0x2F,
+      "BNE $%04X",
       2,
       new int[][] {
         new int[] {0},
@@ -137,8 +280,22 @@ public enum Instruction {
         new int[] {0}
       }),
   BNE_ABS(
-      0x1B,
-      "BNE $(%02X)",
+      0x30,
+      "BNE $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BNE_IDX(
+      0x31,
+      "BNE $%02X, A",
       2,
       new int[][] {
         new int[] {0},
@@ -150,9 +307,10 @@ public enum Instruction {
         new int[] {0},
         new int[] {0}
       }),
-  BMI_IMM(
-      0x1C,
-      "BMI %02X",
+
+  BMI_ZP(
+      0x32,
+      "BMI $%04X",
       2,
       new int[][] {
         new int[] {0},
@@ -165,8 +323,22 @@ public enum Instruction {
         new int[] {0}
       }),
   BMI_ABS(
-      0x1D,
-      "BMI $(%02X)",
+      0x33,
+      "BMI $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BMI_IDX(
+      0x34,
+      "BMI $%02X, A",
       2,
       new int[][] {
         new int[] {0},
@@ -178,9 +350,10 @@ public enum Instruction {
         new int[] {0},
         new int[] {0}
       }),
-  BPL_IMM(
-      0x1E,
-      "BPL %02X",
+
+  BPL_ZP(
+      0x35,
+      "BPL $%04X",
       2,
       new int[][] {
         new int[] {0},
@@ -193,8 +366,22 @@ public enum Instruction {
         new int[] {0}
       }),
   BPL_ABS(
-      0x1F,
-      "BPL $(%02X)",
+      0x36,
+      "BPL $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BPL_IDX(
+      0x37,
+      "BPL $%02X, A",
       2,
       new int[][] {
         new int[] {0},
@@ -206,37 +393,10 @@ public enum Instruction {
         new int[] {0},
         new int[] {0}
       }),
-  BOS_IMM(
-      0x20,
-      "BOS %02X",
-      2,
-      new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
-      }),
-  BOS_ABS(
-      0x21,
-      "BOS $(%02X)",
-      2,
-      new int[][] {
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0},
-        new int[] {0}
-      }),
-  BOC_IMM(
-      0x22,
-      "BOC %02X",
+
+  BOC_ZP(
+      0x38,
+      "BOC $%04X",
       2,
       new int[][] {
         new int[] {0},
@@ -249,8 +409,65 @@ public enum Instruction {
         new int[] {0}
       }),
   BOC_ABS(
-      0x23,
-      "BOC $(%02X)",
+      0x39,
+      "BOC $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BOC_IDX(
+      0x3A,
+      "BOC $%02X, A",
+      2,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+
+  BOS_ZP(
+      0x3B,
+      "BOS $%04X",
+      2,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BOS_ABS(
+      0x3C,
+      "BOS $%04X",
+      3,
+      new int[][] {
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0},
+        new int[] {0}
+      }),
+  BOS_IDX(
+      0x3D,
+      "BOS $%02X, A",
       2,
       new int[][] {
         new int[] {0},
@@ -283,11 +500,6 @@ public enum Instruction {
     int flagStateCount = (1 << Flag.values().length);
     // microsteps are coded over 4 bits, so 16 possible values
     this.microcode = new int[flagStateCount][16];
-    for (int flagState = 0; flagState < flagStateCount; flagState++) {
-      this.microcode[flagState][0] = MAR_IN_PC;
-      this.microcode[flagState][1] = RAM_OUT | IR_IN;
-    }
-
     if (microcode.length > 0) {
       for (int flagState = 0; flagState < flagStateCount; flagState++) {
         int[] steps = microcode[microcode.length > flagState ? flagState : 0];
@@ -295,10 +507,8 @@ public enum Instruction {
           steps = microcode[0];
         }
         if (steps.length > 0) {
-          for (int additionalStep = 0;
-              additionalStep < steps.length && additionalStep < 14;
-              additionalStep++) {
-            this.microcode[flagState][2 + additionalStep] = steps[additionalStep];
+          for (int step = 0; step < steps.length && step < 16; step++) {
+            this.microcode[flagState][step] = steps[step];
           }
         }
       }
@@ -326,5 +536,21 @@ public enum Instruction {
 
   public int[][] getMicrocode() {
     return microcode;
+  }
+
+  public AddressingMode getAddressingMode() {
+    if (format.endsWith("$%02X, A")) {
+      return AddressingMode.IDX;
+    }
+    if (format.endsWith("$%02X")) {
+      return AddressingMode.Z_P;
+    }
+    if (format.endsWith("$%04X")) {
+      return AddressingMode.IMM;
+    }
+    if (format.endsWith("#%02X")) {
+      return AddressingMode.IMP;
+    }
+    return AddressingMode.IMM;
   }
 }

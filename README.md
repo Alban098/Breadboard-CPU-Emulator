@@ -25,7 +25,7 @@ WARNING Not all Instruction have been tested, some of them may be bugged !
 More details about the Breadboard computer in itself can be found [there](docs/modules.md), along with the full [parts list](docs/parts_list.md)
 
 ## Roadmap
-* [ ] Instruction set
+* [x] Instruction set
 * [ ] Assembly compiler
 * [x] Emulator (WIP)
   * [x] Components
@@ -42,4 +42,3 @@ More details about the Breadboard computer in itself can be found [there](docs/m
   * [ ] Memory modules
   * [ ] Control Unit
   * [ ] ESP32 based programmer
-

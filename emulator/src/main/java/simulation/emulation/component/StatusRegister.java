@@ -13,12 +13,13 @@ public final class StatusRegister extends Register8 {
   private final ArithmeticLogicUnit alu;
 
   public StatusRegister(Bus bus, ControlUnitModule controlUnit, ArithmeticLogicUnit alu) {
-    super(bus, controlUnit);
+    super(bus, controlUnit, Signals.STATUS_IN, Signals.STATUS_OUT);
     this.alu = alu;
   }
 
   @Override
   public boolean clock() {
+    super.clock();
     if (controlUnit.hasControlSignal(Signals.SR_LATCH)) {
       value =
           (alu.probeFlag(Flag.OVERFLOW) ? Flag.OVERFLOW.getMask() : 0)

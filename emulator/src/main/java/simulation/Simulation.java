@@ -33,20 +33,19 @@ public class Simulation {
   }
 
   public Simulation(String file) throws IOException {
-    window = new Window("Example", 480, 360);
     timer = new Timer();
     emulator = new Emulator();
     uiLayer = new UILayer(emulator);
+    window = new Window("Example", 480, 360);
     init(file);
     loop();
-    window.cleanUp();
+    // window.cleanUp();
   }
 
   private void init(String file) throws IOException {
     try (FileInputStream programFis = new FileInputStream(file)) {
-      int a = programFis.available();
-      if (programFis.available() > 0x100) {
-        throw new IOException("Program can not be more than 256 bytes");
+      if (programFis.available() > 0x400) {
+        throw new IOException("Program can not be more than 1KB");
       }
       emulator.writeMemory(programFis.readAllBytes());
     }
@@ -55,6 +54,7 @@ public class Simulation {
 
   private void loop() {
     double accumulator = 0f;
+    double frametime = 0f;
     double interval = 1f / CLOCK_FREQUENCY;
     boolean down = false;
 
@@ -63,10 +63,10 @@ public class Simulation {
       window.newFrame();
 
       emulator.update();
-
+      frametime = timer.getElapsedTime();
       // Clock as many times as needed to respect the number of updates per second
       if (emulator.getState() == EmulatorState.RUN) {
-        accumulator += timer.getElapsedTime();
+        accumulator += frametime;
         if (accumulator >= interval) {
           clock();
           accumulator = 0;
@@ -83,7 +83,7 @@ public class Simulation {
       }
 
       // Render the frame
-      uiLayer.render();
+      uiLayer.render(frametime);
 
       // Draw the frame
       window.endFrame();

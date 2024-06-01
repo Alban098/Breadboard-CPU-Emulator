@@ -28,8 +28,8 @@ public final class Instructions {
   public static void dumpInstructionSet(String fileName) throws IOException {
     int sampleAddr = 0xFD;
     BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-    writer.append("Binary |  Hex | Length |  Clk | Assembly\n");
-    writer.append("-------|------|--------|------|---------\n");
+    writer.append("Binary |  Hex | Length | Addr Mode |  Clk | Assembly\n");
+    writer.append("-------|------|--------|-----------|------|---------\n");
 
     for (int i = 0; i < TABLE.length; i++) {
       if (i == 0x40) {
@@ -43,7 +43,8 @@ public final class Instructions {
                 int clockCycles = 0;
                 for (int signals : flagState) {
                   clockCycles++;
-                  if ((signals & Signals.CU_RST.getMask()) == Signals.CU_RST.getMask()) {
+
+                  if (Signals.isActiveInState(Signals.CU_RST, signals)) {
                     break;
                   }
                 }
@@ -62,6 +63,8 @@ public final class Instructions {
           .append(hex)
           .append(" |      ")
           .append(String.valueOf(instruction.getSize()))
+          .append(" |       ")
+          .append(String.valueOf(instruction.getAddressingMode()))
           .append(" | ")
           .append(length)
           .append(" | ")
@@ -74,8 +77,8 @@ public final class Instructions {
   public static void dumpProgramROM(boolean raw, String fileName) throws IOException {
     if (!raw) {
       BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-      writer.append("Step|OZCN|OpCode|          Bin          |\n");
-      writer.append("----|----|------|-----------------------|\n");
+      writer.append("Step|OZCN|OpCode|          Bin           |\n");
+      writer.append("----|----|------|------------------------|\n");
       for (int addr = 0; addr < TABLE.length * (1 << Flag.values().length) * 16; addr++) {
         int opcode = addr & 0b0000_0000_111111;
         int flags = (addr & 0b0000_1111_000000) >> 6;
@@ -99,7 +102,7 @@ public final class Instructions {
                           Integer.toBinaryString(opcode))
                       .replaceAll(" ", "0"))
               .append(" ")
-              .append(String.format("%16s", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
+              .append(String.format("%24s", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
               .append(" ")
               .append(String.valueOf(formattedSignals))
               .append("\n");

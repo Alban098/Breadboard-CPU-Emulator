@@ -27,9 +27,6 @@ public final class MemoryAddressRegister extends Register16 {
 
   @Override
   public boolean clock() {
-    if (controlUnit.hasControlSignal(Signals.MAR_IN)) {
-      value = readBus();
-    }
     if (controlUnit.hasControlSignal(Signals.MAR_IN_HL)) {
       value = hlRegister.getValue();
     }

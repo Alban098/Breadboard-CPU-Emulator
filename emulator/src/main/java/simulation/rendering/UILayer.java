@@ -24,21 +24,24 @@ import simulation.emulation.execution.Instructions;
  */
 public class UILayer {
 
-  private static final int HIGHLIGHT_DURATION = 64;
+  private static final double HIGHLIGHT_DURATION = 1.5;
   private static final int DECOMPILATION_STACK_SIZE = 14;
 
   private final Emulator emulator;
   private final List<DecompiledInstruction> decompiled = new ArrayList<>(DECOMPILATION_STACK_SIZE);
   private final ImString goTo = new ImString();
   private final ImBoolean gradient = new ImBoolean();
+  private final int[] currentMemoryPage = new int[1];
+
   private int highlight = -1;
-  private int highlightCooldown = 0;
+  private double highlightCooldown = 0;
   private int lastInstructionIndex = 0;
 
   private static class DecompiledInstruction {
     public Instruction instruction;
     private int addr;
-    private Integer arg;
+    private int[] args;
+    private int fullArg;
 
     public DecompiledInstruction() {
       clear();
@@ -47,7 +50,8 @@ public class UILayer {
     public void clear() {
       instruction = Instruction.NOP;
       addr = 0;
-      arg = null;
+      args = null;
+      fullArg = 0;
     }
 
     public int getSize() {
@@ -74,11 +78,11 @@ public class UILayer {
   }
 
   /** Render the layer to the screen and propagate button presses if needed */
-  public void render() {
+  public void render(double frametime) {
     ImGui.begin("CPU Status");
-    ImGui.setWindowSize(560, 955);
+    ImGui.setWindowSize(560, 1100);
     printUIElements();
-    printMemoryStatus();
+    printMemoryStatus(frametime);
     printStatusRegister();
     printALUStatus();
     printRegisters();
@@ -157,7 +161,7 @@ public class UILayer {
     ImGui.separator();
   }
 
-  private void printMemoryStatus() {
+  private void printMemoryStatus(double frametime) {
     ImGui.setNextItemOpen(true);
     if (ImGui.treeNode("Memory")) {
       Memory memory = emulator.getModule(ModuleId.RAM, Memory.class);
@@ -168,43 +172,47 @@ public class UILayer {
         goTo.set(goTo.get().replaceAll("[^A-Fa-f0-9]*[ ]*", ""));
         if (goTo.get().isEmpty()) goTo.set("0");
         highlight = Integer.decode("0x" + goTo.get());
+        currentMemoryPage[0] = (highlight & 0x300) >> 4;
         highlightCooldown = HIGHLIGHT_DURATION;
       }
       ImGui.sameLine(440);
       ImGui.checkbox("Gradient", gradient);
       ImGui.separator();
-      ImGui.text("   ");
+      ImGui.text("    ");
       for (int i = 0x0; i <= 0xF; i++) {
         ImGui.sameLine();
         ImGui.textColored(255, 255, 0, 255, String.format("%02X", i));
       }
       for (int i = 0x0; i <= 0xF; i++) {
-        int addr = i << 4;
-        ImGui.textColored(255, 255, 0, 255, String.format("%02X ", addr));
+        int addr = (currentMemoryPage[0] << 4) + (i << 4);
+        ImGui.textColored(255, 255, 0, 255, String.format("%03X ", addr));
         for (int data = 0x0; data <= 0xF; data++) {
           ImGui.sameLine();
-          addr = (i << 4) | data;
+          addr = (currentMemoryPage[0] << 4) + (i << 4) | data;
           int read = memory.readMemory(addr);
           if (addr == highlight) {
             if (read == 0x00) {
               ImGui.textColored(
-                  128 + 128 * highlightCooldown / HIGHLIGHT_DURATION,
-                  128 - 128 * highlightCooldown / HIGHLIGHT_DURATION,
-                  128 - 128 * highlightCooldown / HIGHLIGHT_DURATION,
+                  (int) (128 + 128 * highlightCooldown / HIGHLIGHT_DURATION),
+                  (int) (128 - 128 * highlightCooldown / HIGHLIGHT_DURATION),
+                  (int) (128 - 128 * highlightCooldown / HIGHLIGHT_DURATION),
                   255,
                   String.format("%02X", read));
             } else {
               ImGui.textColored(
                   255,
-                  255 - 255 * highlightCooldown / HIGHLIGHT_DURATION,
-                  255 - 255 * highlightCooldown / HIGHLIGHT_DURATION,
+                  (int) (255 - 255 * highlightCooldown / HIGHLIGHT_DURATION),
+                  (int) (255 - 255 * highlightCooldown / HIGHLIGHT_DURATION),
                   255,
                   String.format("%02X", read));
             }
-            if (highlightCooldown-- == 0) {
+            if (highlightCooldown > 0) {
+              highlightCooldown -= frametime;
+            }
+            if (highlightCooldown <= 0) {
               highlight = -1;
             }
-          } else if (addr == memoryAddressRegister.getValue()) {
+          } else if (addr == (memoryAddressRegister.getValue() & Memory.MAX_ADDRESS)) {
             ImGui.textColored(0, 192, 255, 255, String.format("%02X", read));
           } else if (!gradient.get()) {
             if (read == 0x00) {
@@ -217,15 +225,18 @@ public class UILayer {
           }
         }
         ImGui.sameLine();
-        ImGui.text(" | ");
+        ImGui.text("|");
         StringBuilder dataString = new StringBuilder();
         for (int data = 0x0; data <= 0xF; data++) {
-          char read = (char) memory.readMemory((i << 4) | data);
+          char read = (char) memory.readMemory((currentMemoryPage[0] << 4) + (i << 4) | data);
           dataString.append(read < 0x20 ? "." : read);
         }
         ImGui.sameLine();
         ImGui.text(dataString.toString());
       }
+      ImGui.pushItemWidth(450);
+      ImGui.sliderInt(
+          " ", currentMemoryPage, 0, 0x30, String.format("%03X0", currentMemoryPage[0]));
       ImGui.treePop();
     }
     ImGui.separator();
@@ -307,6 +318,8 @@ public class UILayer {
       Register8 aRegister = emulator.getModule(ModuleId.A_REGISTER, Register8.class);
       Register8 bRegister = emulator.getModule(ModuleId.B_REGISTER, Register8.class);
       Register8 outputRegister = emulator.getModule(ModuleId.OUTPUT_REGISTER, Register8.class);
+      Register16 hlRegister = emulator.getModule(ModuleId.HL_REGISTER, Register16.class);
+      StackPointer stackPointer = emulator.getModule(ModuleId.STACK_POINTER, StackPointer.class);
       ProgramCounter programCounter =
           emulator.getModule(ModuleId.PROGRAM_COUNTER, ProgramCounter.class);
       Register8 instructionRegister =
@@ -341,28 +354,42 @@ public class UILayer {
       ImGui.sameLine();
       ImGui.text("    " + outputRegister.binaryString());
       ImGui.sameLine();
-      ImGui.text("        " + programCounter.binaryString());
+      ImGui.text("     " + programCounter.binaryString());
       ImGui.sameLine();
-      ImGui.text("         " + instructionRegister.binaryString());
+      ImGui.text("      " + instructionRegister.binaryString());
       ImGui.newLine();
 
-      ImGui.textColored(0, 255, 255, 255, "Bus");
+      ImGui.textColored(255, 255, 0, 255, "Bus");
       ImGui.sameLine();
       ImGui.text("= " + emulator.getBus().hexString());
       ImGui.sameLine();
-      ImGui.textColored(0, 255, 255, 255, "     Mem. Addr. Register");
+      ImGui.textColored(255, 0, 255, 255, " Memory Address");
       ImGui.sameLine();
       ImGui.text("= " + memoryAddressRegister.hexString());
       ImGui.sameLine();
-      ImGui.textColored(0, 255, 255, 255, "     RAM Slot");
+      ImGui.textColored(255, 0, 255, 255, " RAM Val");
       ImGui.sameLine();
       ImGui.text("= " + ram.hexString());
+      ImGui.sameLine();
+      ImGui.textColored(0, 255, 255, 255, " HL Register");
+      ImGui.sameLine();
+      ImGui.text("= " + hlRegister.hexString());
 
       ImGui.text(" " + emulator.getBus().binaryString());
       ImGui.sameLine();
-      ImGui.text("              " + memoryAddressRegister.binaryString());
+      ImGui.text("     " + memoryAddressRegister.binaryString());
       ImGui.sameLine();
-      ImGui.text("                     " + ram.binaryString());
+      ImGui.text("        " + ram.binaryString());
+      ImGui.sameLine();
+      ImGui.text("       " + hlRegister.binaryString());
+      ImGui.newLine();
+
+      ImGui.textColored(255, 255, 0, 255, "Stack Pointer");
+      ImGui.sameLine();
+      ImGui.text("= " + stackPointer.hexString());
+
+      ImGui.text("   " + stackPointer.binaryString());
+
       ImGui.treePop();
     }
     ImGui.separator();
@@ -438,7 +465,12 @@ public class UILayer {
     dest.addr = addr;
     dest.instruction = instruction;
     if (instruction.getSize() > 1) {
-      dest.arg = ram.readMemory(addr + 1);
+      dest.args = new int[instruction.getSize() - 1];
+      for (int i = 1; i < instruction.getSize(); i++) {
+        dest.args[i - 1] = ram.readMemory(addr + i);
+        dest.fullArg <<= 8;
+        dest.fullArg |= dest.args[i - 1];
+      }
     }
 
     return dest;
@@ -457,22 +489,27 @@ public class UILayer {
       ImGui.textColored(0, 255, 255, 255, "  " + String.format("%02X", instruction.addr) + ":");
       ImGui.sameLine();
       ImGui.textColored(128, 128, 128, 255, String.format("%02X", instruction.getOpcode()));
-      if (instruction.arg != null) {
-        ImGui.sameLine();
-        ImGui.textColored(128, 128, 128, 255, String.format("%02X", instruction.arg));
+      if (instruction.args != null) {
+        for (int value : instruction.args) {
+          ImGui.sameLine();
+          ImGui.textColored(128, 128, 128, 255, String.format("%02X", value));
+        }
       }
-      ImGui.sameLine(280);
-      ImGui.text(String.format(instruction.getFormat(), instruction.arg));
+      ImGui.sameLine(290);
+      ImGui.text(String.format(instruction.getFormat(), instruction.fullArg));
     } else {
       ImGui.textColored(255, 255, 0, 255, "  " + String.format("%02X", instruction.addr) + ":");
       ImGui.sameLine();
       ImGui.textColored(128, 128, 0, 255, String.format("%02X", instruction.getOpcode()));
-      if (instruction.arg != null) {
-        ImGui.sameLine();
-        ImGui.textColored(128, 128, 0, 255, String.format("%02X", instruction.arg));
+      if (instruction.args != null) {
+        for (int value : instruction.args) {
+          ImGui.sameLine();
+          ImGui.textColored(128, 128, 0, 255, String.format("%02X", value));
+        }
       }
-      ImGui.sameLine(280);
-      ImGui.textColored(255, 255, 0, 255, String.format(instruction.getFormat(), instruction.arg));
+      ImGui.sameLine(290);
+      ImGui.textColored(
+          255, 255, 0, 255, String.format(instruction.getFormat(), instruction.fullArg));
     }
   }
 }

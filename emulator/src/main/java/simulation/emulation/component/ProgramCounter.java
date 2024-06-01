@@ -20,13 +20,10 @@ public final class ProgramCounter extends BusConnectedModule {
   @Override
   public boolean clock() {
     if (controlUnit.hasControlSignal(Signals.PC_E)) {
-      value = (value + 1) & 0x3FF;
-    }
-    if (controlUnit.hasControlSignal(Signals.PC_IN)) {
-      value = readBus();
+      value = (value + 1) & 0xFFFF;
     }
     if (controlUnit.hasControlSignal(Signals.PC_IN_HL)) {
-      value = hlRegister.getValue() & 0x3FF;
+      value = hlRegister.getValue() & 0xFFFF;
     }
     return false;
   }
@@ -50,6 +47,6 @@ public final class ProgramCounter extends BusConnectedModule {
   }
 
   public int getValue() {
-    return value & 0x3FF;
+    return value & 0xFFFF;
   }
 }

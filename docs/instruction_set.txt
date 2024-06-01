@@ -1,0 +1,66 @@
+Binary |  Hex | Length | Addr Mode |  Clk | Assembly
+-------|------|--------|-----------|------|---------
+000000 | 0x00 |      1 |       IMM |   3c | NOP
+000001 | 0x01 |      2 |       IMP |   5c | LDA #FD
+000010 | 0x02 |      2 |       Z_P |   8c | LDA $FD
+000011 | 0x03 |      3 |       IMM |   9c | LDA $00FD
+000100 | 0x04 |      2 |       IMP |   5c | LDB #FD
+000101 | 0x05 |      2 |       Z_P |   8c | LDB $FD
+000110 | 0x06 |      3 |       IMM |   9c | LDB $00FD
+000111 | 0x07 |      2 |       Z_P |   16c | STA $FD
+001000 | 0x08 |      3 |       IMM |   16c | STA $00FD
+001001 | 0x09 |      2 |       Z_P |   16c | STB $FD
+001010 | 0x0A |      3 |       IMM |   16c | STB $00FD
+001011 | 0x0B |      2 |       IMP |   16c | ADD #FD
+001100 | 0x0C |      2 |       Z_P |   16c | ADD $FD
+001101 | 0x0D |      3 |       IMM |   16c | ADD $00FD
+001110 | 0x0E |      2 |       IDX |   16c | ADD $FD, A
+001111 | 0x0F |      2 |       IMP |   16c | SUB #FD
+010000 | 0x10 |      2 |       Z_P |   16c | SUB $FD
+010001 | 0x11 |      3 |       IMM |   16c | SUB $00FD
+010010 | 0x12 |      2 |       IDX |   16c | SUB $FD, A
+010011 | 0x13 |      3 |       IMM |   16c | INC $00FD
+010100 | 0x14 |      3 |       IMM |   16c | DEC $00FD
+010101 | 0x15 |      1 |       IMM |   16c | CLS
+010110 | 0x16 |      1 |       IMM |   16c | CMP
+010111 | 0x17 |      2 |       IMP |   16c | CMP #FD
+011000 | 0x18 |      2 |       Z_P |   16c | CMP $FD
+011001 | 0x19 |      3 |       IMM |   16c | CMP $00FD
+011010 | 0x1A |      1 |       IMM |   16c | PHA
+011011 | 0x1B |      1 |       IMM |   16c | PHB
+011100 | 0x1C |      1 |       IMM |   16c | PHS
+011101 | 0x1D |      1 |       IMM |   16c | PLA
+011110 | 0x1E |      1 |       IMM |   16c | PLB
+011111 | 0x1F |      1 |       IMM |   16c | PLS
+100000 | 0x20 |      2 |       Z_P |   16c | JSR $FD
+100001 | 0x21 |      3 |       IMM |   16c | JSR $00FD
+100010 | 0x22 |      1 |       IMM |   16c | RTS
+100011 | 0x23 |      2 |       Z_P |   16c | JMP $FD
+100100 | 0x24 |      3 |       IMM |   16c | JMP $00FD
+100101 | 0x25 |      2 |       IDX |   16c | JMP $FD, A
+100110 | 0x26 |      2 |       IMM |   16c | BCC $00FD
+100111 | 0x27 |      3 |       IMM |   16c | BCC $00FD
+101000 | 0x28 |      2 |       IDX |   16c | BCC $FD, A
+101001 | 0x29 |      2 |       IMM |   16c | BCS $00FD
+101010 | 0x2A |      3 |       IMM |   16c | BCS $00FD
+101011 | 0x2B |      2 |       IDX |   16c | BCS $FD, A
+101100 | 0x2C |      2 |       IMM |   16c | BEQ $00FD
+101101 | 0x2D |      3 |       IMM |   16c | BEQ $00FD
+101110 | 0x2E |      2 |       IDX |   16c | BEQ $FD, A
+101111 | 0x2F |      2 |       IMM |   16c | BNE $00FD
+110000 | 0x30 |      3 |       IMM |   16c | BNE $00FD
+110001 | 0x31 |      2 |       IDX |   16c | BNE $FD, A
+110010 | 0x32 |      2 |       IMM |   16c | BMI $00FD
+110011 | 0x33 |      3 |       IMM |   16c | BMI $00FD
+110100 | 0x34 |      2 |       IDX |   16c | BMI $FD, A
+110101 | 0x35 |      2 |       IMM |   16c | BPL $00FD
+110110 | 0x36 |      3 |       IMM |   16c | BPL $00FD
+110111 | 0x37 |      2 |       IDX |   16c | BPL $FD, A
+111000 | 0x38 |      2 |       IMM |   16c | BOC $00FD
+111001 | 0x39 |      3 |       IMM |   16c | BOC $00FD
+111010 | 0x3A |      2 |       IDX |   16c | BOC $FD, A
+111011 | 0x3B |      2 |       IMM |   16c | BOS $00FD
+111100 | 0x3C |      3 |       IMM |   16c | BOS $00FD
+111101 | 0x3D |      2 |       IDX |   16c | BOS $FD, A
+111110 | 0x3E |      1 |       IMM |   3c | NOP
+111111 | 0x3F |      1 |       IMM |   2c | HLT

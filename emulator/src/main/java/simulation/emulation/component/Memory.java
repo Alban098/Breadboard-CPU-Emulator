@@ -9,9 +9,10 @@ import java.util.Arrays;
 import simulation.emulation.constant.Signals;
 
 public final class Memory extends BusConnectedModule {
+  public static final int MAX_ADDRESS = 0x3FF;
   private final MemoryAddressRegister memoryAddressRegister;
 
-  private final int[] memory = new int[0x400];
+  private final int[] memory = new int[MAX_ADDRESS + 1];
 
   public Memory(
       Bus bus, ControlUnitModule controlUnit, MemoryAddressRegister memoryAddressRegister) {
@@ -31,7 +32,7 @@ public final class Memory extends BusConnectedModule {
   @Override
   public void update() {
     if (controlUnit.hasControlSignal(Signals.RAM_OUT)) {
-      writeBus(memory[memoryAddressRegister.getValue()]);
+      writeBus(memory[memoryAddressRegister.getValue() & MAX_ADDRESS]);
     }
   }
 
@@ -39,7 +40,7 @@ public final class Memory extends BusConnectedModule {
   public void reset() {}
 
   public int readMemory(int addr) {
-    return memory[addr & 0x3FF];
+    return memory[addr & MAX_ADDRESS];
   }
 
   public void writeMemory(byte[] values) {
@@ -50,12 +51,13 @@ public final class Memory extends BusConnectedModule {
 
   @Override
   public String hexString() {
-    return String.format("0x%02X", memory[memoryAddressRegister.getValue()]);
+    return String.format("0x%02X", memory[memoryAddressRegister.getValue() & MAX_ADDRESS]);
   }
 
   @Override
   public String binaryString() {
-    return String.format("%8s", Integer.toBinaryString(memory[memoryAddressRegister.getValue()]))
+    return String.format(
+            "%8s", Integer.toBinaryString(memory[memoryAddressRegister.getValue() & MAX_ADDRESS]))
         .replaceAll(" ", "0");
   }
 }

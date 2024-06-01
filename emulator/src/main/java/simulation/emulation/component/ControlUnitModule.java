@@ -28,7 +28,7 @@ public final class ControlUnitModule extends Module {
   @Override
   public boolean clock() {
     microStep++;
-    microStep &= 0b11111;
+    microStep &= 0b1111;
     if (hasControlSignal(Signals.CU_RST)) {
       microStep = 0;
       return true;
@@ -39,7 +39,7 @@ public final class ControlUnitModule extends Module {
   @Override
   public void update() {
     Instruction instruction = Instructions.TABLE[instructionRegister.getValue() & 0b111111];
-    state = instruction.getSignals(microStep & 0b11111, statusRegister.getValue() & 0b111);
+    state = instruction.getSignals(microStep & 0b1111, statusRegister.getValue() & 0b1111);
   }
 
   @Override
@@ -50,12 +50,12 @@ public final class ControlUnitModule extends Module {
 
   @Override
   public String hexString() {
-    return String.format("0x%04X", state);
+    return String.format("0x%06X", state);
   }
 
   @Override
   public String binaryString() {
-    return String.format("%16s", Integer.toBinaryString(state)).replaceAll(" ", "0");
+    return String.format("%24s", Integer.toBinaryString(state)).replaceAll(" ", "0");
   }
 
   public int getMicroStep() {

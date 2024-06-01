@@ -11,14 +11,14 @@ import java.util.Map;
 public final class Signals {
 
   public static final int PC_E = 1;
-  public static final int PC_IN = 1 << 1;
-  public static final int PC_IN_HL = 1 << 2;
-  public static final int MAR_IN = 1 << 3;
-  public static final int MAR_IN_HL = 1 << 4;
-  public static final int MAR_IN_PC = 1 << 5;
-  public static final int MAR_IN_STACK = 1 << 6;
-  public static final int RAM_IN = 1 << 7;
-  public static final int RAM_OUT = 1 << 8;
+  public static final int PC_IN_HL = 1 << 1;
+  public static final int MAR_IN_HL = 1 << 2;
+  public static final int MAR_IN_PC = 1 << 3;
+  public static final int MAR_IN_STACK = 1 << 4;
+  public static final int RAM_IN = 1 << 5;
+  public static final int RAM_OUT = 1 << 6;
+  public static final int STATUS_OUT = 1 << 7;
+  public static final int STATUS_IN = 1 << 8;
   public static final int IR_IN = 1 << 9;
   public static final int A_IN = 1 << 10;
   public static final int A_OUT = 1 << 11;
@@ -38,15 +38,15 @@ public final class Signals {
   private static final Map<Integer, String> NAMES = new HashMap<>();
 
   static {
-    NAMES.put(PC_E, "C_E");
-    NAMES.put(PC_IN, "C_IN");
+    NAMES.put(PC_E, "PC_E");
     NAMES.put(PC_IN_HL, "C_IN_HL");
-    NAMES.put(MAR_IN, "MR_IN");
     NAMES.put(MAR_IN_HL, "MR_IN_HL");
     NAMES.put(MAR_IN_PC, "MR_IN_PC");
     NAMES.put(MAR_IN_STACK, "MR_IN_STACK");
     NAMES.put(RAM_IN, "RAM_IN");
     NAMES.put(RAM_OUT, "RAM_OUT");
+    NAMES.put(STATUS_OUT, "STATUS_OUT");
+    NAMES.put(STATUS_IN, "STATUS_IN");
     NAMES.put(IR_IN, "IR_IN");
     NAMES.put(A_IN, "A_IN");
     NAMES.put(A_OUT, "A_OUT");
