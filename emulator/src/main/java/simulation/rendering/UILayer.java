@@ -181,14 +181,14 @@ public class UILayer {
       ImGui.sameLine(440);
       ImGui.checkbox("Gradient", gradient);
       ImGui.separator();
-      ImGui.text("    ");
+      ImGui.text("     ");
       for (int i = 0x0; i <= 0xF; i++) {
         ImGui.sameLine();
         ImGui.textColored(255, 255, 0, 255, String.format("%02X", i));
       }
       for (int i = 0x0; i <= 0xF; i++) {
         int addr = (currentMemoryPage[0] << 4) + (i << 4);
-        ImGui.textColored(255, 255, 0, 255, String.format("%03X ", addr));
+        ImGui.textColored(255, 255, 0, 255, String.format("%04X ", addr));
         for (int data = 0x0; data <= 0xF; data++) {
           ImGui.sameLine();
           addr = (currentMemoryPage[0] << 4) + (i << 4) | data;
@@ -221,6 +221,8 @@ public class UILayer {
             ImGui.textColored(207, 125, 10, 255, String.format("%02X", read));
           } else if (addr == (stackPointer.getValue() & Memory.MAX_ADDRESS)) {
             ImGui.textColored(0, 255, 0, 255, String.format("%02X", read));
+          } else if (addr > (stackPointer.getValue() & Memory.MAX_ADDRESS)) {
+            ImGui.textColored(0, 96, 0, 255, String.format("%02X", read));
           } else if (!gradient.get()) {
             if (read == 0x00) {
               ImGui.textColored(128, 128, 128, 255, String.format("%02X", read));
@@ -243,7 +245,7 @@ public class UILayer {
       }
       ImGui.pushItemWidth(450);
       ImGui.sliderInt(
-          " ", currentMemoryPage, 0, 0x30, String.format("%03X0", currentMemoryPage[0]));
+          " ", currentMemoryPage, 0, 0xFF0, String.format("%03X0", currentMemoryPage[0]));
       ImGui.treePop();
     }
     ImGui.separator();
@@ -457,7 +459,7 @@ public class UILayer {
     }
     int index = 0;
     while (index < DECOMPILATION_STACK_SIZE - (lastInstruction != null ? 1 : 0)) {
-      DecompiledInstruction decompileLine = decompileLine(addr & 0x3FF);
+      DecompiledInstruction decompileLine = decompileLine(addr & Memory.MAX_ADDRESS);
       decompiled.add(decompileLine);
       addr += decompileLine.getSize();
       index++;

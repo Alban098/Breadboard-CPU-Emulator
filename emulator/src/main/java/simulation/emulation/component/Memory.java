@@ -9,7 +9,7 @@ import java.util.Arrays;
 import simulation.emulation.constant.Signals;
 
 public final class Memory extends BusConnectedModule {
-  public static final int MAX_ADDRESS = 0x3FF;
+  public static final int MAX_ADDRESS = 0xFFFF;
   private final MemoryAddressRegister memoryAddressRegister;
 
   private final int[] memory = new int[MAX_ADDRESS + 1];

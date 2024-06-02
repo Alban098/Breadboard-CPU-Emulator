@@ -6,8 +6,8 @@ This assembly language has some global restrictions :
 
 - Values are 1 byte.
 - Addresses are 2 bytes.
-- Address space can go up to $FFFF, but currently the hardware is designed with mirroring after $3FF.
-- The address space is 1KByte but the last page ($0300 to $03FF) is reserved to the stack.
+- Address space can go up to $FFFF
+- The address space is 1KByte but the last page ($FF00 to $FFFF) is reserved to the stack.
 - Stack overflow will trigger the computer to HALT.
 - The base computer is designed to work with big endian values.
 

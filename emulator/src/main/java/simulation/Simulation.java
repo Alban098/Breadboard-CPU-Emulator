@@ -44,7 +44,7 @@ public class Simulation {
 
   private void init(String file) throws IOException {
     try (FileInputStream programFis = new FileInputStream(file)) {
-      if (programFis.available() > 0x400) {
+      if (programFis.available() > 0xFFFF) {
         throw new IOException("Program can not be more than 1KB");
       }
       emulator.writeMemory(programFis.readAllBytes());
