@@ -4341,7 +4341,7 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 111.76) (xy 27.94 111.76)
+			(xy 24.13 111.76) (xy 29.21 111.76)
 		)
 		(stroke
 			(width 0)
@@ -4521,7 +4521,7 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 104.14) (xy 27.94 104.14)
+			(xy 24.13 104.14) (xy 29.21 104.14)
 		)
 		(stroke
 			(width 0)
@@ -5021,7 +5021,7 @@
 	)
 	(wire
 		(pts
-			(xy 24.13 111.76) (xy 20.32 111.76)
+			(xy 24.13 111.76) (xy 19.05 111.76)
 		)
 		(stroke
 			(width 0)
@@ -5191,7 +5191,7 @@
 	)
 	(wire
 		(pts
-			(xy 20.32 104.14) (xy 24.13 104.14)
+			(xy 19.05 104.14) (xy 24.13 104.14)
 		)
 		(stroke
 			(width 0)
@@ -7366,15 +7366,15 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 27.94 107.95 180)
+		(at 24.13 107.95 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
 		(dnp no)
-		(uuid "b5d9e9c5-cbb0-4415-8b56-3c9a2c7003cd")
-		(property "Reference" "C6"
-			(at 26.162 104.394 90)
+		(uuid "b1397a7d-6429-4964-9844-fa6c2882ffc5")
+		(property "Reference" "C8"
+			(at 22.352 104.394 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7383,7 +7383,7 @@
 			)
 		)
 		(property "Value" "0.1uF"
-			(at 33.528 107.696 0)
+			(at 24.384 105.664 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7391,7 +7391,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 26.9748 104.14 0)
+			(at 23.1648 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7400,7 +7400,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 27.94 107.95 0)
+			(at 24.13 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -7409,7 +7409,75 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 27.94 107.95 0)
+			(at 24.13 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "0b838c46-3ac1-4930-9853-d9970cfd8bfd")
+		)
+		(pin "1"
+			(uuid "1487f1f3-f9de-476e-bb5e-358caf51a0af")
+		)
+		(instances
+			(project "Clock_Module"
+				(path "/00881835-431f-440c-8b02-f05a8dfd3447"
+					(reference "C8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 29.21 107.95 180)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "b5d9e9c5-cbb0-4415-8b56-3c9a2c7003cd")
+		(property "Reference" "C6"
+			(at 27.432 104.394 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 34.798 107.696 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 28.2448 104.14 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 29.21 107.95 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 29.21 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8514,7 +8582,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 20.32 107.95 180)
+		(at 19.05 107.95 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -8522,7 +8590,7 @@
 		(dnp no)
 		(uuid "fa2bb8c0-57ca-4775-bd58-1b39cd6ddb20")
 		(property "Reference" "C5"
-			(at 18.542 104.394 90)
+			(at 17.272 104.394 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8531,7 +8599,7 @@
 			)
 		)
 		(property "Value" "0.1uF"
-			(at 14.986 107.696 0)
+			(at 13.716 107.696 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8539,7 +8607,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 19.3548 104.14 0)
+			(at 18.0848 104.14 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8548,7 +8616,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 20.32 107.95 0)
+			(at 19.05 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -8557,7 +8625,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 20.32 107.95 0)
+			(at 19.05 107.95 0)
 			(effects
 				(font
 					(size 1.27 1.27)

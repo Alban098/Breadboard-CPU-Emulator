@@ -25,9 +25,9 @@ public class Simulation {
 
   public static void main(String[] args) throws IOException {
     if (args[0] != null) {
-      Instructions.dumpInstructionSet("docs/instruction_set.txt");
-      Instructions.dumpProgramROM(false, "docs/ROM_dump.txt");
-      Instructions.dumpProgramROM(true, "docs/ROM_dump.bin");
+      Instructions.dumpInstructionSet("dump/instruction_set.txt");
+      Instructions.dumpProgramROM(false, "dump/ROM_dump.txt");
+      Instructions.dumpProgramROM(true, "dump/ROM_dump.bin");
       new Simulation(args[0]);
     }
   }
@@ -54,7 +54,7 @@ public class Simulation {
 
   private void loop() {
     double accumulator = 0f;
-    double frametime = 0f;
+    double frametime;
     double interval = 1f / CLOCK_FREQUENCY;
     boolean down = false;
 

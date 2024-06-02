@@ -144,21 +144,26 @@ public final class Instructions {
     } else {
       FileOutputStream dump_LB = new FileOutputStream(fileName + "0");
       FileOutputStream dump_MB = new FileOutputStream(fileName + "1");
+      FileOutputStream dump_HB = new FileOutputStream(fileName + "2");
       byte[] lbs = new byte[0b1000000_0000_0000];
       byte[] mbs = new byte[0b1000000_0000_0000];
+      byte[] hbs = new byte[0b1000000_0000_0000];
       for (int addr = 0; addr < TABLE.length * (1 << (Flag.values().length - 1)) * 8; addr++) {
         int opcode = addr & 0b0000_0000_111111;
         int flags = (addr & 0b0000_1111_000000) >> 6;
         int microstep = (addr & 0b1111_0000_000000) >> 10;
         Instruction instruction = TABLE[opcode];
         int signals = instruction.getMicrocode()[flags][microstep];
-        lbs[addr] = (byte) (signals & 0x00FF);
-        mbs[addr] = (byte) ((signals & 0xFF00) >> 8);
+        lbs[addr] = (byte) (signals & 0x0000FF);
+        mbs[addr] = (byte) ((signals & 0x00FF00) >> 8);
+        hbs[addr] = (byte) ((signals & 0xFF0000) >> 16);
       }
       dump_LB.write(lbs);
       dump_MB.write(mbs);
+      dump_HB.write(hbs);
       dump_LB.close();
       dump_MB.close();
+      dump_HB.close();
     }
   }
 }

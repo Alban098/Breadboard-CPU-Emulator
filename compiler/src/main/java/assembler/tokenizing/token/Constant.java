@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * Represents a Constant
  *
- * <p>.const alias value that as been tokenized
+ * <p>.const type alias value that as been tokenized
  */
 public class Constant extends Token {
 

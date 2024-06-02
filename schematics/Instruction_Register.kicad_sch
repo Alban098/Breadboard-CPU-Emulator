@@ -1760,6 +1760,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 95.25) (xy 102.87 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f610389-fda6-4d35-ad4a-dee02a7c63c0")
+	)
+	(wire
+		(pts
 			(xy 167.64 113.03) (xy 185.42 113.03)
 		)
 		(stroke
@@ -1767,6 +1777,16 @@
 			(type default)
 		)
 		(uuid "a0da974a-890b-4052-8cc3-7d3240e76f16")
+	)
+	(wire
+		(pts
+			(xy 102.87 85.09) (xy 107.95 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1c9aabf-53ac-4b8d-86f5-fa362268436f")
 	)
 	(wire
 		(pts
@@ -1877,6 +1897,16 @@
 			(type default)
 		)
 		(uuid "bc3ccc90-29a3-4765-9d73-07926f707a04")
+	)
+	(wire
+		(pts
+			(xy 102.87 99.06) (xy 107.95 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bcdbea6f-b0f0-48a6-9894-5ac1e480734e")
 	)
 	(wire
 		(pts
@@ -2167,6 +2197,16 @@
 			(type default)
 		)
 		(uuid "face95e8-6132-4550-b17f-1bbf24dbc722")
+	)
+	(wire
+		(pts
+			(xy 102.87 87.63) (xy 102.87 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fadfd9a0-05c3-44cb-a4ac-636437abee15")
 	)
 	(hierarchical_label "IR_4"
 		(shape output)
@@ -3126,7 +3166,7 @@
 			)
 		)
 		(property "Value" "0.1uF"
-			(at 99.568 91.44 0)
+			(at 105.156 88.138 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -3381,6 +3421,76 @@
 			(project "Instruction_Register"
 				(path "/00881835-431f-440c-8b02-f05a8dfd3447"
 					(reference "D8")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:C")
+		(at 102.87 91.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "a432e5b4-2f10-4608-a954-a01f7b539637")
+		(property "Reference" "C2"
+			(at 106.68 90.1699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 100.076 88.138 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 103.8352 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 102.87 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 102.87 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "b09fb3e0-533e-42c5-95b4-1cea45b3096e")
+		)
+		(pin "1"
+			(uuid "9bcdefbc-820d-41a1-9cf9-ed840cc1b135")
+		)
+		(instances
+			(project "Instruction_Register"
+				(path "/00881835-431f-440c-8b02-f05a8dfd3447"
+					(reference "C2")
 					(unit 1)
 				)
 			)

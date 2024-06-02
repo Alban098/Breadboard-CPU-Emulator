@@ -1412,6 +1412,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 85.09) (xy 107.95 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3cae0d39-18e0-489d-9dbf-b79d84d4b75a")
+	)
+	(wire
+		(pts
 			(xy 175.26 115.57) (xy 190.5 115.57)
 		)
 		(stroke
@@ -1582,6 +1592,16 @@
 	)
 	(wire
 		(pts
+			(xy 102.87 87.63) (xy 102.87 85.09)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "6d5caa83-57c7-4b3f-bcb0-aeeb4b228a82")
+	)
+	(wire
+		(pts
 			(xy 167.64 127) (xy 167.64 138.43)
 		)
 		(stroke
@@ -1609,6 +1629,16 @@
 			(type default)
 		)
 		(uuid "78628cc0-d2c8-4379-80ef-b35a9af8d995")
+	)
+	(wire
+		(pts
+			(xy 102.87 99.06) (xy 107.95 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "79dd1c65-9c9d-41a9-92e1-a09e09b37a81")
 	)
 	(wire
 		(pts
@@ -1839,6 +1869,16 @@
 			(type default)
 		)
 		(uuid "bc3ccc90-29a3-4765-9d73-07926f707a04")
+	)
+	(wire
+		(pts
+			(xy 102.87 95.25) (xy 102.87 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c200f22f-42d6-469e-8c96-eb0c7af0ec51")
 	)
 	(wire
 		(pts
@@ -2739,6 +2779,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:C")
+		(at 102.87 91.44 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(uuid "28a09519-91b1-47cd-b611-7f62a1c624f2")
+		(property "Reference" "C2"
+			(at 106.68 90.1699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+				(hide yes)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 100.584 88.392 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 103.8352 95.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 102.87 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Unpolarized capacitor"
+			(at 102.87 91.44 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "2"
+			(uuid "72d0e431-2f5b-43db-b86b-241d7ded249c")
+		)
+		(pin "1"
+			(uuid "951e143b-e16f-480a-9f1c-9131b0f7841f")
+		)
+		(instances
+			(project "B_Register"
+				(path "/00881835-431f-440c-8b02-f05a8dfd3447"
+					(reference "C2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "74xx:74LS173")
 		(at 177.8 99.06 270)
 		(unit 1)
@@ -3144,7 +3254,7 @@
 			)
 		)
 		(property "Value" "0.1uF"
-			(at 99.568 91.44 0)
+			(at 105.664 88.392 0)
 			(effects
 				(font
 					(size 1.27 1.27)
