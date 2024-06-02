@@ -37,6 +37,6 @@ public class LinkedVariable extends LinkedToken {
 
   @Override
   public String toString() {
-    return String.format("[$%02X] var=%02X", getAddress(), data);
+    return String.format("[$%04X] var = %02X", getAddress(), data);
   }
 }

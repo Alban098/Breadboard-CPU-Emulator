@@ -52,7 +52,7 @@ public class Variable extends Token {
 
   @Override
   public String toString() {
-    return "Var " + alias + "=" + String.format("%02X", value);
+    return "Variable '" + alias + "' = " + String.format("#%02X", value);
   }
 
   @Override

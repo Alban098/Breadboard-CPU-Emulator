@@ -11,7 +11,6 @@ import assembler.linking.token.LinkedOperation;
 import assembler.linking.token.LinkedToken;
 import assembler.linking.token.LinkedVariable;
 import assembler.mapping.Mapper;
-import assembler.mapping.exception.MappingException;
 import assembler.tokenizing.Tokenizer;
 import assembler.tokenizing.exception.MismatchingVersionException;
 import java.io.*;
@@ -21,12 +20,14 @@ import org.apache.log4j.PropertyConfigurator;
 public class Assembler {
 
   private static final String ASM_VERSION_HEADER = "#BB8BC_ASM_v1";
+  public static final int MAX_FILE_SIZE = 0x400;
+  public static final int MAX_ADDRESS = 0x3FF;
+  public static final int STACK_POINTER_MIN_ADDRESS = 0x300;
   private static Tokenizer tokenizer;
   private static Mapper mapper;
   private static Linker linker;
 
-  public static void main(String[] args)
-      throws IOException, MismatchingVersionException, MappingException {
+  public static void main(String[] args) throws IOException, MismatchingVersionException {
     PropertyConfigurator.configure("./log4j.properties");
 
     boolean foundFile = false;
@@ -79,7 +80,7 @@ public class Assembler {
     return tokenizer.hasErrors();
   }
 
-  private static boolean mapTokens() throws MappingException {
+  private static boolean mapTokens() {
     mapper.mapTokens(tokenizer.getTokenizationResult());
     return mapper.hasErrors();
   }
@@ -90,7 +91,7 @@ public class Assembler {
   }
 
   private static void writeBinary(String file) {
-    byte[] binary = new byte[0x100];
+    byte[] binary = new byte[MAX_FILE_SIZE];
     List<LinkedToken> tokens = linker.getLinkingResult();
     for (LinkedToken token : tokens) {
       if (token instanceof LinkedMemoryBlock memoryBlock) {
@@ -101,9 +102,14 @@ public class Assembler {
         binary[variable.getAddress()] = (byte) variable.getData();
       } else if (token instanceof LinkedOperation operation) {
         binary[operation.getAddress()] = (byte) operation.getInstruction().getOpcode();
-        if (operation.getInstruction().getSize() == 2) {
-          binary[operation.getAddress() + 1] =
-              operation.getArg() != null ? operation.getArg().byteValue() : 0;
+        if (operation.getInstruction().getSize() > 1) {
+          for (int i = 1; i < operation.getInstruction().getSize(); i++) {
+            binary[operation.getAddress() + i] =
+                (byte)
+                    ((operation.getArgs() != null && operation.getArgs().length >= i)
+                        ? operation.getArgs()[i - 1]
+                        : 0);
+          }
         }
       }
     }

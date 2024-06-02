@@ -5,6 +5,7 @@
 */
 package assembler.linking;
 
+import assembler.constant.ConstantType;
 import assembler.linking.token.LinkedMemoryBlock;
 import assembler.linking.token.LinkedOperation;
 import assembler.linking.token.LinkedToken;
@@ -40,11 +41,7 @@ public class Linker {
   public void linkTokens(MappingResult mappingResult) {
     linkMemoryBlocks(mappingResult.getMemoryBlocks());
     linkVariables(mappingResult.getVariables());
-    linkOperations(
-        mappingResult.getOperations(),
-        mappingResult.getVariables(),
-        mappingResult.getConstants(),
-        mappingResult.getLabels());
+    linkOperations(mappingResult);
   }
 
   /**
@@ -100,45 +97,31 @@ public class Linker {
    * Links operations, every Variable and Label references will be replaced by their actual
    * addresses, Constant references will be replaced by their actual values
    *
-   * @param operations a List of {@link MappedOperation} to link
-   * @param variables a List of {@link MappedVariable} that will be used to dereference variables
-   * @param constants a List of {@link MappedConstant} that will be used to dereference constants
-   * @param labels a List of {@link MappedLabel} that will be used to dereference labels
+   * @param mappingResult The result of the Mapping stage
    */
-  private void linkOperations(
-      List<MappedOperation> operations,
-      List<MappedVariable> variables,
-      List<MappedConstant> constants,
-      List<MappedLabel> labels) {
+  private void linkOperations(MappingResult mappingResult) {
     LOG.info("Linking instructions");
-    for (MappedOperation operation : operations) {
+    for (MappedOperation operation : mappingResult.getOperations()) {
       int line = operation.getSourceFileLine();
       String arg = operation.getToken().getArg();
-      Integer parsed = null;
-      if (arg != null) {
-        if (arg.startsWith("$(")) {
-          parsed = handlePlainAddress(arg, line);
-        } else if (arg.startsWith("@")) {
-          if (operation.getToken().getInstruction().acceptLabels()) {
-            parsed = handleLabel(labels, arg, line);
-          } else {
-            LOG.error(
-                "-----> Line {} - Instruction '{}' does not support Label dereference",
-                line,
-                operation.getToken().getInstruction().getName());
-            this.hasErrors = true;
-          }
-        } else if (arg.startsWith("*")) {
-          parsed = handlePlainVariable(variables, arg, line);
-        } else if (arg.startsWith("_")) {
-          parsed = handlePlainConstant(constants, arg, line);
-        } else if (arg.startsWith("$")) {
-          parsed = handleDereferenceAlias(variables, constants, arg, line);
-        } else if (arg.matches("[0-9A-Fa-f]{1,2}")) {
-          parsed = handlePlainValue(arg, line);
+      int[] parsed = new int[0];
+      if (arg != null && arg.startsWith("@")) {
+        if (operation.getToken().getInstruction().acceptLabels()) {
+          parsed = handleLabel(mappingResult.getLabels(), arg, line);
         } else {
-          LOG.error("-----> Line {} - Malformed argument '{}'", line, arg);
+          LOG.error(
+              "-----> Line {} - Instruction '{}' does not support Label dereference",
+              line,
+              operation.getToken().getInstruction().getName());
           this.hasErrors = true;
+        }
+      } else {
+        switch (operation.getToken().getInstruction().getAddressingMode()) {
+          case IMM -> parsed = handleImmediate(line, arg, mappingResult);
+          case ABS -> parsed = handleAbsolute(line, arg, mappingResult);
+          case Z_P -> parsed = handleZeroPage(line, arg, mappingResult);
+          case NON -> parsed = new int[0];
+          case IDX -> parsed = handleIndexed(line, arg, mappingResult);
         }
       }
       linkedTokens.add(
@@ -147,38 +130,71 @@ public class Linker {
     }
   }
 
-  /**
-   * Dereferences an alias that is prefixed with a dereference operator '$' into its actual value or
-   * address
-   *
-   * @param variables a List of {@link MappedVariable} that will be used to dereference variables
-   * @param constants a List of {@link MappedConstant} that will be used to dereference constants
-   * @param arg the argument to parse should be the variable / constant alias, with a '_' prepended
-   *     for constants, prefixed with '$'
-   * @param line the line number of the instruction to dereference the argument of, int the source
-   *     file
-   * @return the parsed value to replace the reference with
-   */
-  private Integer handleDereferenceAlias(
-      List<MappedVariable> variables, List<MappedConstant> constants, String arg, int line) {
-    String name = arg.substring(1);
-    if (name.startsWith("_")) {
-      return handlePlainConstant(constants, name, line);
+  private int[] handleImmediate(int line, String arg, MappingResult mappingResult) {
+    if (arg.startsWith(("#("))) {
+      return new int[] {handlePlainConstant(mappingResult.getConstants(), arg, line, false)};
+    } else {
+      return new int[] {handlePlainValue(arg, line)};
     }
-    return handlePlainVariable(variables, arg, line);
+  }
+
+  private int[] handleAbsolute(int line, String arg, MappingResult mappingResult) {
+    int value;
+    if (arg.matches("\\$\\([a-zA-Z0-9_-]+\\)")) { // 2 bytes constants
+      value = handlePlainConstant(mappingResult.getConstants(), arg.substring(1), line, false);
+    } else if (arg.matches(
+        "\\$[0-9a-fA-F]{1,2}\\([a-zA-Z0-9_-]+\\)")) { // 1 byte constant as LSB of address
+      String[] split = arg.split("\\(");
+      int page = handlePlainValue(split[0], line);
+      value =
+          ((page & 0xFF) << 8)
+              | (handlePlainConstant(mappingResult.getConstants(), split[1], line, true) & 0xFF);
+    } else if (arg.matches(
+        "\\$\\([a-zA-Z0-9_-]+\\)[0-9a-fA-F]{2}")) { // 1 byte constant as MSB of address
+      String[] split = arg.split("\\)");
+      int offset = handlePlainValue(split[1], line);
+      value =
+          ((handlePlainConstant(mappingResult.getConstants(), split[0], line, true) & 0xFF) << 8)
+              | (offset & 0xFF);
+    } else if (arg.matches("[a-zA-Z0-9_-]+")) { // variable
+      value = handlePlainVariable(mappingResult.getVariables(), arg, line);
+    } else { // raw 2 bytes value
+      value = handlePlainAddress(arg, line);
+    }
+    return new int[] {(value & 0xFF00) >> 8, value & 0x00FF};
+  }
+
+  private int[] handleZeroPage(int line, String arg, MappingResult mappingResult) {
+    if (arg.startsWith(("$("))) {
+      return new int[] {
+        handlePlainConstant(mappingResult.getConstants(), arg.substring(1), line, true)
+      };
+    } else {
+      return new int[] {Integer.parseInt(arg.replaceAll("[$()]", ""), 16) & 0xFF};
+    }
+  }
+
+  private int[] handleIndexed(int line, String arg, MappingResult mappingResult) {
+    if (arg.startsWith(("$("))) {
+      return new int[] {
+        handlePlainConstant(
+            mappingResult.getConstants(), arg.substring(1).split(",")[0], line, true)
+      };
+    } else {
+      return new int[] {Integer.parseInt(arg.split(",")[0].replaceAll("[$()]", ""), 16) & 0xFF};
+    }
   }
 
   /**
    * Dereferences a variable alias into its address
    *
    * @param variables a List of {@link MappedVariable} that will be used to dereference the variable
-   * @param arg the argument to parse should be the variable alias
+   * @param variableName the argument to parse should be the variable alias
    * @param line the line number of the instruction to dereference the argument of, int the source
    *     file
    * @return the parsed address to replace the reference with
    */
-  private Integer handlePlainVariable(List<MappedVariable> variables, String arg, int line) {
-    String variableName = arg.substring(1);
+  private int handlePlainVariable(List<MappedVariable> variables, String variableName, int line) {
     MappedVariable variable =
         variables.stream()
             .filter(var -> var.getToken().getAlias().equals(variableName))
@@ -188,12 +204,12 @@ public class Linker {
       LOG.info(
           "-----> Resolved variable '{}' to address '${}'",
           variableName,
-          String.format("%02X", variable.getAddress()));
-      return variable.getAddress();
+          String.format("%04X", variable.getAddress()));
+      return variable.getAddress() & 0xFFFF;
     } else {
       LOG.error("-----> Line {} - Unable to resolve variable '{}'", line, variableName);
       this.hasErrors = true;
-      return null;
+      return 0;
     }
   }
 
@@ -204,13 +220,14 @@ public class Linker {
    * @param line the line number of the instruction to parse the argument of, int the source file
    * @return the parsed value to replace the reference with
    */
-  private Integer handlePlainValue(String arg, int line) {
+  private int handlePlainValue(String arg, int line) {
     try {
+      arg = arg.replaceAll("[#$]", "");
       return Integer.parseInt(arg, 16) & 0xFF;
     } catch (NumberFormatException e) {
       LOG.error("-----> Line {} - Unable to resolve value '{}'", line, arg);
     }
-    return null;
+    return 0;
   }
 
   /**
@@ -222,23 +239,36 @@ public class Linker {
    *     file
    * @return the parsed value to replace the reference with
    */
-  private Integer handlePlainConstant(List<MappedConstant> constants, String arg, int line) {
-    String constantName = arg.substring(1);
+  private int handlePlainConstant(
+      List<MappedConstant> constants, String arg, int line, boolean enforce8bit) {
+    String constantName = arg.replaceAll("[#$()]", "");
     MappedConstant constant =
         constants.stream()
             .filter(cst -> cst.getToken().getAlias().equals(constantName))
             .findFirst()
             .orElse(null);
     if (constant != null) {
-      LOG.info(
-          "-----> Resolved constant '{}' to value '${}'",
-          constantName,
-          String.format("%02X", constant.getToken().getValue()));
+      if (enforce8bit && constant.getToken().getType() != ConstantType.BYTE) {
+        LOG.error("-----> Line {} - Unable to resolve byte constant '{}'", line, constantName);
+        this.hasErrors = true;
+        return 0;
+      }
+      switch (constant.getToken().getType()) {
+        case BYTE -> LOG.info(
+            "-----> Resolved constant '{}' to value '${}'",
+            constantName,
+            String.format("%02X", constant.getToken().getValue()));
+        case WORD -> LOG.info(
+            "-----> Resolved constant '{}' to value '${}'",
+            constantName,
+            String.format("%04X", constant.getToken().getValue()));
+      }
+
       return constant.getToken().getValue();
     } else {
       LOG.error("-----> Line {} - Unable to resolve constant '{}'", line, constantName);
       this.hasErrors = true;
-      return null;
+      return 0;
     }
   }
 
@@ -251,7 +281,7 @@ public class Linker {
    *     file
    * @return the parsed address to replace the reference with
    */
-  private Integer handleLabel(List<MappedLabel> labels, String arg, int line) {
+  private int[] handleLabel(List<MappedLabel> labels, String arg, int line) {
     String labelName = arg.substring(1);
     MappedLabel label =
         labels.stream()
@@ -260,11 +290,11 @@ public class Linker {
             .orElse(null);
     if (label != null) {
       LOG.info("-----> Resolving Label '{}' to address '${}'", labelName, label.getAddress());
-      return label.getAddress();
+      return new int[] {(label.getAddress() & 0xFF00) >> 8, label.getAddress() & 0x00FF};
     } else {
       LOG.error("-----> Line {} - Unable to resolve Label '{}'", line, labelName);
       this.hasErrors = true;
-      return null;
+      return new int[0];
     }
   }
 
@@ -273,15 +303,15 @@ public class Linker {
    *
    * @param arg the argument to parse
    * @param line the line number of the instruction to parse the argument of, int the source file
-   * @return the parsed address to replace the reference with, null if unable to parse
+   * @return the parsed address to replace the reference with
    */
-  private Integer handlePlainAddress(String arg, int line) {
+  private int handlePlainAddress(String arg, int line) {
     try {
-      return Integer.parseInt(arg.replaceAll("[$()]", ""), 16) & 0xFF;
+      return Integer.parseInt(arg.replaceAll("\\$", ""), 16) & 0xFFFF;
     } catch (NumberFormatException e) {
       this.hasErrors = true;
       LOG.error("-----> Line {} - Unable to resolve value '{}'", line, arg);
     }
-    return null;
+    return 0;
   }
 }

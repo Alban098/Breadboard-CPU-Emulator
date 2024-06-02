@@ -39,6 +39,6 @@ public class LinkedMemoryBlock extends LinkedToken {
 
   @Override
   public String toString() {
-    return String.format("[$%02X] .block $(%02X)", getAddress(), getAddress());
+    return String.format("[$%04X] .block $(%02X)", getAddress(), getAddress());
   }
 }

@@ -14,12 +14,14 @@ public enum Instruction {
   NOP(
       0x00,
       "NOP",
+      AddressingMode.NON,
       1,
       new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, CU_RST}}),
 
   LDA_IMM(
       0x01,
-      "LDA #%02X",
+      "LDA",
+      AddressingMode.IMM,
       2,
       new int[][] {
         new int[] {
@@ -32,7 +34,8 @@ public enum Instruction {
       }),
   LDA_ZP(
       0x02,
-      "LDA $%02X",
+      "LDA",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {
@@ -48,7 +51,8 @@ public enum Instruction {
       }),
   LDA_ABS(
       0x03,
-      "LDA $%04X",
+      "LDA",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -66,7 +70,8 @@ public enum Instruction {
 
   LDB_IMM(
       0x04,
-      "LDB #%02X",
+      "LDB",
+      AddressingMode.IMM,
       2,
       new int[][] {
         new int[] {
@@ -79,7 +84,8 @@ public enum Instruction {
       }),
   LDB_ZP(
       0x05,
-      "LDB $%02X",
+      "LDB",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {
@@ -95,7 +101,8 @@ public enum Instruction {
       }),
   LDB_ABS(
       0x06,
-      "LDB $%04X",
+      "LDB",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -113,7 +120,8 @@ public enum Instruction {
 
   STA_ZP(
       0x07,
-      "STA $%02X",
+      "STA",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {
@@ -129,7 +137,8 @@ public enum Instruction {
       }),
   STA_ABS(
       0x08,
-      "STA $%04X",
+      "STA",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -147,7 +156,8 @@ public enum Instruction {
 
   ADD_IMM(
       0x0B,
-      "ADD #%02X",
+      "ADD",
+      AddressingMode.IMM,
       2,
       new int[][] {
         new int[] {
@@ -161,7 +171,8 @@ public enum Instruction {
       }),
   ADD_ZP(
       0x0C,
-      "ADD $%02X",
+      "ADD",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {
@@ -178,7 +189,8 @@ public enum Instruction {
       }),
   ADD_ABS(
       0x0D,
-      "ADD $%04X",
+      "ADD",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -196,7 +208,8 @@ public enum Instruction {
       }),
   ADD_IDX(
       0x0E,
-      "ADD $%02X, A",
+      "ADD",
+      AddressingMode.IDX,
       2,
       new int[][] {
         new int[] {
@@ -214,7 +227,8 @@ public enum Instruction {
 
   SUB_IMM(
       0x0F,
-      "SUB #%02X",
+      "SUB",
+      AddressingMode.IMM,
       2,
       new int[][] {
         new int[] {
@@ -228,7 +242,8 @@ public enum Instruction {
       }),
   SUB_ZP(
       0x10,
-      "SUB $%02X",
+      "SUB",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {
@@ -245,7 +260,8 @@ public enum Instruction {
       }),
   SUB_ABS(
       0x11,
-      "SUB $%04X",
+      "SUB",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -263,7 +279,8 @@ public enum Instruction {
       }),
   SUB_IDX(
       0x12,
-      "SUB $%02X, A",
+      "SUB",
+      AddressingMode.IDX,
       2,
       new int[][] {
         new int[] {
@@ -282,19 +299,22 @@ public enum Instruction {
   CLS(
       0x14,
       "CLS",
+      AddressingMode.NON,
       1,
       new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, STATUS_IN | CU_RST | PC_E}}),
 
   CMP(
       0x15,
       "CMP",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, SUB | ALU_OUT | CU_RST | PC_E}
       }),
   CMP_IMM(
       0x16,
-      "CMP #%02X",
+      "CMP",
+      AddressingMode.IMM,
       2,
       new int[][] {
         new int[] {
@@ -308,7 +328,8 @@ public enum Instruction {
       }),
   CMP_ZP(
       0x17,
-      "CMP $%02X",
+      "CMP",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {
@@ -325,7 +346,8 @@ public enum Instruction {
       }),
   CMP_ABS(
       0x18,
-      "CMP $%04X",
+      "CMP",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -345,6 +367,7 @@ public enum Instruction {
   PHA(
       0x19,
       "PHA",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {
@@ -357,6 +380,7 @@ public enum Instruction {
   PHS(
       0x1B,
       "PHS",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {
@@ -370,6 +394,7 @@ public enum Instruction {
   PLA(
       0x1C,
       "PLA",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {
@@ -383,6 +408,7 @@ public enum Instruction {
   PLB(
       0x1D,
       "PLB",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {
@@ -396,6 +422,7 @@ public enum Instruction {
   PLS(
       0x1E,
       "PLS",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {
@@ -409,7 +436,8 @@ public enum Instruction {
 
   JSR_ABS(
       0x20,
-      "JSR $%04X",
+      "JSR",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {
@@ -429,6 +457,7 @@ public enum Instruction {
   RTS(
       0x21,
       "RTS",
+      AddressingMode.NON,
       1,
       new int[][] {
         new int[] {
@@ -446,13 +475,14 @@ public enum Instruction {
           CU_RST | PC_E
         }
       }),
-  JMP_ZP(0x22, "JMP $%02X", 2, new int[][] {Instructions.JMP_ZP_MICROCODE}),
-  JMP_ABS(0x23, "JMP $%04X", 3, new int[][] {Instructions.JMP_ABS_MICROCODE}),
-  JMP_IDX(0x24, "JMP $%02X, A", 2, new int[][] {Instructions.JMP_IDX_MICROCODE}),
+  JMP_ZP(0x22, "JMP", AddressingMode.Z_P, 2, new int[][] {Instructions.JMP_ZP_MICROCODE}),
+  JMP_ABS(0x23, "JMP", AddressingMode.ABS, 3, new int[][] {Instructions.JMP_ABS_MICROCODE}),
+  JMP_IDX(0x24, "JMP", AddressingMode.IDX, 2, new int[][] {Instructions.JMP_IDX_MICROCODE}),
 
   BCS_ZP(
       0x25,
-      "BCS $%02X",
+      "BCS",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -474,7 +504,8 @@ public enum Instruction {
       }),
   BCS_ABS(
       0x26,
-      "BCS $%04X",
+      "BCS",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
@@ -496,7 +527,8 @@ public enum Instruction {
       }),
   BCS_IDX(
       0x27,
-      "BCS $%02X, A",
+      "BCS",
+      AddressingMode.IDX,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -519,7 +551,8 @@ public enum Instruction {
 
   BCC_ZP(
       0x28,
-      "BCC $%02X",
+      "BCC",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         Instructions.JMP_ZP_MICROCODE,
@@ -541,7 +574,8 @@ public enum Instruction {
       }),
   BCC_ABS(
       0x29,
-      "BCC $%04X",
+      "BCC",
+      AddressingMode.ABS,
       3,
       new int[][] {
         Instructions.JMP_ABS_MICROCODE,
@@ -563,7 +597,8 @@ public enum Instruction {
       }),
   BCC_IDX(
       0x2A,
-      "BCC $%02X, A",
+      "BCC",
+      AddressingMode.IDX,
       2,
       new int[][] {
         Instructions.JMP_IDX_MICROCODE,
@@ -586,7 +621,8 @@ public enum Instruction {
 
   BNE_ZP(
       0x2B,
-      "BNE $%02X",
+      "BNE",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         Instructions.JMP_ZP_MICROCODE,
@@ -608,7 +644,8 @@ public enum Instruction {
       }),
   BNE_ABS(
       0x2C,
-      "BNE $%04X",
+      "BNE",
+      AddressingMode.ABS,
       3,
       new int[][] {
         Instructions.JMP_ABS_MICROCODE,
@@ -630,7 +667,8 @@ public enum Instruction {
       }),
   BNE_IDX(
       0x2D,
-      "BNE $%02X, A",
+      "BNE",
+      AddressingMode.IDX,
       2,
       new int[][] {
         Instructions.JMP_IDX_MICROCODE,
@@ -653,7 +691,8 @@ public enum Instruction {
 
   BEQ_ZP(
       0x2E,
-      "BEQ $%02X",
+      "BEQ",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -675,7 +714,8 @@ public enum Instruction {
       }),
   BEQ_ABS(
       0x2F,
-      "BEQ $%04X",
+      "BEQ",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
@@ -697,7 +737,8 @@ public enum Instruction {
       }),
   BEQ_IDX(
       0x30,
-      "BEQ $%02X, A",
+      "BEQ",
+      AddressingMode.IDX,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -720,7 +761,8 @@ public enum Instruction {
 
   BPL_ZP(
       0x31,
-      "BPL $%02X",
+      "BPL",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         Instructions.JMP_ZP_MICROCODE,
@@ -742,7 +784,8 @@ public enum Instruction {
       }),
   BPL_ABS(
       0x32,
-      "BPL $%04X",
+      "BPL",
+      AddressingMode.ABS,
       3,
       new int[][] {
         Instructions.JMP_ABS_MICROCODE,
@@ -764,7 +807,8 @@ public enum Instruction {
       }),
   BPL_IDX(
       0x33,
-      "BPL $%02X, A",
+      "BPL",
+      AddressingMode.IDX,
       2,
       new int[][] {
         Instructions.JMP_IDX_MICROCODE,
@@ -787,7 +831,8 @@ public enum Instruction {
 
   BMI_ZP(
       0x34,
-      "BMI $%02X",
+      "BMI",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -808,7 +853,8 @@ public enum Instruction {
       }),
   BMI_ABS(
       0x35,
-      "BMI $%04X",
+      "BMI",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
@@ -829,7 +875,8 @@ public enum Instruction {
       }),
   BMI_IDX(
       0x36,
-      "BMI $%02X, A",
+      "BMI",
+      AddressingMode.IDX,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -851,7 +898,8 @@ public enum Instruction {
 
   BOC_ZP(
       0x37,
-      "BOC $%02X",
+      "BOC",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         Instructions.JMP_ZP_MICROCODE,
@@ -873,7 +921,8 @@ public enum Instruction {
       }),
   BOC_ABS(
       0x38,
-      "BOC $%04X",
+      "BOC",
+      AddressingMode.ABS,
       3,
       new int[][] {
         Instructions.JMP_ABS_MICROCODE,
@@ -895,7 +944,8 @@ public enum Instruction {
       }),
   BOC_IDX(
       0x39,
-      "BOC $%02X, A",
+      "BOC",
+      AddressingMode.IDX,
       2,
       new int[][] {
         Instructions.JMP_IDX_MICROCODE,
@@ -918,7 +968,8 @@ public enum Instruction {
 
   BOS_ZP(
       0x3A,
-      "BOS $%02X",
+      "BOS",
+      AddressingMode.Z_P,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -940,7 +991,8 @@ public enum Instruction {
       }),
   BOS_ABS(
       0x3B,
-      "BOS $%04X",
+      "BOS",
+      AddressingMode.ABS,
       3,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E, PC_E | CU_RST},
@@ -962,7 +1014,8 @@ public enum Instruction {
       }),
   BOS_IDX(
       0x3C,
-      "BOS $%02X, A",
+      "BOS",
+      AddressingMode.IDX,
       2,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, PC_E | CU_RST},
@@ -985,11 +1038,13 @@ public enum Instruction {
   HLT(
       0x3F,
       "HLT",
+      AddressingMode.NON,
       1,
       new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, HALT, PC_E | CU_RST}});
 
   private final int opcode;
-  private final String format;
+  private final String name;
+  private final AddressingMode addressingMode;
   private final int size;
   private final int[][] microcode;
 
@@ -999,9 +1054,10 @@ public enum Instruction {
    * @param microcode [x][y] x : status flags (not present defaults to y = 0) y : Control Unit Micro
    *     Step (starting after the first 2 mandatory fetch steps)
    */
-  Instruction(int opcode, String format, int size, int[][] microcode) {
+  Instruction(int opcode, String name, AddressingMode addressingMode, int size, int[][] microcode) {
     this.opcode = opcode;
-    this.format = format;
+    this.name = name;
+    this.addressingMode = addressingMode;
     this.size = size;
     int flagStateCount = (1 << Flag.values().length);
     // microsteps are coded over 4 bits, so 16 possible values
@@ -1033,8 +1089,8 @@ public enum Instruction {
     return 0;
   }
 
-  public String getFormat() {
-    return format;
+  public String format(int arg) {
+    return name + " " + addressingMode.format(arg);
   }
 
   public int[][] getMicrocode() {
@@ -1042,18 +1098,6 @@ public enum Instruction {
   }
 
   public AddressingMode getAddressingMode() {
-    if (format.endsWith("$%02X, A")) {
-      return AddressingMode.IDX;
-    }
-    if (format.endsWith("$%02X")) {
-      return AddressingMode.Z_P;
-    }
-    if (format.endsWith("$%04X")) {
-      return AddressingMode.IMM;
-    }
-    if (format.endsWith("#%02X")) {
-      return AddressingMode.IMP;
-    }
-    return AddressingMode.IMM;
+    return addressingMode;
   }
 }

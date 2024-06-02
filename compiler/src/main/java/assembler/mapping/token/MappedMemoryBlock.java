@@ -41,6 +41,6 @@ public class MappedMemoryBlock extends MappedToken {
 
   @Override
   public String toString() {
-    return String.format("[$%02X] .block $(%02X)", getAddress(), getAddress());
+    return String.format("[$%04X] .block $(%04X)", getAddress(), getAddress());
   }
 }

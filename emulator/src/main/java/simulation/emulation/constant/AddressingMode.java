@@ -6,8 +6,19 @@
 package simulation.emulation.constant;
 
 public enum AddressingMode {
-  IMP,
-  IMM,
-  Z_P,
-  IDX
+  IMM("#%02X"),
+  ABS("$%04X"),
+  Z_P("$%02X"),
+  NON(""),
+  IDX("$%02X, A");
+
+  private final String format;
+
+  AddressingMode(String format) {
+    this.format = format;
+  }
+
+  public String format(int arg) {
+    return String.format(format, arg);
+  }
 }

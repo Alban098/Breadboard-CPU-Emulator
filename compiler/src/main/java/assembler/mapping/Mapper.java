@@ -5,7 +5,8 @@
 */
 package assembler.mapping;
 
-import assembler.Instruction;
+import assembler.Assembler;
+import assembler.constant.Instruction;
 import assembler.mapping.exception.MappingException;
 import assembler.mapping.token.*;
 import assembler.tokenizing.TokenizationResult;
@@ -37,7 +38,7 @@ public class Mapper {
    * a global array representing the current state of all memory address, used to prevent multiple
    * tokens to be mapped to the same address
    */
-  private final MappedToken[] addressesStatus = new MappedToken[0x100];
+  private final MappedToken[] addressesStatus = new MappedToken[Assembler.MAX_FILE_SIZE];
   /** An Object containing all mapped tokens */
   private final MappingResult result = new MappingResult();
   /** a Map referencing Mapped Operation, indexed by Operation, used to resolve Label targets */
@@ -86,33 +87,47 @@ public class Mapper {
   private void mapMemoryBlocks(List<MemoryBlock> memoryBlocks) {
     LOG.info("Mapping memory blocks");
     for (MemoryBlock memoryBlock : memoryBlocks) {
-      int address = memoryBlock.getAddress();
+      int address = memoryBlock.getAddress() & Assembler.MAX_ADDRESS;
       int index = 0;
 
       LOG.info(
           "-----> Mapping block of size {} bytes at locations $({}) - $({})",
           memoryBlock.getData().size(),
-          String.format("%02X", address),
-          String.format("%02X", address + memoryBlock.getData().size()));
+          String.format("%04X", address),
+          String.format("%04X", address + memoryBlock.getData().size()));
 
+      if (address != memoryBlock.getAddress()) {
+        LOG.warn(
+            "-----> Line {} - block on memory address '${}' is out of bound, mirroring will be applied, effective address will be '${}'",
+            memoryBlock.getSourceFileLine(),
+            String.format("%04X", memoryBlock.getAddress()),
+            String.format("%04X", address));
+      }
       MappedMemoryBlock mapped = new MappedMemoryBlock(address, memoryBlock);
       for (int ignored : memoryBlock.getData()) {
-        if (address <= 1 || address > 0xFF) {
+        if (address <= 1 || address > Assembler.MAX_ADDRESS) {
           LOG.error(
-              "-----> Line {} - block on memory address '${}' is out of bound for value index {}, resolved address is '${}', address should be between $02 and $FF",
+              "-----> Line {} - block on memory address '{}' is out of bound for value index {}, resolved address is '{}', address should be between $02 and $3FF",
               memoryBlock.getSourceFileLine(),
-              String.format("$%02X", memoryBlock.getAddress()),
+              String.format("$%04X", memoryBlock.getAddress()),
               index,
-              String.format("$%02X", address));
+              String.format("$%04X", address));
           this.hasErrors = true;
+        } else if (address > Assembler.STACK_POINTER_MIN_ADDRESS) {
+          LOG.error(
+              "-----> Line {} - block on memory address '{}' overlaps with the stack address space spanning from '{}' to '{}",
+              memoryBlock.getSourceFileLine(),
+              String.format("$%04X", memoryBlock.getAddress()),
+              String.format("$%04X", Assembler.STACK_POINTER_MIN_ADDRESS),
+              String.format("$%04X", Assembler.MAX_ADDRESS));
         } else if (addressesStatus[address] != null) {
           MappedToken mappedToken = addressesStatus[address];
           LOG.error(
               "-----> Line {} - block on memory address '${}' overlaps with already mapped token at value index {}, resolved address is '${}', that is already mapped to '{}'",
               memoryBlock.getSourceFileLine(),
-              String.format("$%02X", memoryBlock.getAddress()),
+              String.format("$%04X", memoryBlock.getAddress()),
               index,
-              String.format("$%02X", address),
+              String.format("$%04X", address),
               mappedToken);
           this.hasErrors = true;
         } else {
@@ -145,7 +160,7 @@ public class Mapper {
       LOG.info(
           "-----> Found block of size {} bytes at address ${}",
           size,
-          String.format("%02X", entryPoint));
+          String.format("%04X", entryPoint));
     } catch (Exception e) {
       LOG.error("-----> Can not find a block of size {} bytes to place compiled code", size);
       this.hasErrors = true;
@@ -157,7 +172,7 @@ public class Mapper {
     for (Operation operation : operations) {
       MappedOperation mapped = new MappedOperation(currentAddress, operation);
       addressesStatus[currentAddress++] = mapped;
-      if (operation.getInstruction().getSize() == 2) {
+      for (int i = 1; i < operation.getInstruction().getSize(); i++) {
         addressesStatus[currentAddress++] = mapped;
       }
       result.add(mapped);
@@ -167,14 +182,14 @@ public class Mapper {
     // If entrypoint is not address 0x00, add a dummy JMP instruction to jump to it
     if (entryPoint != 0) {
       Operation entryPointJump =
-          new Operation(Instruction.JMP_IMM, String.format("%02X", entryPoint), -1);
+          new Operation(Instruction.JMP_ABS, String.format("$%04X", entryPoint), -1);
       MappedOperation mappedEntryPoint = new MappedOperation(0, entryPointJump);
       addressesStatus[0] = mappedEntryPoint;
       addressesStatus[1] = mappedEntryPoint;
       result.add(mappedEntryPoint);
       LOG.info(
-          "-----> Block is not at address $00, adding {} at address $00",
-          String.format(entryPointJump.getInstruction().getFormat(), entryPoint));
+          "-----> Block is not at address $0000, adding {} at address $0000",
+          String.format(entryPointJump.getInstruction().format(entryPoint)));
     }
   }
 
@@ -185,6 +200,7 @@ public class Mapper {
    * @param variables a List of variable to map
    */
   private void mapVariables(List<Variable> variables) {
+    LOG.info("Mapping Variables");
     for (Variable variable : variables) {
       int address = -1;
       do {
@@ -192,7 +208,7 @@ public class Mapper {
           address = findAvailableBlock(1, true);
         } catch (Exception e) {
           LOG.error(
-              "-----> Line {} - Can not find an address  for variable '{}'",
+              "-----> Line {} - Can not find an address for variable '{}'",
               variable.getSourceFileLine(),
               variable);
           this.hasErrors = true;
@@ -200,9 +216,9 @@ public class Mapper {
       } while (addressesStatus[address] != null);
       MappedVariable mapped = new MappedVariable(address, variable);
       LOG.info(
-          "-----> Linking variable {} at location $({})",
+          "-----> Mapping variable '{}' at location $({})",
           variable.getAlias(),
-          String.format("%02X", address));
+          String.format("%04X", address));
       result.add(mapped);
     }
   }
@@ -251,7 +267,7 @@ public class Mapper {
    * @throws MappingException when the block can not be allocated
    */
   private int findAvailableBlock(int size, boolean fromEnd) throws Exception {
-    final int[] runLength = new int[0x100];
+    final int[] runLength = new int[Assembler.STACK_POINTER_MIN_ADDRESS];
     int currentLength = 1;
     for (int i = 0; i < runLength.length; i++) {
       if (addressesStatus[i] == null) {
@@ -266,7 +282,7 @@ public class Mapper {
     if (fromEnd) {
       for (int i = runLength.length - 1; i > 2; i--) {
         max = Math.max(max, runLength[i]);
-        if (runLength[i] == size) {
+        if (runLength[i] >= size && (1 + i - size != 1)) {
           return 1 + i - size;
         }
       }

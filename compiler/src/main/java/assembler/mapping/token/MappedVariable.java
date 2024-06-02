@@ -39,6 +39,6 @@ public class MappedVariable extends MappedToken {
 
   @Override
   public String toString() {
-    return String.format("[$%02X] %s", getAddress(), token.toString());
+    return String.format("[$%04X] %s", getAddress(), token.toString());
   }
 }

@@ -66,8 +66,8 @@ public class UILayer {
       return instruction.getOpcode();
     }
 
-    public String getFormat() {
-      return instruction.getFormat();
+    public String format() {
+      return instruction.format(fullArg);
     }
   }
 
@@ -503,7 +503,7 @@ public class UILayer {
         }
       }
       ImGui.sameLine(295);
-      ImGui.text(String.format(instruction.getFormat(), instruction.fullArg));
+      ImGui.text(instruction.format());
     } else {
       ImGui.textColored(255, 255, 0, 255, "  " + String.format("%03X", instruction.addr) + ":");
       ImGui.sameLine();
@@ -515,8 +515,7 @@ public class UILayer {
         }
       }
       ImGui.sameLine(295);
-      ImGui.textColored(
-          255, 255, 0, 255, String.format(instruction.getFormat(), instruction.fullArg));
+      ImGui.textColored(255, 255, 0, 255, instruction.format());
     }
   }
 }

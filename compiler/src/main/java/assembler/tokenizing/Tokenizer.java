@@ -5,14 +5,14 @@
 */
 package assembler.tokenizing;
 
-import assembler.Instruction;
+import assembler.constant.AddressingMode;
+import assembler.constant.ConstantType;
+import assembler.constant.Instruction;
 import assembler.tokenizing.exception.MalformedAddressException;
 import assembler.tokenizing.exception.MalformedValueException;
 import assembler.tokenizing.token.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,52 +26,6 @@ import org.slf4j.LoggerFactory;
 public class Tokenizer {
 
   private static final Logger LOG = LoggerFactory.getLogger(Tokenizer.class);
-
-  /** Just a cache to convert from text to actual instructions */
-  private static final Map<String, Instruction> INSTRUCTION_MAP = new HashMap<>();
-
-  /*
-   * Initializes the instruction cache
-   */
-  static {
-    INSTRUCTION_MAP.put("NOP", Instruction.NOP);
-    INSTRUCTION_MAP.put("LDA X", Instruction.LDA_IMM);
-    INSTRUCTION_MAP.put("LDA $(X)", Instruction.LDA_ABS);
-    INSTRUCTION_MAP.put("LDB X", Instruction.LDB_IMM);
-    INSTRUCTION_MAP.put("LDB $(X)", Instruction.LDB_ABS);
-    INSTRUCTION_MAP.put("OUT X", Instruction.OUT_IMM);
-    INSTRUCTION_MAP.put("OUT $(X)", Instruction.OUT_ABS);
-    INSTRUCTION_MAP.put("OUT", Instruction.OUT);
-    INSTRUCTION_MAP.put("STA X", Instruction.STA_IMM);
-    INSTRUCTION_MAP.put("STA $(X)", Instruction.STA_ABS);
-    INSTRUCTION_MAP.put("ADD X", Instruction.ADD_IMM);
-    INSTRUCTION_MAP.put("ADD $(X)", Instruction.ADD_ABS);
-    INSTRUCTION_MAP.put("SUB X", Instruction.SUB_IMM);
-    INSTRUCTION_MAP.put("SUB $(X)", Instruction.SUB_ABS);
-    INSTRUCTION_MAP.put("CMP X", Instruction.CMP_IMM);
-    INSTRUCTION_MAP.put("CMP $(X)", Instruction.CMP_ABS);
-    INSTRUCTION_MAP.put("CMP", Instruction.CMP);
-    INSTRUCTION_MAP.put("JMP X", Instruction.JMP_IMM);
-    INSTRUCTION_MAP.put("JMP $(X)", Instruction.JMP_ABS);
-    INSTRUCTION_MAP.put("JMA", Instruction.JMA);
-    INSTRUCTION_MAP.put("BCS X", Instruction.BCS_IMM);
-    INSTRUCTION_MAP.put("BCS $(X)", Instruction.BCS_ABS);
-    INSTRUCTION_MAP.put("BCC X", Instruction.BCC_IMM);
-    INSTRUCTION_MAP.put("BCC $(X)", Instruction.BCC_ABS);
-    INSTRUCTION_MAP.put("BEQ X", Instruction.BEQ_IMM);
-    INSTRUCTION_MAP.put("BEQ $(X)", Instruction.BEQ_ABS);
-    INSTRUCTION_MAP.put("BNE X", Instruction.BNE_IMM);
-    INSTRUCTION_MAP.put("BNE $(X)", Instruction.BNE_ABS);
-    INSTRUCTION_MAP.put("BMI X", Instruction.BMI_IMM);
-    INSTRUCTION_MAP.put("BMI $(X)", Instruction.BMI_ABS);
-    INSTRUCTION_MAP.put("BPL X", Instruction.BPL_IMM);
-    INSTRUCTION_MAP.put("BPL $(X)", Instruction.BPL_ABS);
-    INSTRUCTION_MAP.put("BOS X", Instruction.BOS_IMM);
-    INSTRUCTION_MAP.put("BOS $(X)", Instruction.BOS_ABS);
-    INSTRUCTION_MAP.put("BOC X", Instruction.BOC_IMM);
-    INSTRUCTION_MAP.put("BOC $(X)", Instruction.BOC_ABS);
-    INSTRUCTION_MAP.put("HLT", Instruction.HLT);
-  }
 
   /** Holds all Tokens that have been decoded */
   private final TokenizationResult result = new TokenizationResult();
@@ -175,27 +129,45 @@ public class Tokenizer {
    */
   private void tokenizeInstruction(int line, String[] tokens) {
     String operand = tokens[0];
+    AddressingMode addressingMode = AddressingMode.NON;
     String arg = null;
-    Instruction decoded;
-    if (tokens.length == 2) {
-      arg = tokens[1];
+    Instruction decoded = null;
+    if (tokens.length > 1) {
+      StringBuilder argB = new StringBuilder();
+      for (int i = 1; i < tokens.length; i++) {
+        argB.append(tokens[i]).append(" ");
+      }
+      arg = argB.toString().trim();
+
       try {
-        checkArg(arg);
-      } catch (MalformedValueException e) {
-        LOG.error("-----> Line {} - Malformed argument '{}'", line, arg);
+        addressingMode = AddressingMode.resolve(arg);
+        // IF the addressing mode is ABSOLUTE but the referenced constant is of type byte, switch it
+        // to ZERO PAGE
+        if (addressingMode == AddressingMode.ABS && arg.matches("\\$\\([a-zA-Z0-9_-]+\\)")) {
+          String constant = arg.replaceAll("[$()]", "");
+          if (result.getConstants().stream()
+              .anyMatch(
+                  cst -> cst.getAlias().equals(constant) && cst.getType() == ConstantType.BYTE)) {
+            addressingMode = AddressingMode.Z_P;
+          }
+        }
+      } catch (IllegalArgumentException e) {
+        LOG.error("-----> Line {} - Unable to deduce addressing mode for argument '{}'", line, arg);
         this.hasErrors = true;
         return;
       }
-      // '$' means we need to dereference the address, aka indirect addressing
-      // - for variables this will replace '$var' by '$(addr)'
-      // - for constants this will replace '$_const' by '$(val)'
-      if (arg.startsWith("$")) {
-        operand += " $(X)";
-      } else {
-        operand += " X";
-      }
     }
-    decoded = INSTRUCTION_MAP.get(operand);
+
+    try {
+      decoded = Instruction.find(operand, addressingMode);
+    } catch (IllegalArgumentException e) {
+      LOG.error(
+          "-----> Line {} - Unable to find instruction '{}' with addressing mode '{}'",
+          line,
+          operand,
+          addressingMode.name());
+      this.hasErrors = true;
+    }
     if (decoded == null) {
       LOG.error(
           "-----> Line {} - '{}' is not recognized as an instruction, or isn't compatible with the passed argument",
@@ -210,30 +182,6 @@ public class Tokenizer {
       labelToReference = null;
     }
     result.add(token);
-  }
-
-  /**
-   * Return true if the argument is pseudo valid
-   *
-   * @param arg the argument to check
-   * @return true if valid
-   * @throws MalformedValueException if the argument is not valid
-   */
-  private boolean checkArg(String arg) throws MalformedValueException {
-    if (arg.startsWith("$(") && arg.matches("\\$\\([0-9A-Fa-f]{1,2}\\)")) {
-      return true;
-    } else if (arg.startsWith("@") && arg.matches("@[a-zA-Z]+[a-zA-Z0-9_-]*")) {
-      return true;
-    } else if (arg.startsWith("*") && arg.matches("\\*[a-zA-Z]+[a-zA-Z0-9_-]*")) {
-      return true;
-    } else if (arg.startsWith("$") && arg.matches("\\$_?[a-zA-Z]+[a-zA-Z0-9_-]*")) {
-      return true;
-    } else if (arg.startsWith("_") && arg.matches("_[a-zA-Z]+[a-zA-Z0-9_-]*")) {
-      return true;
-    } else if (arg.matches("[0-9A-Fa-f]{1,2}")) {
-      return true;
-    }
-    throw new MalformedValueException();
   }
 
   /**
@@ -268,17 +216,18 @@ public class Tokenizer {
    */
   private void tokenizeMemoryBlock(int line, String[] tokens) {
     if (tokens.length != 2) {
-      LOG.error("-----> Line {} - .block must be followed by a memory address '.block $(F0)", line);
+      LOG.error(
+          "-----> Line {} - .block must be followed by a memory address '.block $(XXXX)", line);
       this.hasErrors = true;
       return;
     }
     currentMode = Mode.MEMORY_BLOCK;
     try {
-      if (tokens[1].startsWith("$(") && tokens[1].matches("\\$\\([0-9A-Fa-f]{1,2}\\)")) {
+      if (tokens[1].startsWith("$(") && tokens[1].matches("\\$\\([0-9A-Fa-f]{1,4}\\)")) {
         currentMemoryBlock = new MemoryBlock(tokens[1], line);
       } else {
         LOG.error(
-            "-----> Line {} - {} is invalid, addresses must be formatted like '$(FF)'",
+            "-----> Line {} - {} is invalid, addresses must be formatted like '$(FFFF)'",
             line,
             tokens[1]);
         this.hasErrors = true;
@@ -286,7 +235,7 @@ public class Tokenizer {
       }
     } catch (MalformedAddressException e) {
       LOG.error(
-          "-----> Line {} - {} is invalid, addresses must be formatted like '$(FF)'",
+          "-----> Line {} - {} is invalid, addresses must be formatted like '$(FFFF)'",
           line,
           tokens[1]);
       this.hasErrors = true;
@@ -327,7 +276,7 @@ public class Tokenizer {
     try {
       result.add(new Variable(tokens[1], tokens.length == 3 ? tokens[2] : null, line));
     } catch (NumberFormatException e) {
-      LOG.error("-----> Line {} - '{}' is not a valid hexadecimal value", line, tokens[2]);
+      LOG.error("-----> Line {} - '{}' is not a valid 8 bits hexadecimal value", line, tokens[2]);
       this.hasErrors = true;
     }
   }
@@ -339,15 +288,19 @@ public class Tokenizer {
    * @param tokens tokens to tokenize
    */
   private void tokenizeConstant(int line, String[] tokens) {
-    if (tokens.length != 3) {
-      LOG.error("-----> Line {} - .const must be followed by its alias and optional value", line);
+    if (tokens.length != 4) {
+      LOG.error(
+          "-----> Line {} - .const must be followed by its type, alias and optional value", line);
       this.hasErrors = true;
       return;
     }
     try {
-      result.add(new Constant(tokens[1], tokens[2], line));
+      result.add(new Constant(tokens[1], tokens[2], tokens[3], line));
     } catch (NumberFormatException e) {
       LOG.error("-----> Line {} - '{}' is not a valid hexadecimal value", line, tokens[2]);
+      this.hasErrors = true;
+    } catch (MalformedValueException e) {
+      LOG.error("-----> Line {} - '{}' is not a valid constant type", line, tokens[1]);
       this.hasErrors = true;
     }
   }

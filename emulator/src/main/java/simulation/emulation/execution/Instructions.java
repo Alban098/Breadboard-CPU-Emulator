@@ -101,7 +101,7 @@ public final class Instructions {
           .append(" | ")
           .append(length)
           .append(" | ")
-          .append(String.format(instruction.getFormat(), sampleAddr))
+          .append(String.format(instruction.format(sampleAddr)))
           .append("\n");
     }
     writer.close();

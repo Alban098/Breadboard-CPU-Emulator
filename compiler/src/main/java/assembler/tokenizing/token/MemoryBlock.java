@@ -5,6 +5,7 @@
 */
 package assembler.tokenizing.token;
 
+import assembler.Assembler;
 import assembler.tokenizing.exception.MalformedAddressException;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class MemoryBlock extends Token {
     if (!address.startsWith("$")) {
       throw new MalformedAddressException();
     }
-    this.address = Integer.parseInt(address.replaceAll("[$()]", ""), 16) & 0xFF;
+    this.address = Integer.parseInt(address.replaceAll("[$()]", ""), 16) & Assembler.MAX_ADDRESS;
   }
 
   /**
@@ -70,10 +71,10 @@ public class MemoryBlock extends Token {
   public String toString() {
     StringBuilder builder = new StringBuilder("Block ");
     builder
-        .append(String.format("%02X", address))
+        .append(String.format("$%04X", address))
         .append(" [")
-        .append(String.format("%X", data.size()))
-        .append("Bytes] { ");
+        .append(data.size())
+        .append(" Bytes] { ");
     data.forEach(data -> builder.append(String.format("%02X ", data)));
     builder.append("}");
     return builder.toString();

@@ -5,7 +5,7 @@
 */
 package assembler.linking.token;
 
-import assembler.Instruction;
+import assembler.constant.Instruction;
 
 /**
  * Represents an Operation see {@link Instruction} that as been tokenized, mapped and linked, at
@@ -16,20 +16,20 @@ public class LinkedOperation extends LinkedToken {
   /** The referenced {@link Instruction} referenced by this Operation */
   private final Instruction instruction;
 
-  /** An optional argument, in case {@link Instruction#getSize()} == 2 */
-  private final Integer arg;
+  /** An optional argument, in case {@link Instruction#getSize()} > 1 */
+  private final int[] args;
 
   /**
    * Creates a new LinkedOperation
    *
    * @param address the address of the Operation
    * @param instruction the {@link Instruction} to compile to
-   * @param arg an optional argument in case {@link Instruction#getSize()} == 2
+   * @param args optional arguments in case {@link Instruction#getSize()} == 2
    */
-  public LinkedOperation(int address, Instruction instruction, Integer arg) {
+  public LinkedOperation(int address, Instruction instruction, int[] args) {
     super(address);
     this.instruction = instruction;
-    this.arg = arg;
+    this.args = args;
   }
 
   /**
@@ -42,16 +42,20 @@ public class LinkedOperation extends LinkedToken {
   }
 
   /**
-   * Return the optional argument, null if {@link Instruction#getSize()} != 2
+   * Return the optional argument, null if {@link Instruction#getSize()} > 1
    *
-   * @return the optional argument, null if {@link Instruction#getSize()} != 2
+   * @return the optional argument, null if {@link Instruction#getSize()} > 1
    */
-  public Integer getArg() {
-    return arg;
+  public int[] getArgs() {
+    return args;
   }
 
   @Override
   public String toString() {
-    return String.format("[$%02X]", getAddress()) + String.format(instruction.getFormat(), arg);
+    int arg = 0;
+    for (int i = 0; i < args.length; i++) {
+      arg |= args[i] << (i * 8);
+    }
+    return String.format("[$%04X]", getAddress()) + String.format(instruction.format(arg));
   }
 }

@@ -39,6 +39,6 @@ public class MappedLabel extends MappedToken {
 
   @Override
   public String toString() {
-    return String.format("[$%02X] %s", getAddress(), token.getAlias());
+    return String.format("[$%04X] %s", getAddress(), token.getAlias());
   }
 }

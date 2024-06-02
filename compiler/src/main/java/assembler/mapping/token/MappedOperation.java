@@ -5,7 +5,7 @@
 */
 package assembler.mapping.token;
 
-import assembler.Instruction;
+import assembler.constant.Instruction;
 import assembler.tokenizing.token.Operation;
 
 /** Represents an Operation see {@link Instruction} that as been tokenized and mapped */
@@ -36,6 +36,6 @@ public class MappedOperation extends MappedToken {
 
   @Override
   public String toString() {
-    return String.format("[$%02X] %s", getAddress(), token.toString());
+    return String.format("[$%04X] %s", getAddress(), token.toString());
   }
 }

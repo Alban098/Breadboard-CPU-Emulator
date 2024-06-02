@@ -5,7 +5,7 @@
 */
 package assembler.tokenizing.token;
 
-import assembler.Instruction;
+import assembler.constant.Instruction;
 import java.util.Objects;
 
 /** Represents an Operation see {@link Instruction} that as been tokenized */
@@ -51,8 +51,10 @@ public class Operation extends Token {
   public String toString() {
     return "["
         + String.format("%02X", instruction.getOpcode())
-        + "] "
-        + instruction.name()
+        + "] {"
+        + instruction.getAddressingMode()
+        + "} "
+        + instruction.getName()
         + " "
         + (arg == null ? "" : arg);
   }

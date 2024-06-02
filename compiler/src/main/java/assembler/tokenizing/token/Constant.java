@@ -5,6 +5,8 @@
 */
 package assembler.tokenizing.token;
 
+import assembler.constant.ConstantType;
+import assembler.tokenizing.exception.MalformedValueException;
 import java.util.Objects;
 
 /**
@@ -19,6 +21,8 @@ public class Constant extends Token {
   /** The value of the constant */
   private final int value;
 
+  private final ConstantType type;
+
   /**
    * Creates a new Constant
    *
@@ -26,10 +30,20 @@ public class Constant extends Token {
    * @param value the value of the constant
    * @param sourceFileLine the line of the token in the source file
    */
-  public Constant(String alias, String value, int sourceFileLine) {
+  public Constant(String type, String alias, String value, int sourceFileLine)
+      throws MalformedValueException {
     super(sourceFileLine);
     this.alias = alias;
-    this.value = Integer.parseInt(value == null ? "0" : value, 16) & 0xFF;
+    if ("byte".equals(type)) {
+      this.type = ConstantType.BYTE;
+    } else if ("word".equals(type)) {
+      this.type = ConstantType.WORD;
+    } else {
+      throw new MalformedValueException();
+    }
+    this.value =
+        Integer.parseInt(value == null ? "0" : value, 16)
+            & (this.type == ConstantType.BYTE ? 0xFF : 0xFFFF);
   }
 
   /**
@@ -52,7 +66,10 @@ public class Constant extends Token {
 
   @Override
   public String toString() {
-    return "Const " + alias + "=" + String.format("%02X", value);
+    return switch (type) {
+      case BYTE -> "Constant 1 byte '" + alias + "' = " + String.format("#%02X", value);
+      case WORD -> "Constant 2 bytes '" + alias + "' = " + String.format("#%04X", value);
+    };
   }
 
   @Override
@@ -68,5 +85,9 @@ public class Constant extends Token {
   @Override
   public int hashCode() {
     return Objects.hash(alias, value, getSourceFileLine());
+  }
+
+  public ConstantType getType() {
+    return type;
   }
 }
