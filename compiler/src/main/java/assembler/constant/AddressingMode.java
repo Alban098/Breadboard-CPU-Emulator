@@ -10,7 +10,7 @@ public enum AddressingMode {
   ABS(
       "\\$[0-9a-fA-F]{1,2}\\([a-zA-Z0-9_-]+\\){1}|\\$\\([a-zA-Z0-9_-]+\\){1}[0-9a-fA-F]{2}|\\$[0-9a-fA-F]{3,4}|\\$\\([a-zA-Z0-9_-]+\\)|[a-zA-Z0-9_-]+|@[a-zA-Z0-9_-]+"),
   Z_P("\\$[0-9a-fA-F]{1,2}"),
-  NON(""),
+  IMP(""),
   IDX("(\\$[0-9a-fA-F]{1,2}|\\$\\([a-zA-Z0-9_-]+\\)), A");
 
   private final String regEx;

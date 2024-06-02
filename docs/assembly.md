@@ -4,11 +4,14 @@
 
 This assembly language has some global restrictions :
 
-- It only supports 8 bits values
-- The largest address is 0xFF = 255
-- The size after compilation must not exceed 0xFF = 256 bytes
+- Values are 1 byte.
+- Addresses are 2 bytes.
+- Address space can go up to $FFFF, but currently the hardware is designed with mirroring after $3FF.
+- The address space is 1KByte but the last page ($0300 to $03FF) is reserved to the stack.
+- Stack overflow will trigger the computer to HALT.
+- The base computer is designed to work with big endian values.
 
-File should start with this header
+File should start with this header :
 
 ```
 #BB8BC_ASM_v1
@@ -16,62 +19,281 @@ File should start with this header
 
 ## Comments
 
-Comments can be added anywhere in the code with the following syntax
+Comments can be added anywhere in the code with the following syntax :
 
 ```
-LDA $FA //load the value at the location $FA into the A Register
+// Full comment
+LDA #10    // Inline comment
 ```
 
 ## Addressing Modes
 
-This assembly language support 2 addressing modes :
+This assembly is specifically designed to work with the Breadboard computer, therefore it includes all the addressing modes that the hardware implements :
+### Implied
+**Instructions** using this addressing mode will be **1 byte long** and have **no operand**, the instruction is enough to deduce everything needed for the execution.
 
-- **Direct Addressing** : `LDA FD` This addressing mode will interpret the value as is, being an address or a value depending on the instruction
-- **Indirect Addressing** : `LDA $(FD)` This addressing mode will interpret the value as a pointer, and will use the value stored at the address as the argument, for a direct addressing execution
+Examples :
+```
+NOP
+PHA
+PLB
+CLS
+```
 
-Some instruction can use a 3rd addressing mode, in case they do not take arguments, in that case they will use the value in the A Register
+### Immediate
+**Instructions** using this addressing mode will be **2 byte long** and have **1 operand**, the operand is interpreted as a **plain hexadecimal value**.
+
+This addressing mode is compatible with **1 byte Constants**.
+
+Operands should be formatted as follows :
+- Start with a ``#``.
+- **Constants** should be surrounded by parenthesis.
+
+Examples :
+```
+LDA #FF
+STA #(CONST8)
+```
+
+### Absolute
+This addressing mode works as an absolute pointer.
+
+**Instructions** using this addressing mode will be **3 byte long** and have **2 operands**, the operand is interpreted as a big endian **2 bytes address**.
+
+This addressing mode is compatible with **Variables** and **1 & 2 bytes Constants**, **1 byte Constants** should be completed by a memory page or an offset, if only the constant is passed, the compiler will replace it with the **Zero Page** version as it is faster to execute.
+
+Operands should be formatted as follows :
+- Start with a ``$`` for plain **address** and **Constants**.
+- **Constants** should be surrounded by parenthesis.
+- **Variable** should not be prefixed or surrounded.
+
+Examples :
+```
+LDA $(CONST16)
+ADD $2FF
+STA VARIABLE
+ADD $02(CONST8)
+ADD $(CONST8)A9
+```
+
+### Zero Page
+This addressing mode works in the same way as the **Absolute** mode but is restricted to the first 256 bytes page of memory, and is 1 cycle faster to execute.
+
+**Instructions** using this addressing mode will be **2 byte long** and have **1 operand**, the operand is interpreted as an offset in the 0th memory page.
+
+This addressing mode is compatible with **1 byte Constants**
+
+Operands should be formatted as follows :
+- Start with a ``$``
+- **Constants** should be surrounded by parenthesis
+
+Examples :
+```
+LDA $(CONST8)
+ADD $80
+```
+
+### Indexed
+This addressing mode is kind of an extension of **Zero Page** and **Absolute** as it allows to index a **specified memory page** using the **A Register**.
+
+**Instructions** using this addressing mode will be **2 byte long** and have **1 operand**, **the operand** is interpreted the **page to index** (the 8 MSB of the address), **the offset** inside the page is retrieved from the **A Register** 
+
+This addressing mode is compatible with **1 byte Constants**
+
+Operands should be formatted as follows :
+- Start with a ``$``
+- End with ``, A``
+- **Constants** should be surrounded by parenthesis
+
+Examples :
+```
+ADD $02, A
+ADD $(CONST8), A
+```
 
 ## Instructions
 
-| Instruction                                   |                                          Type | Addressing mode | Opcode | Size (bytes) | Clock cycles |                                                                                                                                                                   Desc |
-|:----------------------------------------------|----------------------------------------------:|----------------:|:------:|:------------:|:------------:|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
-| <span style="color:#808080;">NOP</span>       |     <span style="color:#D0F000;">Misc.</span> |            None |  0x00  |      1       |      3c      |                                                                                                                                                             Do nothing |
-| LDA FD                                        |    <span style="color:#D000D0;">Memory</span> |          Direct |  0x01  |      2       |      6c      |                                                                                                             **Load** the value of the argument into the **A Register** |
-| LDA $(FD)                                     |    <span style="color:#D000D0;">Memory</span> |        Indirect |  0x02  |      2       |      7c      |                                                                                      **Load** the value at the address pointed by the argument into the **A Register** |
-| <span style="color:#808080;">LDB $FD</span>   |    <span style="color:#D000D0;">Memory</span> |          Direct |  0x03  |      2       |      6c      |                                                                                                             **Load** the value of the argument into the **B Register** |
-| <span style="color:#808080;">LDB $(FD)</span> |    <span style="color:#D000D0;">Memory</span> |        Indirect |  0x04  |      2       |      7c      |                                                                                      **Load** the value at the address pointed by the argument into the **B Register** |
-| OUT FD                                        |    <span style="color:#D000D0;">Memory</span> |          Direct |  0x05  |      2       |      6c      |                                                                                                         **Put** the value of the argument into the **Output Register** |
-| OUT $(FD)                                     |    <span style="color:#D000D0;">Memory</span> |        Indirect |  0x06  |      2       |      7c      |                                                                                  **Put** the value at the address pointed by the argument into the **Output Register** |
-| OUT                                           |    <span style="color:#D000D0;">Memory</span> |         Implied |  0x07  |      1       |      4c      |                                                                                                   **Put** the value of the **A Register** into the **Output Register** |
-| <span style="color:#808080;">STA FD</span>    |    <span style="color:#D000D0;">Memory</span> |          Direct |  0x08  |      2       |      7c      |                                                                                       **Store** the value of the **A Register** at the address pointed by the argument |
-| <span style="color:#808080;">STA $(FD)</span> |    <span style="color:#D000D0;">Memory</span> |        Indirect |  0x09  |      2       |      8c      |                                                                 **Store** the value of the **A Register** at the address stored at the address pointed by the argument |
-| ADD FD                                        |     <span style="color:#00D0D0;">Logic</span> |          Direct |  0x0A  |      2       |      7c      |                                                                         **Add** the value of the argument to the **A Register** and **update** the **Status Register** |
-| ADD $(FD)                                     |     <span style="color:#00D0D0;">Logic</span> |        Indirect |  0x0B  |      2       |      8c      |                                                  **Add** the value at the address pointer by the argument to the **A Register** and **update** the **Status Register** |
-| <span style="color:#808080;">SUB FD</span>    |     <span style="color:#00D0D0;">Logic</span> |          Direct |  0x0C  |      2       |      7c      |                                                                  **Subtract** the value of the argument from the **A Register** and **update** the **Status Register** |
-| <span style="color:#808080;">SUB $(FD)</span> |     <span style="color:#00D0D0;">Logic</span> |        Indirect |  0x0D  |      2       |      8c      |                                           **Subtract** the value at the address pointer by the argument from the **A Register** and **update** the **Status Register** |
-| CMP FD                                        |     <span style="color:#00D0D0;">Logic</span> |          Direct |  0x0E  |      2       |      7c      |                        **Subtract** the value of the argument from the value of the **A Register** and **update the **Status Register**, **A Register\*\* in unchanged |
-| CMP $(FD)                                     |     <span style="color:#00D0D0;">Logic</span> |        Indirect |  0x0F  |      2       |      8c      | **Subtract** the value at the address pointer by the argument from the value of the **A Register** and **update the **Status Register**, **A Register\*\* in unchanged |
-| CMP                                           |     <span style="color:#00D0D0;">Logic</span> |         Implied |  0x10  |      1       |      4c      |                  **Subtract** the value of the **B Register** from the value of the **A Register** and **update the **Status Register**, **A Register\*\* in unchanged |
-| <span style="color:#808080;">JMP FD</span>    | <span style="color:#E06030;">Branching</span> |          Direct |  0x11  |      2       |      6c      |                                                                                                                        **Jump** to the address pointed by the argument |
-| <span style="color:#808080;">JMP $(FD)</span> | <span style="color:#E06030;">Branching</span> |        Indirect |  0x12  |      2       |      7c      |                                                                                                  **Jump** to the address stored at the address pointed by the argument |
-| JMA                                           | <span style="color:#E06030;">Branching</span> |         Implied |  0x13  |      1       |      4c      |                                                                                                     **Jump** to the address pointed by the value of the **A Register** |
-| <span style="color:#808080;">BCS FD</span>    | <span style="color:#E06030;">Branching</span> |          Direct |  0x14  |      2       |     4-6c     |                                                                                       **Jump** to the address pointed by the argument if the **CARRY** Flag is **set** |
-| <span style="color:#808080;">BCS $(FD)</span> | <span style="color:#E06030;">Branching</span> |        Indirect |  0x15  |      2       |     4-7c     |                                                                 **Jump** to the address stored at the address pointed by the argument if the **CARRY** Flag is **set** |
-| BCC FD                                        | <span style="color:#E06030;">Branching</span> |          Direct |  0x16  |      2       |     4-6c     |                                                                                   **Jump** to the address pointed by the argument if the **CARRY** Flag is **not set** |
-| BCC $(FD)                                     | <span style="color:#E06030;">Branching</span> |        Indirect |  0x17  |      2       |     4-7c     |                                                             **Jump** to the address stored at the address pointed by the argument if the **CARRY** Flag is **not set** |
-| <span style="color:#808080;">BEQ FD</span>    | <span style="color:#E06030;">Branching</span> |          Direct |  0x18  |      2       |     4-6c     |                                                                                        **Jump** to the address pointed by the argument if the **ZERO** Flag is **set** |
-| <span style="color:#808080;">BEQ $(FD)</span> | <span style="color:#E06030;">Branching</span> |        Indirect |  0x19  |      2       |     4-7c     |                                                                  **Jump** to the address stored at the address pointed by the argument if the **ZERO** Flag is **set** |
-| BNE FD                                        | <span style="color:#E06030;">Branching</span> |          Direct |  0x1A  |      2       |     4-6c     |                                                                                    **Jump** to the address pointed by the argument if the **ZERO** Flag is **not set** |
-| BNE $(FD)                                     | <span style="color:#E06030;">Branching</span> |        Indirect |  0x1B  |      2       |     4-7c     |                                                              **Jump** to the address stored at the address pointed by the argument if the **ZERO** Flag is **not set** |
-| <span style="color:#808080;">BMI FD</span>    | <span style="color:#E06030;">Branching</span> |          Direct |  0x1C  |      2       |     4-6c     |                                                                                    **Jump** to the address pointed by the argument if the **NEGATIVE** Flag is **set** |
-| <span style="color:#808080;">BMI $(FD)</span> | <span style="color:#E06030;">Branching</span> |        Indirect |  0x1D  |      2       |     4-7c     |                                                              **Jump** to the address stored at the address pointed by the argument if the **NEGATIVE** Flag is **set** |
-| BPL FD                                        | <span style="color:#E06030;">Branching</span> |          Direct |  0x1E  |      2       |     4-6c     |                                                                                **Jump** to the address pointed by the argument if the **NEGATIVE** Flag is **not set** |
-| BPL $(FD)                                     | <span style="color:#E06030;">Branching</span> |        Indirect |  0x1F  |      2       |     4-7c     |                                                          **Jump** to the address stored at the address pointed by the argument if the **NEGATIVE** Flag is **not set** |
-| <span style="color:#808080;">BOS FD</span>    | <span style="color:#E06030;">Branching</span> |          Direct |  0x20  |      2       |     4-6c     |                                                                                    **Jump** to the address pointed by the argument if the **OVERFLOW** Flag is **set** |
-| <span style="color:#808080;">BOS $(FD)</span> | <span style="color:#E06030;">Branching</span> |        Indirect |  0x21  |      2       |     4-7c     |                                                              **Jump** to the address stored at the address pointed by the argument if the **OVERFLOW** Flag is **set** |
-| BOC FD                                        | <span style="color:#E06030;">Branching</span> |          Direct |  0x22  |      2       |     4-6c     |                                                                                **Jump** to the address pointed by the argument if the **OVERFLOW** Flag is **not set** |
-| BOC $(FD)                                     | <span style="color:#E06030;">Branching</span> |        Indirect |  0x23  |      2       |     4-7c     |                                                          **Jump** to the address stored at the address pointed by the argument if the **OVERFLOW** Flag is **not set** |
-| <span style="color:#808080;">HLT</span>       |     <span style="color:#D0F000;">Misc.</span> |            None |  0x3F  |      1       |      3c      |                                                                                                                                    Halt execution by cutting the clock |
+|  Hex  | Assembly                                                   |                               Addressing Mode |      Type | Size | Clock cycles |
+|:-----:|:-----------------------------------------------------------|----------------------------------------------:|----------:|-----:|-------------:|
+| 0x00  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x01  | **[LDA](#lda)** <span style="color:#E6DC31;">#FD</span>    | <span style="color:#E6DC31;">Immediate</span> |    Memory |    2 |           5c | 
+| 0x02  | **[LDA](#lda)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> |    Memory |    2 |           8c | 
+| 0x03  | **[LDA](#lda)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> |    Memory |    3 |           9c | 
+| 0x04  | **[LDB](#ldb)** <span style="color:#E6DC31;">#FD</span>    | <span style="color:#E6DC31;">Immediate</span> |    Memory |    2 |           5c | 
+| 0x05  | **[LDB](#ldb)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> |    Memory |    2 |           8c | 
+| 0x06  | **[LDB](#ldb)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> |    Memory |    3 |           9c | 
+| 0x07  | **[STA](#sta)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> |    Memory |    2 |           8c | 
+| 0x08  | **[STA](#sta)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> |    Memory |    3 |           9c | 
+| 0x09  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x0A  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x0B  | **[ADD](#add)** <span style="color:#E6DC31;">#FD</span>    | <span style="color:#E6DC31;">Immediate</span> |     Logic |    2 |           6c | 
+| 0x0C  | **[ADD](#add)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> |     Logic |    2 |           9c | 
+| 0x0D  | **[ADD](#add)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> |     Logic |    3 |          10c | 
+| 0x0E  | **[ADD](#add)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> |     Logic |    2 |           9c | 
+| 0x0F  | **[SUB](#sub)** <span style="color:#E6DC31;">#FD</span>    | <span style="color:#E6DC31;">Immediate</span> |     Logic |    2 |           6c | 
+| 0x10  | **[SUB](#sub)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> |     Logic |    2 |           9c | 
+| 0x11  | **[SUB](#sub)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> |     Logic |    3 |          10c | 
+| 0x12  | **[SUB](#sub)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> |     Logic |    2 |           9c | 
+| 0x13  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x14  | **[CLS](#cls)**                                            |                                       Implied |     Logic |    1 |           3c | 
+| 0x15  | **[CMP](#cmp)**                                            |                                       Implied |     Logic |    1 |           3c | 
+| 0x16  | **[CMP](#cmp)** <span style="color:#E6DC31;">#FD</span>    | <span style="color:#E6DC31;">Immediate</span> |     Logic |    2 |           6c | 
+| 0x17  | **[CMP](#cmp)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> |     Logic |    2 |           9c | 
+| 0x18  | **[CMP](#cmp)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> |     Logic |    3 |          10c | 
+| 0x19  | **[PHA](#pha)**                                            |                                       Implied |    Memory |    1 |           4c | 
+| 0x1A  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x1B  | **[PHS](#phs)**                                            |                                       Implied |    Memory |    1 |           4c | 
+| 0x1C  | **[PLA](#pla)**                                            |                                       Implied |    Memory |    1 |           5c | 
+| 0x1D  | **[PLB](#plb)**                                            |                                       Implied |    Memory |    1 |           5c | 
+| 0x1E  | **[PLS](#pls)**                                            |                                       Implied |     Logic |    1 |           5c | 
+| 0x1F  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x20  | **[JSR](#jsr)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |          11c | 
+| 0x21  | **[RTS](#rts)**                                            |                                       Implied | Branching |    1 |          12c | 
+| 0x22  | **[JMP](#jpm)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |           7c | 
+| 0x23  | **[JMP](#jmp)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |           8c | 
+| 0x24  | **[JMP](#jmp)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |           7c | 
+| 0x25  | **[BCS](#bcs)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x26  | **[BCS](#bcs)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x27  | **[BCS](#bcs)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x28  | **[BCC](#bcc)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x29  | **[BCC](#bcc)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x2A  | **[BCC](#bcc)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x2B  | **[BNE](#bne)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x2C  | **[BNE](#bne)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x2D  | **[BNE](#bne)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x2E  | **[BEQ](#beq)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x2F  | **[BEQ](#beq)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x30  | **[BEQ](#beq)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x31  | **[BPL](#bpl)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x32  | **[BPL](#bpl)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x33  | **[BPL](#bpl)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x34  | **[BMI](#bmi)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x35  | **[BMI](#bmi)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x36  | **[BMI](#bmi)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x37  | **[BOC](#boc)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x38  | **[BOC](#boc)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x39  | **[BOC](#boc)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x3A  | **[BOS](#bos)** <span style="color:#18E637;">$FD</span>    | <span style="color:#18E637;">Zero Page</span> | Branching |    2 |         4-7c | 
+| 0x3B  | **[BOS](#bos)** <span style="color:#EB412C;">$02FD</span>  |  <span style="color:#EB412C;">Absolute</span> | Branching |    3 |         5-8c | 
+| 0x3C  | **[BOS](#bos)** <span style="color:#0797EB;">$FD, A</span> |   <span style="color:#0797EB;">Indexed</span> | Branching |    2 |         4-7c | 
+| 0x3D  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x3E  | **[NOP](#nop)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+| 0x3F  | **[HLT](#hlt)**                                            |                                       Implied |     Misc. |    1 |           4c | 
+
+### NOP
+Does nothing and passes to the next instruction.
+
+### LDA
+Loads a value into the **A Register** from operand or memory depending on [Addressing Mode](#addressing-modes).
+
+### LDB
+Loads a value into the **B Register** from operand or memory depending on [Addressing Mode](#addressing-modes).
+
+### STA
+Stores the value of the **A Register** in memory
+
+### ADD
+Adds a value to the **A Register**, value is determined from the operand depending on [Addressing Mode](#addressing-modes).
+
+Will override the **B Register** with the resolved value to add.
+
+Will update the **Status Register** :
+- O : A_8 ^ R_8
+- Z : R == 0
+- C : R_9 == 1
+- N : R_8 == 1
+
+### SUB
+Subtracts a value from the **A Register**, value is determined from the operand depending on [Addressing Mode](#addressing-modes).
+
+Will override the **B Register** with the resolved value to subtract.
+
+Will update the **Status Register** :
+- O : A_8 ^ R_8
+- Z : R == 0
+- C : R_9 == 1
+- N : R_8 == 1
+
+### CLS
+Clears the **Status Register**
+
+### CMP
+Compares 2 values, the **A Register** and an operand determined by the [Addressing Mode](#addressing-modes).
+
+Will update the **Status Register** but not the **A Register** :
+- O : A_8 ^ R_8
+- Z : R == 0
+- C : R_9 == 1
+- N : R_8 == 1
+
+### PHA
+Pushes the content of the **A Register** into the stack.
+
+The stack pointer will be automatically updated.
+
+### PHS
+Pushes the content of the **Status Register** into the stack.
+
+The **Stack Pointer** will be automatically updated.
+
+### PLA
+Pulls the most recent element from the stack and stores it in to **A Register**
+
+The **Stack Pointer** will be automatically updated.
+
+### PLB
+Pulls the most recent element from the stack and stores it in to **B Register**
+
+The **Stack Pointer** will be automatically updated.
+
+### PLS
+Pulls the most recent element from the stack and stores it in to **Status Register**
+
+The **Stack Pointer** will be automatically updated.
+
+### JSR
+Jumps to a subroutine, and pushes the return address into the stack.
+
+Will take 2 bytes on the stack.
+
+The **Stack Pointer** will be automatically updated.
+
+### RTS
+Returns from a subroutine, by pulling the return address into the stack.
+
+Execution will resume at the instruction right after the last ``JSR`` instruction
+
+The **Stack Pointer** will be automatically updated.
+
+### JMP
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes).
+
+### BCC
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Carry Flag`` cleared : ``Status & 0b0010 == 0b0000``
+
+### BCS
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Carry Flag`` set : ``Status & 0b0010 == 0b0010``
+
+### BNE
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Zero Flag`` cleared : ``Status & 0b0100 == 0b0001``
+
+### BEQ
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Zero Flag`` set : ``Status & 0b0100 == 0b0100``
+
+### BPL
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Negative Flag`` cleared : ``Status & 0b0001 == 0b0000``
+
+### BMI
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Negative Flag`` set : ``Status & 0b0001 == 0b0001``
+
+### BOC
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Overflow Flag`` cleared : ``Status & 0b1000 == 0b0000``
+
+### BOS
+Jumps to a specified address, determined by the [Addressing Mode](#addressing-modes) if the **Status Register** has the ``Overflow Flag`` set : ``Status & 0b1000 == 0b1000``
+
+### HLT
+Halts the **Clock** until reset
 
 ## Memory Blocks
 
@@ -86,33 +308,32 @@ A Memory block is defined as follows
 ```
 
 - Declaration must start with `.block` and specify the base address
-- Size is arbitrary but `addr + size` must not exceed 255
+- Size is arbitrary but `addr + size` should not exceed #3FF, in practice higher memory address are allowed, but mirroring will be applied
+- A Memory Block can not be mapped to reserved addresses, which are **$0000** and **$0001** that are the **entrypoint of execution**, and **$0300 to $03FF** which is reserved for the **Stack**
 - Declaration must end with `.endblock`
 
 ## Constants
 
 ### Declaration
 
-Constants are the same as a memory block, but only allows for a size of 1 byte
+Constants are the same as a memory block, but only allows for a size of 1 or 2 bytes
 
 A constant if defined as follows
 
 ```
-.const name FF
+.const byte name #FF
+.const word name #FFFF
 ```
 
-- Declaration must start with `.const` followed by an alias
+Legal types are ``byte`` for 8 bits Constants and ``word`` for 16 bits Constants
+
+- Declaration must start with `.const` followed a type and an alias
 - Aliases must start with a letter, and can contain alphanumeric characters, '-' or '\_'
-- Value must be specified as hexadecimal and mandatory
+- Value must be specified as hexadecimal and is mandatory
 
 ### Usages
 
-Constants have 2 use cases depending on the addressing mode
-
-Assuming the following declaration `.const C 10` we have 2 possible use cases :
-
-- **Direct Addressing** : `ADD _C` this will be compiled as `ADD 10` and add 10 to the A Register
-- **Indirect Addressing** : `ADD $_C` this will be compiled as `ADD $(10)` and add the value at address $10 to the A Register
+See [Addressing Mode](#addressing-modes) examples
 
 ## Variable
 
@@ -123,7 +344,7 @@ Variable allows you to abstract a memory address, it will allocate an available 
 A variable is defined as follows
 
 ```
-.var name FF
+.var name #FF
 ```
 
 - Declaration must start with `.var` followed by an alias
@@ -132,12 +353,7 @@ A variable is defined as follows
 
 ### Usages
 
-Variable have 2 use cases depending on the addressing mode
-
-Assuming the following declaration `.var V FF` with an assigned address of `$F0` we have 2 possible use cases :
-
-- **Direct Addressing** : `STA *V` this will be compiled as `STA F0` and store the content of the A Register at address `F0`
-- **Indirect Addressing** : `LDA $V` this will be compiled as `LDA $(F0)` and load value FF into the A Register
+See [Addressing Mode](#addressing-modes) examples
 
 ## Labels
 
@@ -158,9 +374,9 @@ A Label can be referenced by branching instructions as follows
 
 ```
 :LOOP
-    ADD 10
+    ADD #10
     BCC @LOOP
 ```
 
 This code will loop until the value in the A Register rolls over 0xFF and sets the Carry Flag,
-the `BCC` instruction will jump to the address referenced by the `LOOP` label, which in this case is the `ADD 10` instruction
+the `BCC` instruction will jump to the address referenced by the `LOOP` label, which in this case is the `ADD #10` instruction

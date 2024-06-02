@@ -64,8 +64,8 @@ public final class Instructions {
   public static void dumpInstructionSet(String fileName) throws IOException {
     int sampleAddr = 0xFD;
     BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-    writer.append("Binary |  Hex | Length | Addr Mode |  Clk | Assembly\n");
-    writer.append("-------|------|--------|-----------|------|---------\n");
+    writer.append("|    Hex|  Assembly| Addressing Mode|   Size| Clock cycles|\n");
+    writer.append("|:-----:|:---------|---------------:|------:|------------:|\n");
 
     for (int i = 0; i < TABLE.length; i++) {
       Instruction instruction = TABLE[i];
@@ -84,24 +84,23 @@ public final class Instructions {
                 minMaxClockCycles[0] = Math.min(minMaxClockCycles[0], clockCycles);
                 minMaxClockCycles[1] = Math.max(minMaxClockCycles[1], clockCycles);
               });
-      String binary = String.format("%6s", Integer.toBinaryString(i)).replaceAll(" ", "0");
       String hex = String.format("0x%02X", i);
       String length =
           minMaxClockCycles[0] == minMaxClockCycles[1]
               ? "  " + minMaxClockCycles[0] + "c"
               : minMaxClockCycles[0] + "-" + minMaxClockCycles[1] + "c";
       writer
-          .append(binary)
-          .append(" | ")
+          .append("| ")
           .append(hex)
-          .append(" |      ")
-          .append(String.valueOf(instruction.getSize()))
-          .append(" |       ")
+          .append(" | ")
+          .append(instruction.format(sampleAddr))
+          .append(" | ")
           .append(String.valueOf(instruction.getAddressingMode()))
           .append(" | ")
-          .append(length)
+          .append(String.valueOf(instruction.getSize()))
           .append(" | ")
-          .append(String.format(instruction.format(sampleAddr)))
+          .append(length)
+          .append(" |")
           .append("\n");
     }
     writer.close();

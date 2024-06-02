@@ -19,6 +19,7 @@ public final class Emulator {
   private final Bus bus;
   private final Map<ModuleId, Module> modules = new HashMap<>();
   private int currentInstructionAddress = 0;
+  private boolean halted;
 
   public Emulator() {
     this.bus = new Bus();
@@ -37,7 +38,7 @@ public final class Emulator {
         ModuleId.HL_REGISTER,
         new Register16(
             bus, controlUnit, Signals.HL_IN_LOW, Signals.HL_IN_HIGH, 0, Signals.HL_OUT_16));
-    modules.put(ModuleId.STACK_POINTER, new StackPointer(bus, controlUnit));
+    modules.put(ModuleId.STACK_POINTER, new StackPointer(bus, controlUnit, this));
     modules.put(ModuleId.OUTPUT_REGISTER, new Register8(bus, controlUnit, Signals.OUT_IN, 0));
     modules.put(ModuleId.RAM, new Memory(bus, controlUnit, memoryAddressRegister));
 
@@ -51,7 +52,8 @@ public final class Emulator {
   }
 
   public boolean clock() {
-    if (getModule(ModuleId.CONTROL_UNIT, ControlUnitModule.class).hasControlSignal(Signals.HALT)) {
+    if (getModule(ModuleId.CONTROL_UNIT, ControlUnitModule.class).hasControlSignal(Signals.HALT)
+        || this.halted) {
       return false;
     }
     bus.update();
@@ -95,6 +97,7 @@ public final class Emulator {
       modules.get(id).reset();
     }
     currentInstructionAddress = 0;
+    halted = false;
   }
 
   public void writeMemory(byte[] bytes) {
@@ -103,5 +106,9 @@ public final class Emulator {
 
   public int getCurrentInstructionAddress() {
     return currentInstructionAddress;
+  }
+
+  public void halt() {
+    this.halted = true;
   }
 }

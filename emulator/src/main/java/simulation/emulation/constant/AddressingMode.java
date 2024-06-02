@@ -9,7 +9,7 @@ public enum AddressingMode {
   IMM("#%02X"),
   ABS("$%04X"),
   Z_P("$%02X"),
-  NON(""),
+  IMP(""),
   IDX("$%02X, A");
 
   private final String format;

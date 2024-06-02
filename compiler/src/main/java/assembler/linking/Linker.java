@@ -120,7 +120,7 @@ public class Linker {
           case IMM -> parsed = handleImmediate(line, arg, mappingResult);
           case ABS -> parsed = handleAbsolute(line, arg, mappingResult);
           case Z_P -> parsed = handleZeroPage(line, arg, mappingResult);
-          case NON -> parsed = new int[0];
+          case IMP -> parsed = new int[0];
           case IDX -> parsed = handleIndexed(line, arg, mappingResult);
         }
       }

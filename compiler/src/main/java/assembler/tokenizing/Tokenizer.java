@@ -129,7 +129,7 @@ public class Tokenizer {
    */
   private void tokenizeInstruction(int line, String[] tokens) {
     String operand = tokens[0];
-    AddressingMode addressingMode = AddressingMode.NON;
+    AddressingMode addressingMode = AddressingMode.IMP;
     String arg = null;
     Instruction decoded = null;
     if (tokens.length > 1) {

@@ -42,7 +42,7 @@ public class Constant extends Token {
       throw new MalformedValueException();
     }
     this.value =
-        Integer.parseInt(value == null ? "0" : value, 16)
+        Integer.parseInt(value == null ? "0" : value.replaceAll("#", ""), 16)
             & (this.type == ConstantType.BYTE ? 0xFF : 0xFFFF);
   }
 

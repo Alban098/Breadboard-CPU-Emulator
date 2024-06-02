@@ -29,7 +29,7 @@ public class Variable extends Token {
   public Variable(String alias, String value, int sourceFileLine) {
     super(sourceFileLine);
     this.alias = alias;
-    this.value = value == null ? 0 : Integer.parseInt(value, 16) & 0xFF;
+    this.value = value == null ? 0 : Integer.parseInt(value.replaceAll("#", ""), 16) & 0xFF;
   }
 
   /**

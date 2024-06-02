@@ -14,7 +14,7 @@ public enum Instruction {
   NOP(
       0x00,
       "NOP",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, PC_E, CU_RST}}),
 
@@ -299,14 +299,14 @@ public enum Instruction {
   CLS(
       0x14,
       "CLS",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, STATUS_IN | CU_RST | PC_E}}),
 
   CMP(
       0x15,
       "CMP",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, SUB | ALU_OUT | CU_RST | PC_E}
@@ -367,7 +367,7 @@ public enum Instruction {
   PHA(
       0x19,
       "PHA",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {
@@ -380,7 +380,7 @@ public enum Instruction {
   PHS(
       0x1B,
       "PHS",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {
@@ -394,7 +394,7 @@ public enum Instruction {
   PLA(
       0x1C,
       "PLA",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {
@@ -408,7 +408,7 @@ public enum Instruction {
   PLB(
       0x1D,
       "PLB",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {
@@ -422,7 +422,7 @@ public enum Instruction {
   PLS(
       0x1E,
       "PLS",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {
@@ -457,7 +457,7 @@ public enum Instruction {
   RTS(
       0x21,
       "RTS",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {
         new int[] {
@@ -1038,7 +1038,7 @@ public enum Instruction {
   HLT(
       0x3F,
       "HLT",
-      AddressingMode.NON,
+      AddressingMode.IMP,
       1,
       new int[][] {new int[] {MAR_IN_16 | PC_OUT_16, RAM_OUT | IR_IN, HALT, PC_E | CU_RST}});
 

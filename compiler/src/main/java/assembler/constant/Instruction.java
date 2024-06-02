@@ -6,7 +6,7 @@
 package assembler.constant;
 
 public enum Instruction {
-  NOP(0x00, "NOP", AddressingMode.NON, 1, false),
+  NOP(0x00, "NOP", AddressingMode.IMP, 1, false),
 
   LDA_IMM(0x01, "LDA", AddressingMode.IMM, 2, false),
   LDA_ZP(0x02, "LDA", AddressingMode.Z_P, 2, false),
@@ -29,22 +29,22 @@ public enum Instruction {
   SUB_ABS(0x11, "SUB", AddressingMode.ABS, 3, false),
   SUB_IDX(0x12, "SUB", AddressingMode.IDX, 2, false),
 
-  CLS(0x14, "CLS", AddressingMode.NON, 1, false),
+  CLS(0x14, "CLS", AddressingMode.IMP, 1, false),
 
-  CMP(0x15, "CMP", AddressingMode.NON, 1, false),
+  CMP(0x15, "CMP", AddressingMode.IMP, 1, false),
   CMP_IMM(0x16, "CMP", AddressingMode.IMM, 2, false),
   CMP_ZP(0x17, "CMP", AddressingMode.Z_P, 2, false),
   CMP_ABS(0x18, "CMP", AddressingMode.ABS, 3, false),
 
-  PHA(0x19, "PHA", AddressingMode.NON, 1, false),
-  PHS(0x1B, "PHS", AddressingMode.NON, 1, false),
+  PHA(0x19, "PHA", AddressingMode.IMP, 1, false),
+  PHS(0x1B, "PHS", AddressingMode.IMP, 1, false),
 
-  PLA(0x1C, "PLA", AddressingMode.NON, 1, false),
-  PLB(0x1D, "PLB", AddressingMode.NON, 1, false),
-  PLS(0x1E, "PLS", AddressingMode.NON, 1, false),
+  PLA(0x1C, "PLA", AddressingMode.IMP, 1, false),
+  PLB(0x1D, "PLB", AddressingMode.IMP, 1, false),
+  PLS(0x1E, "PLS", AddressingMode.IMP, 1, false),
 
   JSR_ABS(0x20, "JSR", AddressingMode.ABS, 3, true),
-  RTS(0x21, "RTS", AddressingMode.NON, 1, false),
+  RTS(0x21, "RTS", AddressingMode.IMP, 1, false),
   JMP_ZP(0x22, "JMP", AddressingMode.Z_P, 2, false),
   JMP_ABS(0x23, "JMP", AddressingMode.ABS, 3, true),
   JMP_IDX(0x24, "JMP", AddressingMode.IDX, 2, false),
@@ -80,7 +80,7 @@ public enum Instruction {
   BOS_ZP(0x3A, "BOS", AddressingMode.Z_P, 2, false),
   BOS_ABS(0x3B, "BOS", AddressingMode.ABS, 3, true),
   BOS_IDX(0x3C, "BOS", AddressingMode.IDX, 2, false),
-  HLT(0x3F, "HLT", AddressingMode.NON, 1, false);
+  HLT(0x3F, "HLT", AddressingMode.IMP, 1, false);
 
   private final int opcode;
   private final String name;

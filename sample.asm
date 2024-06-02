@@ -7,11 +7,11 @@
     FF FF F7 FF FF FF FF 55
 .endblock
 
-.var VAR 1A             // .var only work with ABSOLUTE addressing mode, as they abstract 16bit addresses
+.var VAR #1A             // .var only work with ABSOLUTE addressing mode, as they abstract 16bit addresses
 
-.const byte BYTE F0     // .const byte work with all addressing modes as they are just an in place replacement
-.const byte BYTE2 02
-.const word WORD 02F7   // .const word only works with ABSOLUTE addressing mode, as they can only represent a 16bit address
+.const byte BYTE #F0     // .const byte work with all addressing modes as they are just an in place replacement
+.const byte BYTE2 #02
+.const word WORD #02F7   // .const word only works with ABSOLUTE addressing mode, as they can only represent a 16bit address
 
 :START
     // Addressing modes

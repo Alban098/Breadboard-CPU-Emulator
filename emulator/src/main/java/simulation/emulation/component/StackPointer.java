@@ -5,12 +5,16 @@
 */
 package simulation.emulation.component;
 
+import simulation.emulation.Emulator;
 import simulation.emulation.constant.Signals;
 
 public class StackPointer extends Register8 {
 
-  public StackPointer(Bus bus, ControlUnitModule controlUnit) {
+  private final Emulator emulator;
+
+  public StackPointer(Bus bus, ControlUnitModule controlUnit, Emulator emulator) {
     super(bus, controlUnit);
+    this.emulator = emulator;
     reset();
   }
 
@@ -18,9 +22,15 @@ public class StackPointer extends Register8 {
   public boolean clock() {
     if (controlUnit.hasControlSignal(Signals.STACK_POP)) {
       value = (value + 1) & 0xFF;
+      if (value == 0) {
+        emulator.halt();
+      }
     }
     if (controlUnit.hasControlSignal(Signals.STACK_PUSH)) {
       value = (value - 1) & 0xFF;
+      if (value == 0xFF) {
+        emulator.halt();
+      }
     }
     return false;
   }
