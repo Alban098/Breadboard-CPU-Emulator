@@ -308,8 +308,8 @@ A Memory block is defined as follows
 ```
 
 - Declaration must start with `.block` and specify the base address
-- Size is arbitrary but `addr + size` should not exceed #3FF, in practice higher memory address are allowed, but mirroring will be applied
-- A Memory Block can not be mapped to reserved addresses, which are **$0000** and **$0001** that are the **entrypoint of execution**, and **$0300 to $03FF** which is reserved for the **Stack**
+- Size is arbitrary but `addr + size` should not exceed #FFFF, in practice higher memory address are allowed, but mirroring will be applied
+- A Memory Block can not be mapped to reserved addresses, which are **$0000** and **$0001** that are the **entrypoint of execution**, and **$FF00 to $FFFF** which is reserved for the **Stack**
 - Declaration must end with `.endblock`
 
 ## Constants
