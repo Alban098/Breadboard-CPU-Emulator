@@ -31,11 +31,9 @@ Electrical diagram not tested, Not that sure that the arrangement of the 2 74HCT
 | 10kΩ Resistor                          |        2 |     0,05 € |
 | 1nF Capacitor                          |        1 |     0,56 € |
 | 0,01µF Capacitor                       |        1 |     0,28 € |
-| 0,1µF Capacitor                        |        7 |     0,37 € |
+| 0,1µF Capacitor                        |        5 |     0,37 € |
 | CD74HCT00E (4x 2-NANDs)                |        1 |     0,57 € |
-| CD74HCT04E (8x Inverters)              |        1 |     0,51 € |
-| CD74HCT08E (4x 2-ANDs)                 |        1 |     0,55 € |
-| CD74HCT157E (2 lines to 1 bit Encoder) |        2 |     0,81 € |
+| CD74HCT157E (2 lines to 1 bit Encoder) |        1 |     0,81 € |
 | CD74HCT245E (8 bits Bus Transceiver)   |        2 |     0,80 € |
 | AS6C1008-55PIN                         |        1 |     5,32 € |
 | Red LED                                |        8 |     0,12 € |

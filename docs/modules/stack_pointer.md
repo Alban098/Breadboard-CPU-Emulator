@@ -32,6 +32,6 @@ On overflow during will trigger the ``HTL`` signal
 | CD74HCT283E (4 bits Full Adder)      |        2 |     0,90 € |
 | CD74HCT00E (4x 2-NANDs)              |        1 |     0,57 € |
 | CD74HCT08E (4x 2-ANDs)               |        2 |     0,55 € |
-| CD74HCT30E (1x 8-NANDs)              |        2 |     0,47 € |
+| CD74HCT30E (1x 8-NANDs)              |        1 |     0,47 € |
 | CD74HCT32E (4x 2-ORs)                |        2 |     0,47 € |
 | Red LED                              |        8 |     0,12 € |

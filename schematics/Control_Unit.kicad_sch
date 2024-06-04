@@ -4174,16 +4174,6 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 66.04) (xy 240.03 66.04)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "15ddff90-a836-4e6b-9a8b-ef667834e89a")
-	)
-	(wire
-		(pts
 			(xy 60.96 55.88) (xy 62.23 55.88)
 		)
 		(stroke
@@ -4341,6 +4331,16 @@
 			(type default)
 		)
 		(uuid "20395c08-358c-4a71-8ab8-90c12cf5f473")
+	)
+	(wire
+		(pts
+			(xy 233.68 63.5) (xy 240.03 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "20491561-2fab-426a-a5c4-a19908a45975")
 	)
 	(wire
 		(pts
@@ -4534,6 +4534,16 @@
 	)
 	(wire
 		(pts
+			(xy 240.03 63.5) (xy 240.03 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "2b2daee0-0a7b-43bb-beea-2adbbee79eda")
+	)
+	(wire
+		(pts
 			(xy 209.55 160.02) (xy 209.55 156.21)
 		)
 		(stroke
@@ -4624,7 +4634,7 @@
 	)
 	(wire
 		(pts
-			(xy 238.76 35.56) (xy 238.76 60.96)
+			(xy 238.76 35.56) (xy 238.76 58.42)
 		)
 		(stroke
 			(width 0)
@@ -4934,16 +4944,6 @@
 	)
 	(wire
 		(pts
-			(xy 205.74 66.04) (xy 205.74 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "51f9bec3-6e8a-40e2-8396-fe871c4771b3")
-	)
-	(wire
-		(pts
 			(xy 19.05 15.24) (xy 27.94 15.24)
 		)
 		(stroke
@@ -5034,16 +5034,6 @@
 	)
 	(wire
 		(pts
-			(xy 240.03 66.04) (xy 240.03 38.1)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "59448349-85bc-4008-bfdb-8f4f0c4ffabf")
-	)
-	(wire
-		(pts
 			(xy 200.66 132.08) (xy 218.44 132.08)
 		)
 		(stroke
@@ -5071,16 +5061,6 @@
 			(type default)
 		)
 		(uuid "5e5d53a8-2cc4-4651-8b65-f510c83317d8")
-	)
-	(wire
-		(pts
-			(xy 238.76 60.96) (xy 233.68 60.96)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5eb1a020-319c-45f2-b4de-c227dfc7feb1")
 	)
 	(wire
 		(pts
@@ -5324,6 +5304,16 @@
 	)
 	(wire
 		(pts
+			(xy 205.74 63.5) (xy 218.44 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "70011541-28c9-4eb1-a5ee-c33e817f5a5b")
+	)
+	(wire
+		(pts
 			(xy 38.1 40.64) (xy 48.26 40.64)
 		)
 		(stroke
@@ -5334,7 +5324,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 60.96) (xy 208.28 35.56)
+			(xy 208.28 58.42) (xy 208.28 35.56)
 		)
 		(stroke
 			(width 0)
@@ -5871,6 +5861,16 @@
 			(type default)
 		)
 		(uuid "931d53d1-88c4-4c40-880b-69091613a0a0")
+	)
+	(wire
+		(pts
+			(xy 205.74 63.5) (xy 205.74 38.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9404636d-847a-4590-b91c-c66734493bb3")
 	)
 	(wire
 		(pts
@@ -6494,7 +6494,7 @@
 	)
 	(wire
 		(pts
-			(xy 208.28 60.96) (xy 218.44 60.96)
+			(xy 208.28 58.42) (xy 238.76 58.42)
 		)
 		(stroke
 			(width 0)
@@ -7592,7 +7592,7 @@
 		)
 		(uuid "ff0cc7c2-c26a-4cf0-9677-0c163b3160fb")
 	)
-	(hierarchical_label "|RAM_IN"
+	(hierarchical_label "RAM_IN"
 		(shape output)
 		(at 264.16 35.56 0)
 		(fields_autoplaced yes)
@@ -7928,7 +7928,7 @@
 		)
 		(uuid "bdff5fa9-d4c1-4f16-a9f7-c86577a4be25")
 	)
-	(hierarchical_label "RAM_OUT"
+	(hierarchical_label "|RAM_OUT"
 		(shape output)
 		(at 264.16 38.1 0)
 		(fields_autoplaced yes)
@@ -11250,112 +11250,6 @@
 		)
 	)
 	(symbol
-		(lib_id "74xx:74LS04")
-		(at 226.06 60.96 0)
-		(unit 3)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "55c0570c-7481-4970-87ab-3909d9fd77c7")
-		(property "Reference" "U9"
-			(at 226.06 52.07 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "74LS04"
-			(at 226.06 54.61 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Footprint" ""
-			(at 226.06 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "http://www.ti.com/lit/gpn/sn74LS04"
-			(at 226.06 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Hex Inverter"
-			(at 226.06 60.96 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "8"
-			(uuid "21e897b8-0c80-4c56-b974-5b9d935cc0b7")
-		)
-		(pin "14"
-			(uuid "04d86d73-5dbe-4710-ba64-22158142652e")
-		)
-		(pin "1"
-			(uuid "fa7f68d7-6cac-46bc-b1ec-79bddd3e388c")
-		)
-		(pin "10"
-			(uuid "2bec229e-b932-48bc-9ffd-d31cfdf45bc0")
-		)
-		(pin "7"
-			(uuid "35aa1d65-dd69-49a9-98ad-0e0adcef9306")
-		)
-		(pin "3"
-			(uuid "fcdb7a9c-0239-4afd-a19e-b5fd9bce2b5f")
-		)
-		(pin "9"
-			(uuid "33f5e64d-da39-40f2-a484-3179c3df3b8a")
-		)
-		(pin "11"
-			(uuid "6eeeb024-a0d4-4821-9384-375ffcab5fbc")
-		)
-		(pin "2"
-			(uuid "d539ac29-7abb-458c-a69f-4427fe69e847")
-		)
-		(pin "13"
-			(uuid "3fca4928-aa1b-40a0-874f-065942cb180e")
-		)
-		(pin "6"
-			(uuid "68bd1158-96fc-409f-b7b6-8cc7b48a1a68")
-		)
-		(pin "4"
-			(uuid "c1ec721a-8626-4ba5-865d-3dc8a82f3ceb")
-		)
-		(pin "12"
-			(uuid "f1114092-3608-404c-ab91-0699fe6d2e40")
-		)
-		(pin "5"
-			(uuid "9a14dc6f-f8cb-4dfd-861e-8f3720a1c7a8")
-		)
-		(instances
-			(project "Control_Unit"
-				(path "/00881835-431f-440c-8b02-f05a8dfd3447"
-					(reference "U9")
-					(unit 3)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:R")
 		(at 170.18 168.91 0)
 		(unit 1)
@@ -13020,6 +12914,112 @@
 		)
 	)
 	(symbol
+		(lib_id "74xx:74LS04")
+		(at 226.06 63.5 0)
+		(unit 3)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "91677e2a-afed-48ed-bf9a-c6a99539ffc0")
+		(property "Reference" "U9"
+			(at 226.06 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Value" "74LS04"
+			(at 226.06 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Footprint" ""
+			(at 226.06 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "http://www.ti.com/lit/gpn/sn74LS04"
+			(at 226.06 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Hex Inverter"
+			(at 226.06 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "8"
+			(uuid "21e897b8-0c80-4c56-b974-5b9d935cc0b7")
+		)
+		(pin "14"
+			(uuid "04d86d73-5dbe-4710-ba64-22158142652e")
+		)
+		(pin "1"
+			(uuid "fa7f68d7-6cac-46bc-b1ec-79bddd3e388c")
+		)
+		(pin "10"
+			(uuid "2bec229e-b932-48bc-9ffd-d31cfdf45bc0")
+		)
+		(pin "7"
+			(uuid "35aa1d65-dd69-49a9-98ad-0e0adcef9306")
+		)
+		(pin "3"
+			(uuid "fcdb7a9c-0239-4afd-a19e-b5fd9bce2b5f")
+		)
+		(pin "9"
+			(uuid "33f5e64d-da39-40f2-a484-3179c3df3b8a")
+		)
+		(pin "11"
+			(uuid "6eeeb024-a0d4-4821-9384-375ffcab5fbc")
+		)
+		(pin "2"
+			(uuid "d539ac29-7abb-458c-a69f-4427fe69e847")
+		)
+		(pin "13"
+			(uuid "3fca4928-aa1b-40a0-874f-065942cb180e")
+		)
+		(pin "6"
+			(uuid "23b51cd5-9f62-4100-9fbd-55fd08c63081")
+		)
+		(pin "4"
+			(uuid "c1ec721a-8626-4ba5-865d-3dc8a82f3ceb")
+		)
+		(pin "12"
+			(uuid "f1114092-3608-404c-ab91-0699fe6d2e40")
+		)
+		(pin "5"
+			(uuid "4aa85873-5fca-46ec-8c5e-e37a4c6d62d7")
+		)
+		(instances
+			(project "Control_Unit"
+				(path "/00881835-431f-440c-8b02-f05a8dfd3447"
+					(reference "U9")
+					(unit 3)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:LED")
 		(at 170.18 161.29 90)
 		(unit 1)
@@ -14202,43 +14202,43 @@
 			)
 		)
 		(pin "8"
-			(uuid "21e897b8-0c80-4c56-b974-5b9d935cc0b7")
+			(uuid "21e897b8-0c80-4c56-b974-5b9d935cc0b8")
 		)
 		(pin "14"
-			(uuid "04d86d73-5dbe-4710-ba64-22158142652e")
+			(uuid "04d86d73-5dbe-4710-ba64-22158142652f")
 		)
 		(pin "1"
-			(uuid "fa7f68d7-6cac-46bc-b1ec-79bddd3e388c")
+			(uuid "fa7f68d7-6cac-46bc-b1ec-79bddd3e388d")
 		)
 		(pin "10"
-			(uuid "2bec229e-b932-48bc-9ffd-d31cfdf45bc0")
+			(uuid "2bec229e-b932-48bc-9ffd-d31cfdf45bc1")
 		)
 		(pin "7"
-			(uuid "35aa1d65-dd69-49a9-98ad-0e0adcef9306")
+			(uuid "35aa1d65-dd69-49a9-98ad-0e0adcef9307")
 		)
 		(pin "3"
-			(uuid "fcdb7a9c-0239-4afd-a19e-b5fd9bce2b5f")
+			(uuid "fcdb7a9c-0239-4afd-a19e-b5fd9bce2b60")
 		)
 		(pin "9"
-			(uuid "33f5e64d-da39-40f2-a484-3179c3df3b8a")
+			(uuid "33f5e64d-da39-40f2-a484-3179c3df3b8b")
 		)
 		(pin "11"
-			(uuid "6eeeb024-a0d4-4821-9384-375ffcab5fbc")
+			(uuid "6eeeb024-a0d4-4821-9384-375ffcab5fbd")
 		)
 		(pin "2"
-			(uuid "d539ac29-7abb-458c-a69f-4427fe69e847")
+			(uuid "d539ac29-7abb-458c-a69f-4427fe69e848")
 		)
 		(pin "13"
-			(uuid "3fca4928-aa1b-40a0-874f-065942cb180e")
+			(uuid "3fca4928-aa1b-40a0-874f-065942cb180f")
 		)
 		(pin "6"
 			(uuid "b9edbb43-b83d-48e9-b840-1105bb11c4e6")
 		)
 		(pin "4"
-			(uuid "c1ec721a-8626-4ba5-865d-3dc8a82f3ceb")
+			(uuid "c1ec721a-8626-4ba5-865d-3dc8a82f3cec")
 		)
 		(pin "12"
-			(uuid "f1114092-3608-404c-ab91-0699fe6d2e40")
+			(uuid "f1114092-3608-404c-ab91-0699fe6d2e41")
 		)
 		(pin "5"
 			(uuid "72f698ff-daf1-45c0-b791-d645dabcab82")
@@ -15421,43 +15421,43 @@
 			)
 		)
 		(pin "8"
-			(uuid "21e897b8-0c80-4c56-b974-5b9d935cc0b8")
+			(uuid "21e897b8-0c80-4c56-b974-5b9d935cc0b9")
 		)
 		(pin "14"
-			(uuid "04d86d73-5dbe-4710-ba64-22158142652f")
+			(uuid "04d86d73-5dbe-4710-ba64-221581426530")
 		)
 		(pin "1"
-			(uuid "fa7f68d7-6cac-46bc-b1ec-79bddd3e388d")
+			(uuid "fa7f68d7-6cac-46bc-b1ec-79bddd3e388e")
 		)
 		(pin "10"
-			(uuid "2bec229e-b932-48bc-9ffd-d31cfdf45bc1")
+			(uuid "2bec229e-b932-48bc-9ffd-d31cfdf45bc2")
 		)
 		(pin "7"
-			(uuid "35aa1d65-dd69-49a9-98ad-0e0adcef9307")
+			(uuid "35aa1d65-dd69-49a9-98ad-0e0adcef9308")
 		)
 		(pin "3"
-			(uuid "fcdb7a9c-0239-4afd-a19e-b5fd9bce2b60")
+			(uuid "fcdb7a9c-0239-4afd-a19e-b5fd9bce2b61")
 		)
 		(pin "9"
-			(uuid "33f5e64d-da39-40f2-a484-3179c3df3b8b")
+			(uuid "33f5e64d-da39-40f2-a484-3179c3df3b8c")
 		)
 		(pin "11"
-			(uuid "6eeeb024-a0d4-4821-9384-375ffcab5fbd")
+			(uuid "6eeeb024-a0d4-4821-9384-375ffcab5fbe")
 		)
 		(pin "2"
-			(uuid "d539ac29-7abb-458c-a69f-4427fe69e848")
+			(uuid "d539ac29-7abb-458c-a69f-4427fe69e849")
 		)
 		(pin "13"
-			(uuid "3fca4928-aa1b-40a0-874f-065942cb180f")
+			(uuid "3fca4928-aa1b-40a0-874f-065942cb1810")
 		)
 		(pin "6"
 			(uuid "b9edbb43-b83d-48e9-b840-1105bb11c4e7")
 		)
 		(pin "4"
-			(uuid "c1ec721a-8626-4ba5-865d-3dc8a82f3cec")
+			(uuid "c1ec721a-8626-4ba5-865d-3dc8a82f3ced")
 		)
 		(pin "12"
-			(uuid "f1114092-3608-404c-ab91-0699fe6d2e41")
+			(uuid "f1114092-3608-404c-ab91-0699fe6d2e42")
 		)
 		(pin "5"
 			(uuid "72f698ff-daf1-45c0-b791-d645dabcab83")

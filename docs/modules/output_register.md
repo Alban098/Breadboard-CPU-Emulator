@@ -8,7 +8,7 @@ This register will display its value as a decimal value that can be signed or no
 
 It will drive 4 7 segments display using the same data lines and one EEPROM. this is managed by rapidly switching on and off each display and relying on persistance of vision.
 
-To do so we use a 555 Timer to get a consistant clock signal, and use 2 JK-Flip-Flop to simulate a 2 bit binary counter, this value is used as the 2 MSB of the EEPROM Address to differentiate each digit of a number.
+To do so we use a 555 Timer to get a consistent clock signal, and use 2 JK-Flip-Flop to simulate a 2 bit binary counter, this value is used as the 2 MSB of the EEPROM Address to differentiate each digit of a number.
 We also use a 2bit to 4 lines selector to activate and deactivate each display one at a time.
 This will have the effect of making each display display a different number, creating the illusion of driving all the 7 segment displays at the same time with a quarter of the data lines 
 
