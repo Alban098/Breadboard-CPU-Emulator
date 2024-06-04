@@ -22,16 +22,16 @@ On overflow during will trigger the ``HTL`` signal
 | BUS  | 16 bits | In / Out |                   Direct connection to the BUS |
 
 ## Parts list
-| Part                                 | Quantity | Unit Price |
-|:-------------------------------------|---------:|-----------:|
-| Breadboard BB830                     |        3 |     8,12 € |
-| 220Ω Resistor                        |        8 |     0,02 € |
-| 0,1µF Capacitor                      |       13 |     0,37 € |
-| CD74HCT173E (4 bits Register)        |        2 |     0,73 € | 
-| CD74HCT245E (8 bits Bus Transceiver) |        3 |     0,80 € |
-| CD74HCT283E (4 bits Full Adder)      |        2 |     0,90 € |
-| CD74HCT00E (4x 2-NANDs)              |        1 |     0,57 € |
-| CD74HCT08E (4x 2-ANDs)               |        2 |     0,55 € |
-| CD74HCT30E (1x 8-NANDs)              |        1 |     0,47 € |
-| CD74HCT32E (4x 2-ORs)                |        2 |     0,47 € |
-| Red LED                              |        8 |     0,12 € |
+| Part                                 | Quantity |
+|:-------------------------------------|---------:|
+| Breadboard BB830                     |        3 |
+| 220Ω Resistor                        |        8 |
+| 0,1µF Capacitor                      |       13 |
+| CD74HCT173E (4 bits Register)        |        2 | 
+| CD74HCT245E (8 bits Bus Transceiver) |        3 |
+| CD74HCT283E (4 bits Full Adder)      |        2 |
+| CD74HCT00E (4x 2-NANDs)              |        1 |
+| CD74HCT08E (4x 2-ANDs)               |        2 |
+| CD74HCT30E (1x 8-NANDs)              |        1 |
+| CD74HCT32E (4x 2-ORs)                |        2 |
+| Red LED                              |        8 |

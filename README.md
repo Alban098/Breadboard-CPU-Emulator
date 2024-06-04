@@ -18,8 +18,17 @@ The emulator is based on real world breadboard computer inspired by [this projec
 
 To run a binary file, just pass its path as an argument to the emulator.
 
+### ROM & Instructions dumps
+To facilitate physical assembly and proper emulation from instruction opcode down to signal indices in the control words,
+the emulator has the ability to dump the content of it's program ROM, both in ["humanly readable format"](dump/ROM_dump.md) and as the binary blob that should be written to the 3 EEPROM that will be located in the **Control Unit** :
+- [Dump 0](dump/ROM_dump.bin0) for the 8 least bits of the **Control Word**
+- [Dump 1](dump/ROM_dump.bin1) for the 8 middle bits of the **Control Word**
+- [Dump 2](dump/ROM_dump.bin2) for the 8 most significant bits of the **Control Word**
+
+The emulator can also dump the [current instruction set](dump/instruction_set.md).
+
 ## Physical Computer
-More details about the Breadboard computer in itself can be found [there](docs/modules.md), along with the full [parts list](docs/parts_list.md) (Not up to date, refer to the part list in each module description instead)
+More details about the Breadboard computer in itself can be found [there](docs/modules.md), along with the full [parts list](docs/parts_list.md)
 
 ## Roadmap
 * [x] Instruction set
@@ -30,7 +39,7 @@ More details about the Breadboard computer in itself can be found [there](docs/m
   * [x] Instructions
 * [x] Documentation
 * [ ] Electrical diagrams
-* [ ] Electronic part ordering (See [part list](/parts_list.md) (not yet correct for the new hardware))
+* [ ] Electronic components ordering
 * [ ] Physical assembly
   * [ ] Clock module
   * [ ] Program counter

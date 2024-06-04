@@ -27,20 +27,20 @@ A Switch can control if the value is displayed as signed or not.
 | BUS  | 8 bits |       In | Direct connection to the BUS |
 
 ## Parts list
-| Part                                    | Quantity | Unit Price |
-|:----------------------------------------|---------:|-----------:|
-| Breadboard BB830                        |        2 |     8,12 € |
-| 220Ω Resistor                           |        8 |     0,02 € |
-| 1kΩ Resistor                            |        2 |     0,03 € |
-| 100kΩ Resistor                          |        1 |     0,04 € |
-| 0,01µF Capacitor                        |        2 |     0,28 € |
-| 0,1µF Capacitor                         |        4 |     0,37 € |
-| LM555CN (Timer)                         |        1 |     1,21 € |
-| CD74HCT08E (4x 2-ANDs)                  |        1 |     0,55 € |
-| CD74HCT107E (Dual JK-Flip-Flops)        |        1 |     0,84 € |
-| CD74HCT139E (2 bits to 4 lines Decoder) |        1 |     0,74 € |
-| CD74HCT273E (8x D-Flip-Flops)           |        1 |     0,93 € |
-| AT28C64B-15PU                           |        1 |     5,12 € |
-| Red LED                                 |        8 |     0,12 € |
-| Toggle Switch                           |        1 |     1,09 € |
-| 7 Segments Display                      |        4 |     1,92 € |
+| Part                                    | Quantity |
+|:----------------------------------------|---------:|
+| Breadboard BB830                        |        2 |
+| 220Ω Resistor                           |        8 |
+| 1kΩ Resistor                            |        2 |
+| 100kΩ Resistor                          |        1 |
+| 0,01µF Capacitor                        |        2 |
+| 0,1µF Capacitor                         |        4 |
+| LM555CN (Timer)                         |        1 |
+| CD74HCT08E (4x 2-ANDs)                  |        1 |
+| CD74HCT107E (Dual JK-Flip-Flops)        |        1 |
+| CD74HCT139E (2 bits to 4 lines Decoder) |        1 |
+| CD74HCT273E (8x D-Flip-Flops)           |        1 |
+| AT28C64B-15PU                           |        1 |
+| Red LED                                 |        8 |
+| Toggle Switch                           |        1 |
+| 7 Segments Display                      |        4 |

@@ -21,11 +21,11 @@
 | A    |  8 bits |      Out | Output of the register, before the Transceiver |
 
 ## Parts list
-| Part                                    | Quantity | Unit Price |
-|:----------------------------------------|---------:|-----------:|
-| Breadboard BB830                        |        1 |     8,12 € |
-| 220Ω Resistor                           |       16 |     0,02 € |
-| 0,1µF Capacitor                         |        6 |     0,37 € |
-| CD74HCT173E (4 bits Register)           |        4 |     0,73 € | 
-| CD74HCT245E (8 bits Bus Transceiver)    |        2 |     0,80 € |
-| Red LED                                 |       16 |     0,12 € |
+| Part                                    | Quantity |
+|:----------------------------------------|---------:|
+| Breadboard BB830                        |        1 |
+| 220Ω Resistor                           |       16 |
+| 0,1µF Capacitor                         |        6 |
+| CD74HCT173E (4 bits Register)           |        4 | 
+| CD74HCT245E (8 bits Bus Transceiver)    |        2 |
+| Red LED                                 |       16 |

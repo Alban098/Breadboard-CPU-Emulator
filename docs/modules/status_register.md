@@ -43,15 +43,15 @@ This flag is simply captured as the 8th bit of the result
 | *_F    |  4 bit |      Out |          The 4 least significant bits of the Register |
 
 ## Parts list
-| Part                                    | Quantity | Unit Price |
-|:----------------------------------------|---------:|-----------:|
-| Breadboard BB830                        |        1 |     8,12 € |
-| 220Ω Resistor                           |        4 |     0,02 € |
-| 0,1µF Capacitor                         |        4 |     0,37 € |
-| CD74HCT173E (4 bits Register)           |        1 |     0,73 € |
-| CD74HCT02E (4x 2-NORs)                  |        1 |     0,54 € |
-| CD74HCT08E (4x 2-ANDs)                  |        1 |     0,55 € |
-| CD74HCT86E (4x 2-XORs)                  |        1 |     0,81 € |
-| CD74HCT157E (2 lines to 1 bit Encoder)  |        1 |     0,81 € |
-| CD74HCT245E (8 bits Bus Transceiver)    |        1 |     0,80 € |
-| Red LED                                 |        4 |     0,12 € |
+| Part                                    | Quantity |
+|:----------------------------------------|---------:|
+| Breadboard BB830                        |        1 |
+| 220Ω Resistor                           |        4 |
+| 0,1µF Capacitor                         |        4 |
+| CD74HCT173E (4 bits Register)           |        1 |
+| CD74HCT02E (4x 2-NORs)                  |        1 |
+| CD74HCT08E (4x 2-ANDs)                  |        1 |
+| CD74HCT86E (4x 2-XORs)                  |        1 |
+| CD74HCT157E (2 lines to 1 bit Encoder)  |        1 |
+| CD74HCT245E (8 bits Bus Transceiver)    |        1 |
+| Red LED                                 |        4 |

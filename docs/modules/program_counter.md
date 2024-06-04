@@ -22,11 +22,11 @@ The 4 CD74HCT161E are connected in series, to achieve a 16 bit binary counter.
 | BUS  | 16 bits | In / Out | Direct connection to the BUS |
 
 ## Parts list
-| Part                                    | Quantity | Unit Price |
-|:----------------------------------------|---------:|-----------:|
-| Breadboard BB830                        |        2 |     8,12 € |
-| 220Ω Resistor                           |       16 |     0,02 € |
-| 0,1µF Capacitor                         |        7 |     0,37 € |
-| CD74HCT161E (4 bits Counter)            |        4 |     0,69 € |
-| CD74HCT245E (8 bits Bus Transceiver)    |        3 |     0,80 € |
-| Red LED                                 |       16 |     0,12 € |
+| Part                                    | Quantity |
+|:----------------------------------------|---------:|
+| Breadboard BB830                        |        2 |
+| 220Ω Resistor                           |       16 |
+| 0,1µF Capacitor                         |        7 |
+| CD74HCT161E (4 bits Counter)            |        4 |
+| CD74HCT245E (8 bits Bus Transceiver)    |        3 |
+| Red LED                                 |       16 |

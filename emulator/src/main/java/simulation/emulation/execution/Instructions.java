@@ -109,8 +109,8 @@ public final class Instructions {
   public static void dumpProgramROM(boolean raw, String fileName) throws IOException {
     if (!raw) {
       BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-      writer.append("Step|OZCN|OpCode|          Bin           |\n");
-      writer.append("----|----|------|------------------------|\n");
+      writer.append("| Step | OZCN | OpCode |          Bin           |     Signals     |\n");
+      writer.append("|:----:|:----:|:------:|:----------------------:|:----------------|\n");
       for (int addr = 0; addr < TABLE.length * (1 << Flag.values().length) * 16; addr++) {
         int opcode = addr & 0b0000_0000_111111;
         int flags = (addr & 0b0000_1111_000000) >> 6;
@@ -121,23 +121,21 @@ public final class Instructions {
         for (Map.Entry<Integer, String> signal : Signals.values().entrySet()) {
           int mask = signal.getKey();
           if ((signals & mask) == mask) {
-            formattedSignals.append(String.format("%11s", signal.getValue()));
+            formattedSignals.append(String.format("%11s; ", signal.getValue()));
           }
         }
         if (signals != 0) {
           writer
               .append(
                   String.format(
-                          "%4s_%4s_%6s",
+                          "|%4s|%4s|%6s|",
                           Integer.toBinaryString(microstep),
                           Integer.toBinaryString(flags),
                           Integer.toBinaryString(opcode))
                       .replaceAll(" ", "0"))
-              .append(" ")
-              .append(String.format("%24s", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
-              .append(" ")
+              .append(String.format("%24s|", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
               .append(String.valueOf(formattedSignals))
-              .append("\n");
+              .append("|\n");
         }
       }
       writer.close();

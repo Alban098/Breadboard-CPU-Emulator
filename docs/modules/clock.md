@@ -22,21 +22,21 @@ The 3 LM555CM timers each have a different purpose :
 
 
 ## Parts list
-| Part                       | Quantity | Unit Price |
-|:---------------------------|---------:|-----------:|
-| Breadboard BB830           |        1 |     8,12 € |
-| 220Ω Resistor              |        3 |     0,02 € |
-| 1kΩ Resistor               |        5 |     0,03 € |
-| 1MΩ Resistor               |        1 |     0,04 € |
-| 1MΩ Potentiometer          |        1 |     3,48 € |
-| 0,1µF Capacitor            |        4 |     0,37 € |
-| 0,01µF Capacitor           |        3 |     0,28 € |
-| 1µF Capacitor              |        1 |     1,92 € |
-| Toggle Switch              |        1 |     1,09 € |
-| Push Button                |        1 |     0,20 € |
-| LM555CN (Timer)            |        3 |     1,21 € |
-| CD74HCT04E (8x Inverters)  |        1 |     0,51 € |
-| CD74HCT08E (4x 2-ANDs)     |        1 |     0,55 € |
-| CD74HCT32E (2x 4-ORs)      |        1 |     0,47 € |
-| Green LED                  |        2 |     0,16 € |
-| Blue LED                   |        1 |     0,40 € |
+| Part                       | Quantity |
+|:---------------------------|---------:|
+| Breadboard BB830           |        1 |
+| 220Ω Resistor              |        3 |
+| 1kΩ Resistor               |        5 |
+| 1MΩ Resistor               |        1 |
+| 1MΩ Potentiometer          |        1 |
+| 0,1µF Capacitor            |        4 |
+| 0,01µF Capacitor           |        3 |
+| 1µF Capacitor              |        1 |
+| Toggle Switch              |        1 |
+| Push Button                |        1 |
+| LM555CN (Timer)            |        3 |
+| CD74HCT04E (8x Inverters)  |        1 |
+| CD74HCT08E (4x 2-ANDs)     |        1 |
+| CD74HCT32E (2x 4-ORs)      |        1 |
+| Green LED                  |        2 |
+| Blue LED                   |        1 |

@@ -19,10 +19,10 @@
 | IR   | 6 bits |      Out |       Output of the register |
 
 ## Parts list
-| Part                          | Quantity | Unit Price |
-|:------------------------------|---------:|-----------:|
-| Breadboard BB830              |        1 |     8,12 € |
-| 220Ω Resistor                 |        8 |     0,02 € |
-| 0,1µF Capacitor               |        2 |     0,37 € |
-| CD74HCT173E (4 bits Register) |        2 |     0,73 € |
-| Yellow LED                    |        8 |     0,23 € |
+| Part                          | Quantity |
+|:------------------------------|---------:|
+| Breadboard BB830              |        1 |
+| 220Ω Resistor                 |        8 |
+| 0,1µF Capacitor               |        2 |
+| CD74HCT173E (4 bits Register) |        2 |
+| Yellow LED                    |        8 |

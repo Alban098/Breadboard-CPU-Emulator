@@ -28,15 +28,15 @@ A subset of signals is inverted, this is due to the fact that in their respectiv
 | *_F  | 4 bits |   In |      The 4 least significant bits of the Status Register |
 
 ## Parts list
-| Part                         | Quantity | Unit Price |
-|:-----------------------------|---------:|-----------:|
-| Breadboard BB830             |        2 |     8,12 € |
-| 220Ω Resistor                |       20 |     0,02 € |
-| 0,1µF Capacitor              |        8 |     0,37 € |
-| CD74HCT00E (4x 2-NANDs)      |        1 |     0,57 € |
-| CD74HCT04E (8x Inverters)    |        3 |     0,51 € |
-| CD74HCT161E (4 bits Counter) |        1 |     0,69 € |
-| AT28C256-15PU                |        3 |    10,81 € |
-| Yellow LED                   |        4 |     0,23 € |
-| Blue LED                     |       24 |     0,40 € |
-| Push Button                  |        1 |     0,20 € |
+| Part                         | Quantity |
+|:-----------------------------|---------:|
+| Breadboard BB830             |        2 |
+| 220Ω Resistor                |       20 |
+| 0,1µF Capacitor              |        8 |
+| CD74HCT00E (4x 2-NANDs)      |        1 |
+| CD74HCT04E (8x Inverters)    |        3 |
+| CD74HCT161E (4 bits Counter) |        1 |
+| AT28C256-15PU                |        3 |
+| Yellow LED                   |        4 |
+| Blue LED                     |       24 |
+| Push Button                  |        1 |

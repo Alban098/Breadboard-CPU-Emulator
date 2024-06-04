@@ -25,8 +25,8 @@ public class Simulation {
 
   public static void main(String[] args) throws IOException {
     if (args[0] != null) {
-      Instructions.dumpInstructionSet("dump/instruction_set.txt");
-      Instructions.dumpProgramROM(false, "dump/ROM_dump.txt");
+      Instructions.dumpInstructionSet("dump/instruction_set.md");
+      Instructions.dumpProgramROM(false, "dump/ROM_dump.md");
       Instructions.dumpProgramROM(true, "dump/ROM_dump.bin");
       new Simulation(args[0]);
     }
@@ -39,7 +39,7 @@ public class Simulation {
     window = new Window("Example", 480, 360);
     init(file);
     loop();
-    // window.cleanUp();
+    window.cleanUp();
   }
 
   private void init(String file) throws IOException {

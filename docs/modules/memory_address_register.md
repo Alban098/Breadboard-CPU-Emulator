@@ -21,16 +21,16 @@ This register holds the pointer of the current RAM address, it also controls the
 | PROG |  1 bits |  Out |  Will set the module in **Manual Programming Mode** |
 
 ## Parts list
-| Part                                   | Quantity | Unit Price |
-|:---------------------------------------|---------:|-----------:|
-| Breadboard BB830                       |        2 |     8,12 € |
-| 220Ω Resistor                          |        8 |     0,02 € |
-| 1kΩ Resistor                           |        2 |     0,03 € |
-| 0,1µF Capacitor                        |        8 |     0,37 € |
-| CD74HCT173E (4 bits Register)          |        4 |     0,73 € |
-| CD74HCT157E (2 lines to 1 bit Encoder) |        4 |     0,81 € |
-| Yellow LED                             |        1 |     0,23 € |
-| Green LED                              |        1 |     0,16 € |
-| Red LED                                |       16 |     0,12 € |
-| 8 bits DIP switch                      |        2 |     1,64 € |
-| Toggle Switch                          |        1 |     1,09 € |
+| Part                                   | Quantity |
+|:---------------------------------------|---------:|
+| Breadboard BB830                       |        2 |
+| 220Ω Resistor                          |        8 |
+| 1kΩ Resistor                           |        2 |
+| 0,1µF Capacitor                        |        8 |
+| CD74HCT173E (4 bits Register)          |        4 |
+| CD74HCT157E (2 lines to 1 bit Encoder) |        4 |
+| Yellow LED                             |        1 |
+| Green LED                              |        1 |
+| Red LED                                |       16 |
+| 8 bits DIP switch                      |        2 |
+| Toggle Switch                          |        1 |

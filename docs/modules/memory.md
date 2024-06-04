@@ -23,18 +23,18 @@ Electrical diagram not tested, Not that sure that the arrangement of the 2 74HCT
 | MAR  | 16 bits |       In | Direct output of the **Memory Address Register** |
 
 ## Parts list
-| Part                                   | Quantity | Unit Price |
-|:---------------------------------------|---------:|-----------:|
-| Breadboard BB830                       |        2 |     8,12 € |
-| 220Ω Resistor                          |        8 |     0,02 € |
-| 1kΩ Resistor                           |        1 |     0,03 € |
-| 10kΩ Resistor                          |        2 |     0,05 € |
-| 1nF Capacitor                          |        1 |     0,56 € |
-| 0,01µF Capacitor                       |        1 |     0,28 € |
-| 0,1µF Capacitor                        |        5 |     0,37 € |
-| CD74HCT00E (4x 2-NANDs)                |        1 |     0,57 € |
-| CD74HCT157E (2 lines to 1 bit Encoder) |        1 |     0,81 € |
-| CD74HCT245E (8 bits Bus Transceiver)   |        2 |     0,80 € |
-| AS6C1008-55PIN                         |        1 |     5,32 € |
-| Red LED                                |        8 |     0,12 € |
-| 8 bits DIP switch                      |        1 |     1,64 € |
+| Part                                   | Quantity |
+|:---------------------------------------|---------:|
+| Breadboard BB830                       |        2 |
+| 220Ω Resistor                          |        8 |
+| 1kΩ Resistor                           |        1 |
+| 10kΩ Resistor                          |        2 |
+| 1nF Capacitor                          |        1 |
+| 0,01µF Capacitor                       |        1 |
+| 0,1µF Capacitor                        |        5 |
+| CD74HCT00E (4x 2-NANDs)                |        1 |
+| CD74HCT157E (2 lines to 1 bit Encoder) |        1 |
+| CD74HCT245E (8 bits Bus Transceiver)   |        2 |
+| AS6C1008-55PIN                         |        1 |
+| Red LED                                |        8 |
+| 8 bits DIP switch                      |        1 |
