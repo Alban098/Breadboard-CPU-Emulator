@@ -60,7 +60,7 @@ This addressing mode works as an absolute pointer.
 
 **Instructions** using this addressing mode will be **3 byte long** and have **2 operands**, the operand is interpreted as a big endian **2 bytes address**.
 
-This addressing mode is compatible with **Variables** and **1 & 2 bytes Constants**, **1 byte Constants** should be completed by a memory page or an offset, if only the constant is passed, the compiler will replace it with the **Zero Page** version as it is faster to execute.
+This addressing mode is compatible with **Variables** and **1 & 2 bytes Constants**, **1 byte Constants** should be completed by a memory page or an offset, if only a 1 byte constant is passed, the compiler will replace it with the **Zero Page** version as it is faster to execute.
 
 Operands should be formatted as follows :
 - Start with a ``$`` for plain **address** and **Constants**.

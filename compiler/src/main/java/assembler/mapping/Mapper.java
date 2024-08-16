@@ -107,13 +107,14 @@ public class Mapper {
       for (int ignored : memoryBlock.getData()) {
         if (address <= 1 || address > Assembler.MAX_ADDRESS) {
           LOG.error(
-              "-----> Line {} - block on memory address '{}' is out of bound for value index {}, resolved address is '{}', address should be between $02 and $3FF",
+              "-----> Line {} - block on memory address '{}' is out of bound for value index {}, resolved address is '{}', address should be between $02 and ${}",
               memoryBlock.getSourceFileLine(),
               String.format("$%04X", memoryBlock.getAddress()),
               index,
-              String.format("$%04X", address));
+              String.format("$%04X", address),
+              Assembler.MAX_ADDRESS);
           this.hasErrors = true;
-        } else if (address > Assembler.STACK_POINTER_MIN_ADDRESS) {
+        } else if (address >= Assembler.STACK_POINTER_MIN_ADDRESS) {
           LOG.error(
               "-----> Line {} - block on memory address '{}' overlaps with the stack address space spanning from '{}' to '{}",
               memoryBlock.getSourceFileLine(),
@@ -139,10 +140,27 @@ public class Mapper {
   }
 
   /**
-   * Maps a List of Operation into memory space, This will compute the size of the block to
-   * allocate, then find a block of that size and map operation their, If the start of the block is
-   * not at address 0, a JMP instruction will be placed on addresses $00 and $01 to jump to the
-   * correct memory address
+   * Maps a List of Operation into memory space, Mapping occurs as follows
+   * <ol>
+   *   <li>We extract each memory block available ordered by address</li>
+   *   <li>
+   *     We try to map the current instruction at the current address
+   *     <ul>
+   *       <li>
+   *          If we have enough space to map the operation and a JMP afterward, we just map
+   *          the instruction
+   *       </li>
+   *       <li>
+   *          If not, we move to the next available block, map the operation there and add a
+   *          dummy JMP to jump to that address at runtime
+   *       </li>
+   *       <li>
+   *         if no block is available, we just stop the pass, because we can't map the code to
+   *         addressable memory space
+   *       </li>
+   *     </ul>
+   *   </li>
+   * </ol>
    *
    * @param operations a List of Operation to map
    */
@@ -152,24 +170,41 @@ public class Mapper {
     operations.forEach(op -> size.addAndGet(op.getInstruction().getSize()));
 
     LOG.info("Mapping instructions");
-
-    // Find memory block
-    int entryPoint;
-    try {
-      entryPoint = findAvailableBlock(size.get(), false);
-      LOG.info(
-          "-----> Found block of size {} bytes at address ${}",
-          size,
-          String.format("%04X", entryPoint));
-    } catch (Exception e) {
-      LOG.error("-----> Can not find a block of size {} bytes to place compiled code", size);
-      this.hasErrors = true;
+    // Get all currently available memory blocks
+    Queue<AvailableBlock> blocks = getBlocks();
+    AvailableBlock currentBlock = blocks.poll();
+    if (currentBlock == null) {
+      LOG.error("------> Not enough space to map Code even when splitting it");
       return;
     }
 
     // Map operations
-    int currentAddress = entryPoint;
+    int currentAddress = currentBlock.address;
+    int operationIndex = 0;
     for (Operation operation : operations) {
+      int opSize = operation.getInstruction().getSize();
+      // Needed size for operation and potential JMP afterward (except if this is the last
+      // operation to map, in which case, the dummy JMP is irrelevant)
+      int neededSize = opSize + (operationIndex < operations.size() - 1 ? 3 : 0);
+      // If we can't place that instruction followed by a JMP, we need to move to the next block
+      // and add a JMP Instruction to go to that next block
+      if (currentAddress + neededSize > currentBlock.address + currentBlock.size) {
+        currentBlock = blocks.poll();
+        if (currentBlock == null) {
+          LOG.error("------> Not enough space to map Code even when splitting it");
+          return;
+        }
+        int dummyAddress = currentAddress;
+        currentAddress = currentBlock.address;
+        Operation dummyJump =
+            new Operation(Instruction.JMP_ABS, String.format("$%04X", currentAddress), -1);
+        MappedOperation mappedDummyJump =
+            new MappedOperation(dummyAddress, dummyJump);
+        result.add(mappedDummyJump);
+        addressesStatus[dummyAddress++] = mappedDummyJump;
+        addressesStatus[dummyAddress++] = mappedDummyJump;
+        addressesStatus[dummyAddress] = mappedDummyJump;
+      }
       MappedOperation mapped = new MappedOperation(currentAddress, operation);
       addressesStatus[currentAddress++] = mapped;
       for (int i = 1; i < operation.getInstruction().getSize(); i++) {
@@ -177,19 +212,6 @@ public class Mapper {
       }
       result.add(mapped);
       operationMap.put(operation, mapped);
-    }
-
-    // If entrypoint is not address 0x00, add a dummy JMP instruction to jump to it
-    if (entryPoint != 0) {
-      Operation entryPointJump =
-          new Operation(Instruction.JMP_ABS, String.format("$%04X", entryPoint), -1);
-      MappedOperation mappedEntryPoint = new MappedOperation(0, entryPointJump);
-      addressesStatus[0] = mappedEntryPoint;
-      addressesStatus[1] = mappedEntryPoint;
-      result.add(mappedEntryPoint);
-      LOG.info(
-          "-----> Block is not at address $0000, adding {} at address $0000",
-          String.format(entryPointJump.getInstruction().format(entryPoint)));
     }
   }
 
@@ -282,16 +304,16 @@ public class Mapper {
     if (fromEnd) {
       for (int i = runLength.length - 1; i > 2; i--) {
         max = Math.max(max, runLength[i]);
-        if (runLength[i] >= size && (1 + i - size != 1)) {
+        if (runLength[i] >= size && (1 + i - size != 1) && (1 + i - size != 2)) {
           return 1 + i - size;
         }
       }
     } else {
       for (int i = 0; i < runLength.length; i++) {
         max = Math.max(max, runLength[i]);
-        // block can not be placed at address 0x01, because the dummy jump is 2 bytes long and must
-        // be placed at addresses 0x00 and 0x01
-        if (runLength[i] >= size && (1 + i - size != 1)) {
+        // block can not be placed at address 0x01 or 0x02, because the dummy jump is 3 bytes long and must
+        // be placed at addresses 0x00, 0x01 and 0x02
+        if (runLength[i] >= size && (1 + i - size != 1) && (1 + i - size != 2)) {
           return 1 + i - size;
         }
       }
@@ -302,5 +324,22 @@ public class Mapper {
             + " bytes for mapping code, max found is "
             + max
             + " bytes");
+  }
+
+  private record AvailableBlock(int address, int size) {}
+
+  private Queue<AvailableBlock> getBlocks() {
+    Queue<AvailableBlock> availableBlocks = new LinkedList<>();
+    // Get all available memory block
+    int currentLength = 0;
+    for (int i = 0; i < Assembler.STACK_POINTER_MIN_ADDRESS; i++) {
+      if (addressesStatus[i] == null) {
+        currentLength++;
+      } else if (currentLength > 0) {
+        availableBlocks.offer(new AvailableBlock(i - currentLength, currentLength));
+        currentLength = 0;
+      }
+    }
+    return availableBlocks;
   }
 }
