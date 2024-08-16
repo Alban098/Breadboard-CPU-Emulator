@@ -470,7 +470,7 @@ public class UILayer {
     DecompiledInstruction dest = new DecompiledInstruction();
     Memory ram = emulator.getModule(ModuleId.RAM, Memory.class);
     int opcode = ram.readMemory(addr);
-    Instruction instruction = Instructions.TABLE[opcode & 0x3F];
+    Instruction instruction = Instructions.TABLE[opcode & 0xFF];
     dest.addr = addr;
     dest.instruction = instruction;
     if (instruction.getSize() > 1) {

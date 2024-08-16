@@ -20,7 +20,7 @@ import org.apache.log4j.PropertyConfigurator;
 public class Assembler {
 
   private static final String ASM_VERSION_HEADER = "#BB8BC_ASM_v1";
-  public static final int MAX_FILE_SIZE = 0x10000;
+  public static final int MAX_FILE_SIZE = 0xFF00;
   public static final int MAX_ADDRESS = 0xFFFF;
   public static final int STACK_POINTER_MIN_ADDRESS = 0xFF00;
   private static Tokenizer tokenizer;

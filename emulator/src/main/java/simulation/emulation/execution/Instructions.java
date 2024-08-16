@@ -18,7 +18,7 @@ import simulation.emulation.constant.Signals;
 
 public final class Instructions {
 
-  public static final Instruction[] TABLE = new Instruction[0x40];
+  public static final Instruction[] TABLE = new Instruction[0x100];
 
   public static final int[] JMP_ZP_MICROCODE =
       new int[] {
