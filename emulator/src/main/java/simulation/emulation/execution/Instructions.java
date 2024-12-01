@@ -109,14 +109,15 @@ public final class Instructions {
   public static void dumpProgramROM(boolean raw, String fileName) throws IOException {
     if (!raw) {
       BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, false));
-      writer.append("| Step | OZCN | OpCode |          Bin           |     Signals     |\n");
-      writer.append("|:----:|:----:|:------:|:----------------------:|:----------------|\n");
+      writer.append("| Step | OZCN | OpCode |          Bin           |     Bin in EEPROM      |     Signals     |\n");
+      writer.append("|:----:|:----:|:------:|:----------------------:|:----------------------:|:----------------|\n");
       for (int addr = 0; addr < TABLE.length * (1 << Flag.values().length) * 16; addr++) {
         int opcode = addr & 0b0000_0000_111111;
         int flags = (addr & 0b0000_1111_000000) >> 6;
         int microstep = (addr & 0b1111_0000_000000) >> 10;
         Instruction instruction = TABLE[opcode];
         int signals = instruction.getMicrocode()[flags][microstep];
+        int signalsInEEPROM = applyActiveLows(signals);
         StringBuilder formattedSignals = new StringBuilder();
         for (Map.Entry<Integer, String> signal : Signals.values().entrySet()) {
           int mask = signal.getKey();
@@ -134,6 +135,7 @@ public final class Instructions {
                           Integer.toBinaryString(opcode))
                       .replaceAll(" ", "0"))
               .append(String.format("%24s|", Integer.toBinaryString(signals)).replaceAll(" ", "0"))
+              .append(String.format("%24s|", Integer.toBinaryString(signalsInEEPROM)).replaceAll(" ", "0"))
               .append(String.valueOf(formattedSignals))
               .append("|\n");
         }
@@ -151,7 +153,7 @@ public final class Instructions {
         int flags = (addr & 0b0000_1111_000000) >> 6;
         int microstep = (addr & 0b1111_0000_000000) >> 10;
         Instruction instruction = TABLE[opcode];
-        int signals = instruction.getMicrocode()[flags][microstep];
+        int signals = applyActiveLows(instruction.getMicrocode()[flags][microstep]);
         lbs[addr] = (byte) (signals & 0x0000FF);
         mbs[addr] = (byte) ((signals & 0x00FF00) >> 8);
         hbs[addr] = (byte) ((signals & 0xFF0000) >> 16);
@@ -163,5 +165,16 @@ public final class Instructions {
       dump_MB.close();
       dump_HB.close();
     }
+  }
+
+  private static int applyActiveLows(int signals) {
+    int converted = signals;
+    for (Map.Entry<Integer, String> signal : Signals.values().entrySet()) {
+      int mask = signal.getKey();
+      if (Signals.isActiveLow(mask)) {
+        converted ^= mask;
+      }
+    }
+    return converted;
   }
 }

@@ -1,4 +1,5 @@
 # Breadboard CPU Emulator
+<img src="img/img_0.png">
 
 ## Compiler
 
@@ -30,6 +31,12 @@ The emulator can also dump the [current instruction set](dump/instruction_set.md
 ## Physical Computer
 More details about the Breadboard computer in itself can be found [there](docs/modules.md), along with the full [parts list](docs/parts_list.md)
 
+### EEPROM Programmer
+That build uses some 28C series EEPROM to emulate large combinatorial logic, those will need to be programmed
+
+I used that **EEPROM Programmer** : https://tomnisbet.github.io/TommyPROM/docs/hardware
+If like me, you used an **Arduino Nano Every** instead of a **Nano V3** for the **EEPROM Programmer**, that Programmer will need some rework to actually work as intended (see [this repo](https://github.com/Alban098/TommyPROM-ATMEGA-4809) for the adapted code and wiring diagram)
+
 ## Roadmap
 * [x] Instruction set
 * [x] Assembly compiler
@@ -38,14 +45,19 @@ More details about the Breadboard computer in itself can be found [there](docs/m
   * [x] Signals
   * [x] Instructions
 * [x] Documentation
-* [ ] Electrical diagrams
-* [ ] Electronic components ordering
+* [x] Electrical diagrams
+* [x] Electronic components ordering
 * [ ] Physical assembly
-  * [ ] Clock module
-  * [ ] Program counter
+  * [x] Clock module
+  * [x] Program counter
   * [ ] Registers
-  * [ ] ALU
-  * [ ] Status register
-  * [ ] Memory modules
+  * [x] ALU
+  * [x] Status register
+  * [x] Memory modules
   * [ ] Control Unit
   * [ ] ESP32 based programmer
+
+## Images
+<img src="img/img_1.png">
+<img src="img/img_2.png">
+<img src="img/img_3.png">

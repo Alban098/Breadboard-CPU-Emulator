@@ -1,10 +1,10 @@
 # 8 bits Breadboard Computer - Parts list
 
-EEPROM Programmer : https://tomnisbet.github.io/TommyPROM/docs/hardware
-
 Digikey basket export [here](digikey_basket.csv) (This basket have some spare resistors capacitors and LEDs).  **(~375€)**
 
 [This](digikey_basket_with_spare.csv) second basket export has spare for every single component. **(~400€)**
+
+! Part list not up to date, schematics where rewired a bit and some more ICs where needed, refer to each module's part list that are up to date, or take the one with spare components !
 
 | Part                                    | Quantity |
 |:----------------------------------------|---------:|

@@ -24,8 +24,9 @@ This register holds the pointer of the current RAM address, it also controls the
 | Part                                   | Quantity |
 |:---------------------------------------|---------:|
 | Breadboard BB830                       |        2 |
-| 220Ω Resistor                          |        8 |
+| 220Ω Resistor                          |       16 |
 | 1kΩ Resistor                           |        2 |
+| 10kΩ Resistor                          |       16 |
 | 0,1µF Capacitor                        |        8 |
 | CD74HCT173E (4 bits Register)          |        4 |
 | CD74HCT157E (2 lines to 1 bit Encoder) |        4 |

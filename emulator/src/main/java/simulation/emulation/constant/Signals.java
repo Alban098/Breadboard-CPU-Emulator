@@ -36,6 +36,7 @@ public final class Signals {
   public static final int HALT = 1 << 23;
 
   private static final Map<Integer, String> NAMES = new HashMap<>();
+  private static final Map<Integer, Boolean> ACTIVE_LOW = new HashMap<>();
 
   static {
     NAMES.put(PC_E, "PC_E");
@@ -62,6 +63,31 @@ public final class Signals {
     NAMES.put(OUT_IN, "OUT_IN");
     NAMES.put(CU_RST, "CU_RST");
     NAMES.put(HALT, "HLT");
+
+    ACTIVE_LOW.put(PC_E, false);
+    ACTIVE_LOW.put(PC_IN_16, true);
+    ACTIVE_LOW.put(PC_OUT_16, true);
+    ACTIVE_LOW.put(PC_OUT_HIGH, true);
+    ACTIVE_LOW.put(MAR_IN_16, true);
+    ACTIVE_LOW.put(RAM_IN, false);
+    ACTIVE_LOW.put(RAM_OUT, true);
+    ACTIVE_LOW.put(STATUS_OUT, true);
+    ACTIVE_LOW.put(STATUS_IN, true);
+    ACTIVE_LOW.put(IR_IN, true);
+    ACTIVE_LOW.put(A_IN, true);
+    ACTIVE_LOW.put(A_OUT, true);
+    ACTIVE_LOW.put(B_IN, true);
+    ACTIVE_LOW.put(HL_IN_LOW, true);
+    ACTIVE_LOW.put(HL_IN_HIGH, true);
+    ACTIVE_LOW.put(HL_OUT_16, true);
+    ACTIVE_LOW.put(STACK_PUSH, false);
+    ACTIVE_LOW.put(STACK_POP, false);
+    ACTIVE_LOW.put(STACK_OUT_16, true);
+    ACTIVE_LOW.put(ALU_OUT, true);
+    ACTIVE_LOW.put(SUB, false);
+    ACTIVE_LOW.put(OUT_IN, false);
+    ACTIVE_LOW.put(CU_RST, false);
+    ACTIVE_LOW.put(HALT, false);
   }
 
   private Signals() {}
@@ -72,5 +98,9 @@ public final class Signals {
 
   public static Map<Integer, String> values() {
     return NAMES;
+  }
+
+  public static boolean isActiveLow(int signal) {
+    return ACTIVE_LOW.getOrDefault(signal, false);
   }
 }

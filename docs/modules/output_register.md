@@ -6,13 +6,17 @@
 ## Description
 This register will display its value as a decimal value that can be signed or not.
 
-It will drive 4 7 segments display using the same data lines and one EEPROM. this is managed by rapidly switching on and off each display and relying on persistance of vision.
+It will drive 4 7 segments display using the same data lines and one EEPROM. this is managed by rapidly switching on and off each display and relying on persistence of vision.
 
 To do so we use a 555 Timer to get a consistent clock signal, and use 2 JK-Flip-Flop to simulate a 2 bit binary counter, this value is used as the 2 MSB of the EEPROM Address to differentiate each digit of a number.
 We also use a 2bit to 4 lines selector to activate and deactivate each display one at a time.
-This will have the effect of making each display display a different number, creating the illusion of driving all the 7 segment displays at the same time with a quarter of the data lines 
+This will have the effect of making each display show a different number, creating the illusion of driving all the 7 segment displays at the same time with a quarter of the data lines 
 
 A Switch can control if the value is displayed as signed or not.
+
+! Don't forget to tie signals of the additional flip-flop of the 74HCT107 to GND to avoid potential interference in the display !
+
+Find [here](../../dump/output_register_eeprom_dump.bin) the EEPROM content associated with this wiring
 
 ### Signals
 | Signal |        Mode |          Binary mask          |                                   Description |

@@ -4104,6 +4104,12 @@
 		(uuid "dcccc0b0-888f-4dfb-ad34-383d668cf015")
 	)
 	(junction
+		(at 95.25 121.92)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "e076d765-4bf1-413c-82a2-af20c27e7d8a")
+	)
+	(junction
 		(at 146.05 114.3)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -4114,12 +4120,6 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "f0d94ef1-ac0b-401d-a9b2-dcbfce2501d8")
-	)
-	(junction
-		(at 102.87 132.08)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "f7cb106f-1cbc-49ef-b574-65121a043435")
 	)
 	(junction
 		(at 119.38 104.14)
@@ -4181,7 +4181,7 @@
 	)
 	(wire
 		(pts
-			(xy 99.06 116.84) (xy 99.06 120.65)
+			(xy 99.06 116.84) (xy 99.06 118.11)
 		)
 		(stroke
 			(width 0)
@@ -4408,6 +4408,16 @@
 			(type default)
 		)
 		(uuid "3d2cb654-7de0-4273-b0a2-84433967050c")
+	)
+	(wire
+		(pts
+			(xy 95.25 121.92) (xy 102.87 121.92)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3f833cfc-306c-4d95-af99-aecc7152e998")
 	)
 	(wire
 		(pts
@@ -4721,7 +4731,7 @@
 	)
 	(wire
 		(pts
-			(xy 95.25 132.08) (xy 102.87 132.08)
+			(xy 95.25 132.08) (xy 107.95 132.08)
 		)
 		(stroke
 			(width 0)
@@ -4848,16 +4858,6 @@
 			(type default)
 		)
 		(uuid "9d2b51ac-9c49-42e6-99f8-1c44cd110221")
-	)
-	(wire
-		(pts
-			(xy 102.87 124.46) (xy 102.87 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "9e0ec856-a2ec-4645-8c17-3a1fa49115e3")
 	)
 	(wire
 		(pts
@@ -5068,16 +5068,6 @@
 			(type default)
 		)
 		(uuid "cd3fe316-b838-4f03-89c5-d73149e827c3")
-	)
-	(wire
-		(pts
-			(xy 102.87 132.08) (xy 107.95 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "cef5d6d7-12a7-4677-b3ec-403e3fb648f3")
 	)
 	(wire
 		(pts
@@ -5681,7 +5671,7 @@
 	)
 	(symbol
 		(lib_id "Device:R_Potentiometer")
-		(at 102.87 120.65 180)
+		(at 102.87 118.11 180)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -5689,7 +5679,7 @@
 		(dnp no)
 		(uuid "1226e135-ce2c-4008-874c-758d114f1ae4")
 		(property "Reference" "1M"
-			(at 102.87 122.174 90)
+			(at 102.87 119.888 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5698,7 +5688,7 @@
 			)
 		)
 		(property "Value" "R_Potentiometer"
-			(at 105.41 121.9199 0)
+			(at 105.41 119.3799 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5708,7 +5698,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 102.87 120.65 0)
+			(at 102.87 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5717,7 +5707,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 102.87 120.65 0)
+			(at 102.87 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5726,7 +5716,7 @@
 			)
 		)
 		(property "Description" "Potentiometer"
-			(at 102.87 120.65 0)
+			(at 102.87 118.11 0)
 			(effects
 				(font
 					(size 1.27 1.27)

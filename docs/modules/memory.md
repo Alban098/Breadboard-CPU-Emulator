@@ -4,9 +4,7 @@
 <img src="schematics/memory.png">
 
 ## Description
-The module can be switched in **Manual Programming Mode**, in that state, the value read from the bus is overridden by a 8DIP Switch, and the clock and **RAM_IN** signals are overridden by a Push Switch.
-
-Electrical diagram not tested, Not that sure that the arrangement of the 2 74HCT245 will not cause issues when switching, may be subject to reworks during assembly
+The module can be switched in **Manual Programming Mode** (this is controlled by the Memory Address Register), in that state, the value read from the bus is overridden by a 8DIP Switch, and the clock and **RAM_IN** signals are overridden by a Push Switch.
 
 ### Signals
 | Signal  |        Mode |     Binary mask     |                                                                        Description |
@@ -27,13 +25,11 @@ Electrical diagram not tested, Not that sure that the arrangement of the 2 74HCT
 |:---------------------------------------|---------:|
 | Breadboard BB830                       |        2 |
 | 220Ω Resistor                          |        8 |
-| 1kΩ Resistor                           |        1 |
-| 10kΩ Resistor                          |        2 |
+| 10kΩ Resistor                          |        9 |
 | 1nF Capacitor                          |        1 |
-| 0,01µF Capacitor                       |        1 |
 | 0,1µF Capacitor                        |        5 |
-| CD74HCT00E (4x 2-NANDs)                |        1 |
-| CD74HCT157E (2 lines to 1 bit Encoder) |        1 |
+| CD74HCT00E (4x 2-NANDs)                |        2 |
+| CD74HCT157E (2 lines to 1 bit Encoder) |        2 |
 | CD74HCT245E (8 bits Bus Transceiver)   |        2 |
 | AS6C1008-55PIN                         |        1 |
 | Red LED                                |        8 |
