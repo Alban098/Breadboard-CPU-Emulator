@@ -50,14 +50,14 @@ If like me, you used an **Arduino Nano Every** instead of a **Nano V3** for the 
 * [ ] Physical assembly
   * [x] Clock module
   * [x] Program counter
-  * [ ] Registers
+  * [x] Registers
   * [x] ALU
   * [x] Status register
   * [x] Memory modules
   * [ ] Control Unit
-  * [ ] ESP32 based programmer
+  * [x] [Arduino Programmer](docs/programmer.md)
 
 ## Images
 <img src="img/img_1.png">
+<img src="img/img_0.png">
 <img src="img/img_2.png">
-<img src="img/img_3.png">
